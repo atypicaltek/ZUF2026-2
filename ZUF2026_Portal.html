@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Zion Unity Fest 2026 — Volunteer Signup Portal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+:root{
+  --navy:#0d0d0d;--blue:#8B0000;--light-blue:#1a0808;--gold:#C9A227;
+  --gold-light:#1a1508;--white:#fff;--gray:#111111;--text:#f0ece4;
+  --success:#1a3a1a;--success-bg:#1e3b1e;--warn:#C9A227;
+  --choir:#4A0E7F;--coord:#6B0000;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,html{height:100%}body{height:100%;overflow:hidden;display:flex;flex-direction:column}
+body{font-family:Arial,sans-serif;background:#111;color:#f0ece4;display:flex;flex-direction:column}
+header{background:#fff;color:#0d0d0d;padding:8px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:0;flex-shrink:0;border-bottom:3px solid #8B0000}
+header h1{font-size:2.1rem;font-weight:900;line-height:1.15;letter-spacing:.5px;color:#0d0d0d}
+header span{font-size:1.1rem;opacity:.75}
+.tab-bar{display:flex;flex-wrap:nowrap;gap:3px;background:#0d0d0d;padding:0 6px 6px;justify-content:space-between;flex-shrink:0;overflow:hidden;position:relative;z-index:10;border-bottom:2px solid #8B0000}
+.tab-btn{background:#222;color:#f0ece4;border:none;padding:4px 4px 5px;border-radius:5px 5px 0 0;cursor:pointer;font-size:.93rem;font-weight:600;transition:.2s;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden}
+.tab-btn:hover{background:#6B0000;color:#fff}
+.tab-btn.active{background:#8B0000;color:#fff;font-weight:900}
+.tab-lbl{font-size:.72rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center}
+.tab-icon{font-size:1.1rem;line-height:1}
+main{flex:1;overflow:hidden;padding:0;min-height:0;display:flex;flex-direction:column}
+#tab-home{max-width:100%;text-align:center}
+#tab-matrix{max-width:100%;margin:0}
+#tab-f1,#tab-f2,#tab-f3,#tab-f4,#tab-f5,#tab-f6,#tab-f7,#tab-f8,#tab-f9,#tab-f10,#tab-f11,#tab-f12,#tab-f13{max-width:900px;margin:0 auto}
+.qr-grid{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.qr-grid-row{display:flex;gap:5px;justify-content:center}
+.qr-card{background:#1a1a1a;border-radius:8px;padding:6px 4px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.4);cursor:pointer;border:2px solid #8B0000;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
+.qr-card:hover{border-color:#8B0000}
+.qr-label{font-size:.68rem;font-weight:700;color:#C9A227;line-height:1.2}
+.qr-canvas{display:flex;justify-content:center;align-items:center}
+.qr-canvas canvas,.qr-canvas img{border-radius:4px;width:80px!important;height:80px!important}
+.qr-count{font-size:.75rem;font-weight:700;color:#f0ece4}
+.qr-open-btn{font-size:.6rem;padding:2px 8px;background:#8B0000;color:#fff;border:none;border-radius:10px;cursor:pointer}
+.open-btn{display:inline-block;margin-top:10px;padding:6px 18px;background:#8B0000;color:#fff;border:none;border-radius:20px;font-size:.8rem;cursor:pointer;text-decoration:none}
+.open-btn:hover{background:#0d0d0d}
+.section-title{font-size:1.4rem;color:#0d0d0d;font-weight:700;margin-bottom:4px}
+.section-sub{font-size:.9rem;color:#555;margin-bottom:20px}
+.form-panel{display:none}
+.form-panel.active{display:flex;flex-direction:column;flex:1;overflow:auto}
+.form-wrap{background:#1a1a1a;border:1px solid #333;border-radius:14px;padding:28px 32px;box-shadow:0 4px 20px rgba(0,0,0,.5);max-width:640px;margin:0 auto}
+.form-wrap h2{color:#C9A227;font-size:1.3rem;margin-bottom:6px}
+.form-wrap.choir-wrap h2{color:var(--choir)}
+.form-wrap.coord-wrap h2{color:var(--coord)}
+.form-desc{color:#aaa;font-size:.88rem;margin-bottom:22px;line-height:1.5}
+.form-group{margin-bottom:18px}
+label{display:block;font-size:.88rem;font-weight:700;color:#C9A227;margin-bottom:5px}
+.choir-wrap label{color:var(--choir)}
+.coord-wrap label{color:var(--coord)}
+label .req{color:#c0392b}
+input[type=text],input[type=tel],input[type=email],select,textarea{
+  width:100%;padding:10px 12px;border:1.5px solid #ccd;border-radius:8px;
+  font-size:.92rem;font-family:Arial,sans-serif;transition:.2s;background:#fafafa
+}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#8B0000;background:#fff}
+textarea{resize:vertical;min-height:80px}
+.radio-group,.check-group{display:flex;flex-direction:column;gap:8px}
+.radio-group label,.check-group label{font-weight:400;display:flex;align-items:center;gap:8px;cursor:pointer;color:#f0ece4}
+.radio-group input,.check-group input{width:auto;margin:0}
+.hint{font-size:.78rem;color:#888;margin-top:3px}
+.submit-btn{width:100%;padding:13px;background:#8B0000;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
+.submit-btn:hover{background:#6B0000}
+.submit-btn.choir-btn-submit{background:var(--choir)}
+.submit-btn.coord-btn-submit{background:var(--coord)}
+.success-msg{display:none;background:var(--success-bg);border:1.5px solid var(--success);color:var(--success);border-radius:8px;padding:16px;text-align:center;font-weight:600;margin-top:16px}
+.back-link{display:inline-block;margin-bottom:20px;color:#8B0000;cursor:pointer;font-size:.9rem}
+.back-link:hover{text-decoration:underline}
+.req-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:.75rem;font-weight:700;margin-left:8px}
+.req-badge.high{background:#0d0d0d;color:#fff}
+.req-badge.med{background:#8B0000;color:#fff}
+.req-badge.choir-badge{background:var(--choir);color:#fff}
+.req-badge.coord-badge{background:var(--coord);color:#fff}
+.matrix-section{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.10);overflow-x:visible}
+.matrix-table{width:100%;border-collapse:collapse;font-size:1.05rem;table-layout:fixed}
+.matrix-table th{background:#8B0000;color:#fff;padding:12px 8px;text-align:center;word-wrap:break-word}
+.matrix-table th:first-child{text-align:left;min-width:130px}
+.matrix-table td{padding:10px 8px;border:1px solid #dde;text-align:center}
+.matrix-table tr:nth-child(even) td{background:#f8f9fd}
+.matrix-table td:first-child{text-align:left;font-weight:600;color:#0d0d0d}
+.cathedral{background:#0d0d0d!important;color:#fff!important}
+.kecoughtan{background:#4CAF50!important;color:#fff!important}
+.newbeg{background:#1565C0!important;color:#fff!important}
+.newport{background:#6D4C41!important;color:#fff!important}
+.hampton{background:#7CB342!important;color:#fff!important}
+.ingleside{background:#E65100!important;color:#fff!important}
+.norfolk{background:#C62828!important;color:#fff!important}
+.franklin{background:#2E7D32!important;color:#fff!important}
+
+.total-col{background:#1a1508!important;font-weight:700;color:#0d0d0d!important}
+.total-row td{background:#0d0d0d!important;color:#fff!important;font-weight:700}
+.info-banner{background:linear-gradient(135deg,#e8f4fd,#f0f8ff);border:1px solid #8B0000;border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:.88rem;color:#0d0d0d;line-height:1.6}
+.info-banner strong{display:block;font-size:.95rem;margin-bottom:6px}
+footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;background:#0d0d0d;border-top:1px solid #333}
+.status-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:999;padding:16px 24px;font-size:1rem;font-weight:700;text-align:center;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.status-banner.cancelled{background:#E2EFDA;color:#375623;border-bottom:3px solid #375623}
+.status-banner.update{background:#FFF9C4;color:#7B5800;border-bottom:3px solid #F9A825}
+.status-banner.invalid{background:#FDECEA;color:#c0392b;border-bottom:3px solid #c0392b}
+.status-banner .close-btn{float:right;cursor:pointer;font-size:1.2rem;margin-left:16px;opacity:.7}
+
+/* ── HOME PAGE: single-screen no-scroll layout ── */
+#tab-home{flex-direction:column;flex:1;min-height:0;overflow:hidden;gap:0;padding:6px 12px;box-sizing:border-box}#tab-home.active{display:flex;flex:1}
+
+/* ── DASHBOARD ── */
+
+
+
+
+
+
+.dash-date{font-size:1.1rem;color:#C9A227;font-weight:700;white-space:nowrap;line-height:1}
+.dash-statsbar{display:flex;gap:8px;margin:5px 0;justify-content:center;flex-shrink:0}
+.dash-stat{background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:5px 12px;flex:1;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.4)}
+.dash-stat-num{font-size:1.8rem;font-weight:900;color:#C9A227;line-height:1}
+.dash-stat-lbl{font-size:.62rem;color:#777;text-transform:uppercase;letter-spacing:.5px}
+.dash-section-lbl{flex-shrink:0;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A227;margin:4px 0 3px;border-bottom:1.5px solid #C9A227;padding-bottom:2px;text-align:center;flex-shrink:0}
+.act-overview{display:grid;grid-template-columns:repeat(13,1fr);gap:4px;flex:0 0 auto;align-content:start}
+.act-tile{background:#1a1a1a;border-radius:8px;padding:9px 2px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #8B0000;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;max-height:138px}
+.act-tile:hover{border-color:#C9A227}
+.act-tile-num{font-size:3.6rem;font-weight:900;line-height:1;color:#C9A227}
+.act-tile-pct{font-size:1.73rem;margin-top:3px;font-weight:700;color:#f0ece4}
+.act-tile-bar{background:#333;border-radius:2px;height:4px;margin-top:4px;overflow:hidden;width:70%}
+.act-tile-bar-fill{height:100%;border-radius:3px;transition:width .5s}
+.sites-overview{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;flex:0 0 auto;align-content:start}
+.site-tile{background:#1a1a1a;border-radius:6px;padding:4px 6px;box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #8B0000;display:flex;flex-direction:column;justify-content:center}
+.site-tile-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1px}
+.site-tile-name{font-size:.72rem;font-weight:700;color:#f0ece4}
+.site-tile-badge{font-size:.9rem;font-weight:900;padding:2px 7px;border-radius:20px;color:#fff}
+.site-tile-bar{background:#eee;border-radius:2px;height:3px;overflow:hidden}
+.site-tile-bar-fill{height:100%;border-radius:3px;transition:width .6s}
+.dash-refresh{background:#0d0d0d;color:#fff;border:none;border-radius:20px;padding:4px 12px;font-size:.7rem;cursor:pointer;margin-left:6px}
+.dash-refresh:hover{background:#8B0000}
+
+/* ── QR GRID — compact, no QR images shown ── */
+
+.qr-label{font-size:.76rem;font-weight:700;color:#0d0d0d;line-height:1.2}
+
+
+.qr-count{font-size:1rem;font-weight:900;color:#0d0d0d;line-height:1}
+.qr-open-btn{display:inline-block;margin-top:1px;padding:2px 5px;background:#8B0000;color:#fff;border:none;border-radius:8px;font-size:.38rem;cursor:pointer;font-weight:600}
+
+.qr-scan-hint{font-size:.72rem;color:#888;margin-top:7px}
+.qr-count{font-size:1.13rem;font-weight:900;color:#0d0d0d;margin-top:2px;line-height:1}
+.qr-open-btn{display:inline-block;margin-top:3px;padding:2px 7px;background:#8B0000;color:#fff;border:none;border-radius:8px;font-size:.57rem;cursor:pointer;text-decoration:none;font-weight:600}
+.qr-open-btn:hover{background:#0d0d0d}
+
+/* ── T-SHIRT FLASH BANNER ── */
+@keyframes tshirt-flash {
+  0%,45%{opacity:1} 50%,95%{opacity:0} 100%{opacity:1}
+}
+.tshirt-banner{background:#8B0000;color:#fff;font-size:1.82rem;font-weight:900;
+  text-align:center;padding:13px 16px;border-radius:8px;flex-shrink:0;
+  letter-spacing:.5px;animation:tshirt-flash 1.8s infinite;margin:4px 0;
+  text-shadow:0 1px 4px rgba(0,0,0,.3)}
+</style>
+</head>
+<body>
+
+<div id="status-banner" class="status-banner"><span class="close-btn" onclick="document.getElementById('status-banner').style.display='none'">✕</span><span id="status-msg"></span></div>
+<header>
+  <h1>⛪ Zion Unity Fest 2026 — Volunteer Signup Portal</h1>
+</header>
+
+<div class="tab-bar">
+  <button class="tab-btn active"  onclick="showTab('home')"><span class="tab-lbl">Home</span><span class="tab-icon">🏠</span></button>
+  <button class="tab-btn"         onclick="showTab('f12')"><span class="tab-lbl">Contacts</span><span class="tab-icon">📋</span></button>
+  <button class="tab-btn"         onclick="showTab('matrix')"><span class="tab-lbl">Coordinator</span><span class="tab-icon">📊</span></button>
+  <button class="tab-btn"         onclick="showTab('f1')"><span class="tab-lbl">Food</span><span class="tab-icon">🍽</span></button>
+  <button class="tab-btn"         onclick="showTab('f2')"><span class="tab-lbl">Drinks</span><span class="tab-icon">🥤</span></button>
+  <button class="tab-btn"         onclick="showTab('f3')"><span class="tab-lbl">Games</span><span class="tab-icon">🎯</span></button>
+  <button class="tab-btn"         onclick="showTab('f4')"><span class="tab-lbl">DJ</span><span class="tab-icon">🎵</span></button>
+  <button class="tab-btn"         onclick="showTab('f5')"><span class="tab-lbl">Karaoke</span><span class="tab-icon">🎤</span></button>
+  <button class="tab-btn"         onclick="showTab('f6')"><span class="tab-lbl">Basketball</span><span class="tab-icon">🏀</span></button>
+  <button class="tab-btn"         onclick="showTab('f7')"><span class="tab-lbl">Kid Games</span><span class="tab-icon">🧒</span></button>
+  <button class="tab-btn"         onclick="showTab('f8')"><span class="tab-lbl">Parking</span><span class="tab-icon">🅿</span></button>
+  <button class="tab-btn"         onclick="showTab('f9')"><span class="tab-lbl">Site Setup</span><span class="tab-icon">⛺</span></button>
+  <button class="tab-btn"         onclick="showTab('f10')"><span class="tab-lbl">Popcorn</span><span class="tab-icon">🍿</span></button>
+  <button class="tab-btn"         onclick="showTab('f11')"><span class="tab-lbl">Pretzels</span><span class="tab-icon">🥨</span></button>
+  <button class="tab-btn"         onclick="showTab('f13')"><span class="tab-lbl">Choir</span><span class="tab-icon">🎶</span></button>
+</div>
+
+<main>
+
+
+<!-- ══ HOME ══ -->
+<div id="tab-home" class="form-panel active">
+  <!-- TOP HALF: stats + activity tiles + site tiles -->
+  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;gap:0">
+
+    
+
+    <!-- Stats bar -->
+    <div class="dash-statsbar">
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-total">--</div><div class="dash-stat-lbl">Total Signed Up</div></div>
+      <div class="dash-stat"><div class="dash-stat-num" id="stat-needed">--</div><div class="dash-stat-lbl">Volunteers Needed</div></div>
+      <div class="dash-stat" style="flex:2;display:flex;align-items:center;justify-content:center;gap:8px">
+        <span style="font-size:.72rem;color:#888">Updated: <span id="stat-updated">--</span></span>
+        <button class="dash-refresh" onclick="loadDash()">↻ Refresh</button>
+      </div>
+    </div>
+
+    <!-- Activity overview tiles -->
+    <div class="dash-section-lbl">📊 Activity Signups</div>
+    <div class="act-overview" id="act-overview"></div>
+
+    <!-- Site overview -->
+    <div class="dash-section-lbl">📍 Signups by Site</div>
+    <div class="sites-overview" id="sites-overview"></div>
+
+  </div><!-- end top half -->
+
+  <!-- T-SHIRT FLASH BANNER -->
+  <div class="tshirt-banner">🎽 Purchase Your Unity Fest T-Shirts Today! 🎽</div>
+
+</div>
+
+<!-- ══ MATRIX ══ -->
+<div id="tab-matrix" class="form-panel">
+  <!-- Lock Gate -->
+  <div id="matrix-lock" style="max-width:420px;margin:60px auto;background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:40px 36px;box-shadow:0 4px 20px rgba(0,0,0,.6);text-align:center">
+    <div style="font-size:3rem;margin-bottom:12px">🔒</div>
+    <h2 style="color:#C9A227;font-size:1.3rem;margin-bottom:8px">Coordinator Access Only</h2>
+    <p style="color:#aaa;font-size:.9rem;margin-bottom:24px">This page is restricted to Site Coordinators. Please enter the access code to continue.</p>
+    <p style="font-size:.75rem;color:#888;margin-bottom:6px">400–800 Attendees · 8 Sites · 13 Categories</p>
+    <label style="display:block;font-size:.85rem;font-weight:700;color:#C9A227;margin-bottom:6px;text-align:left">Coordinator Access Code</label>
+    <input id="matrix-code" type="password" placeholder="Enter access code" style="width:100%;padding:10px 12px;border:1.5px solid #444;border-radius:8px;font-size:.95rem;margin-bottom:12px;background:#222;color:#f0ece4">
+    <div id="matrix-err" style="display:none;color:#c0392b;font-size:.83rem;margin-bottom:10px">❌ Incorrect code. Please try again.</div>
+    <button onclick="unlockMatrix()" style="width:100%;padding:12px;background:#8B0000;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer">🔓 Unlock</button>
+  </div>
+  <!-- Matrix Content (hidden until unlocked) -->
+  <div id="matrix-content" style="display:none">
+  <p class="section-title">Volunteer Requirements by Site</p>
+  <p class="section-sub">Required volunteer counts · Oct 4, 2026 · 400–800 Attendees · 8 Sites · 13 Categories</p>
+  <div class="matrix-section">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th>Activity</th>
+          <th class="cathedral">The Cathedral</th>
+          <th class="kecoughtan">Kecoughtan Road</th>
+          <th class="newbeg">New Beginnings</th><th class="newport">Newport News</th>
+          <th class="hampton">Downtown Hampton</th><th class="ingleside">Ingleside Road</th>
+          <th class="norfolk">Port Norfolk</th><th class="franklin">Downtown Franklin</th>
+          <th class="total-col">TOTAL</th><th>Deadline</th>
+        </tr>
+      </thead>
+      <tbody id="matrix-body"></tbody>
+    </table>
+  </div>
+  <div style="text-align:center;margin-top:24px"><a href="https://docs.google.com/spreadsheets/d/1JmUA5WzgHxuLnODD-96rtYtgH68dJvSaNaW5Vhp2pSI/view" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#1565C0;color:#fff;border-radius:24px;font-size:1.28rem;font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.15)">📊 View Master Google Sheet</a></div>
+
+  <!-- QR Signup Codes -->
+  <div style="margin:28px 0 16px">
+    <p class="section-title" style="text-align:center;margin-bottom:4px">📱 Volunteer Signup QR Codes</p>
+    <p class="section-sub" style="text-align:center">Scan or tap any tile to open the volunteer signup form</p>
+    <div class="qr-grid" id="qr-grid"></div>
+  </div>
+  </div><!-- end matrix-content -->
+</div>
+
+<!-- ══ FOOD ══ -->
+<div id="tab-f1" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🍽 Food Signup <span class="req-badge high">3 wks out</span></h2>
+    <p class="form-desc">Sign up to prepare and serve your site's assigned food item. Each station needs enough servers to serve 400–800 attendees.</p>
+    <form onsubmit="submitForm(event,'food',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Server Name <span class="req">*</span></label><input type="text" name="Server Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Assigned Food Item <span class="req">*</span></label><select name="Assigned Food Item" required><option value="">— Select —</option><option>The Cathedral – [Item TBD]</option><option>New Beginnings – [Item TBD]</option><option>Newport News – [Item TBD]</option><option>Downtown Hampton – [Item TBD]</option><option>Kecoughtan Road – [Item TBD]</option><option>Ingleside Road – [Item TBD]</option><option>Port Norfolk – [Item TBD]</option><option>Downtown Franklin – [Item TBD]</option></select></div>
+      <div class="form-group"><label>Availability <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Availability" value="Full event" required> Full event</label><label><input type="radio" name="Availability" value="Setup/serving only"> Setup/serving only</label><label><input type="radio" name="Availability" value="Cleanup only"> Cleanup only</label></div></div>
+      <div class="form-group"><label>Allergy / Dietary Notes</label><textarea name="Allergy Notes" placeholder="Optional notes for the Food Chair"></textarea></div>
+      <button type="submit" class="submit-btn">Submit Food Signup</button>
+      <div class="success-msg" id="success-food">✅ Signup recorded! A confirmation email is on its way.</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ DRINKS ══ -->
+<div id="tab-f2" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🥤 Drinks Signup <span class="req-badge high">3 wks out</span></h2>
+    <p class="form-desc">Help keep everyone hydrated! Sign up to restock coolers, run beverages, or staff the drinks table.</p>
+    <form onsubmit="submitForm(event,'drinks',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Volunteer Name <span class="req">*</span></label><input type="text" name="Volunteer Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Role <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Role" value="Restock / runner" required> Restock / runner</label><label><input type="radio" name="Role" value="Table staff"> Table staff</label><label><input type="radio" name="Role" value="Setup / teardown"> Setup / teardown</label></div></div>
+      <div class="form-group"><label>Time Availability</label><input type="text" name="Time Availability" placeholder="e.g., 10am–2pm (optional)"></div>
+      <button type="submit" class="submit-btn">Submit Drinks Signup</button>
+      <div class="success-msg" id="success-drinks">✅ Signup recorded! Confirmation email sent.</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ GAMES ══ -->
+<div id="tab-f3" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🎯 Games Signup <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Staff a game station and keep the competition fun!</p>
+    <form onsubmit="submitForm(event,'games',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Volunteer Name <span class="req">*</span></label><input type="text" name="Volunteer Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Which Game Station? <span class="req">*</span></label><select name="Game Station" required><option value="">— Select —</option><option>Station 1</option><option>Station 2</option><option>Station 3</option><option>Station 4</option><option>No preference</option></select></div>
+      <div class="form-group"><label>Available for Setup? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Setup Help" value="Yes" required> Yes</label><label><input type="radio" name="Setup Help" value="No"> No</label></div></div>
+      <button type="submit" class="submit-btn">Submit Games Signup</button>
+      <div class="success-msg" id="success-games">✅ Signup recorded! Confirmation email sent.</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ DJ ══ -->
+<div id="tab-f4" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🎵 DJ / Music <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Submit song requests, shoutouts, or volunteer as MC helper for your site.</p>
+    <form onsubmit="submitForm(event,'dj',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Name <span class="req">*</span></label><input type="text" name="Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Song Request</label><input type="text" name="Song Request" placeholder="Artist – Song title (optional)"></div>
+      <div class="form-group"><label>Shoutout / Announcement</label><textarea name="Shoutout Request" placeholder="Site shoutouts, birthdays, etc. (optional)"></textarea></div>
+      <div class="form-group"><label>Volunteer as MC Helper? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="MC Volunteer" value="Yes — I'll help with site shoutouts" required> Yes — I'll help with site shoutouts</label><label><input type="radio" name="MC Volunteer" value="No — just submitting a request"> No — just submitting a request</label></div></div>
+      <button type="submit" class="submit-btn">Submit DJ / Music Form</button>
+      <div class="success-msg" id="success-dj">✅ Submitted! Confirmation email sent.</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ KARAOKE ══ -->
+<div id="tab-f5" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🎤 Karaoke Signup <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Ready to take the stage? Solo, duet, or group — all welcome!</p>
+    <form onsubmit="submitForm(event,'karaoke',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Singer Name(s) <span class="req">*</span></label><input type="text" name="Singer Name" required placeholder="For duets/groups, list all names"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Song Choice <span class="req">*</span></label><input type="text" name="Song Choice" required placeholder="Artist – Song title"></div>
+      <div class="form-group"><label>Backup Song</label><input type="text" name="Backup Song" placeholder="In case your first choice is taken (optional)"></div>
+      <button type="submit" class="submit-btn">Submit Karaoke Signup</button>
+      <div class="success-msg" id="success-karaoke">✅ You're on the list! See you on stage 🎤</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ BASKETBALL ══ -->
+<div id="tab-f6" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🏀 Basketball Tournament <span class="req-badge high">3 wks out</span></h2>
+    <p class="form-desc">Register your site's team (5–8 players). One team per site.</p>
+    <form onsubmit="submitForm(event,'basketball',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Team Name <span class="req">*</span></label><input type="text" name="Team Name" required placeholder="e.g., Cathedral Kings"></div>
+      <div class="form-group"><label>Team Captain Name <span class="req">*</span></label><input type="text" name="Team Captain" required placeholder="Full name"></div>
+      <div class="form-group"><label>Captain Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Captain Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Player Names (5–8 players) <span class="req">*</span></label><textarea name="Player Names" required placeholder="List one player per line&#10;1. &#10;2. &#10;3. &#10;4. &#10;5. "></textarea></div>
+      <div class="form-group"><label>Jersey Color Preference</label><input type="text" name="Jersey Color" placeholder="Helps avoid same-color matchups (optional)"></div>
+      <button type="submit" class="submit-btn">Register Basketball Team</button>
+      <div class="success-msg" id="success-basketball">✅ Team registered! Bracket info coming soon 🏀</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ KID GAMES ══ -->
+<div id="tab-f7" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🧒 Kid Games Signup <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Help keep kids safe and entertained in the children's area.</p>
+    <form onsubmit="submitForm(event,'kidgames',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Chaperone / Helper Name <span class="req">*</span></label><input type="text" name="Helper Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Age Group Comfortable Supervising <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Age Group" value="Ages 3–6" required> Ages 3–6</label><label><input type="radio" name="Age Group" value="Ages 7–10"> Ages 7–10</label><label><input type="radio" name="Age Group" value="Ages 11+"> Ages 11+</label><label><input type="radio" name="Age Group" value="Any age group"> Any age group</label></div></div>
+      <div class="form-group"><label>First Aid / CPR Certified? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="CPR Certified" value="Yes" required> Yes</label><label><input type="radio" name="CPR Certified" value="No"> No</label></div></div>
+      <button type="submit" class="submit-btn">Submit Kid Games Signup</button>
+      <div class="success-msg" id="success-kidgames">✅ Thank you for helping with the kids' area!</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ PARKING ══ -->
+<div id="tab-f8" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🅿 Parking Signup <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Keep traffic flowing smoothly on event day.</p>
+    <form onsubmit="submitForm(event,'parking',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Volunteer Name <span class="req">*</span></label><input type="text" name="Volunteer Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Shift Preference <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Shift Preference" value="Arrival / early shift" required> Arrival / early shift</label><label><input type="radio" name="Shift Preference" value="Mid-day"> Mid-day</label><label><input type="radio" name="Shift Preference" value="Departure / late shift"> Departure / late shift</label><label><input type="radio" name="Shift Preference" value="Full day"> Full day</label></div></div>
+      <div class="form-group"><label>Own Reflective Vest or Flashlight? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Has Vest/Flashlight" value="Yes" required> Yes — I have a vest / flashlight</label><label><input type="radio" name="Has Vest/Flashlight" value="No"> No — will need one provided</label></div></div>
+      <button type="submit" class="submit-btn">Submit Parking Signup</button>
+      <div class="success-msg" id="success-parking">✅ Thanks for keeping us organized in the lot!</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ SITE SETUP ══ -->
+<div id="tab-f9" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>⛺ Site Setup Signup <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Help set up and break down the event — tables, chairs, tents, and venue prep.</p>
+    <form onsubmit="submitForm(event,'setup',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Volunteer Name <span class="req">*</span></label><input type="text" name="Volunteer Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Equipment Your Site Can Bring <span class="req">*</span></label><div class="check-group"><label><input type="checkbox" name="Equipment" value="Tables"> Tables</label><label><input type="checkbox" name="Equipment" value="Chairs"> Chairs</label><label><input type="checkbox" name="Equipment" value="Tents"> Tent(s)</label><label><input type="checkbox" name="Equipment" value="None - volunteer labor only"> None — volunteer labor only</label></div></div>
+      <div class="form-group"><label>Quantity of Equipment</label><input type="text" name="Equipment Quantity" placeholder="e.g., 2 tables, 10 chairs (optional)"></div>
+      <div class="form-group"><label>Available For <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Available For" value="Setup only" required> Setup only</label><label><input type="radio" name="Available For" value="Teardown only"> Teardown only</label><label><input type="radio" name="Available For" value="Both setup and teardown"> Both setup and teardown</label></div></div>
+      <button type="submit" class="submit-btn">Submit Site Setup Signup</button>
+      <div class="success-msg" id="success-setup">✅ Thanks! Your setup crew signup was recorded.</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ POPCORN ══ -->
+<div id="tab-f10" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🍿 Popcorn Machine Signup <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Staff the popcorn station and keep the snacks flowing!</p>
+    <form onsubmit="submitForm(event,'popcorn',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Volunteer Name <span class="req">*</span></label><input type="text" name="Volunteer Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Shift Preference <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Shift Preference" value="Morning" required> Morning</label><label><input type="radio" name="Shift Preference" value="Afternoon"> Afternoon</label><label><input type="radio" name="Shift Preference" value="All day"> All day</label></div></div>
+      <div class="form-group"><label>Prior Experience Running a Popcorn Machine? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Prior Experience" value="Yes" required> Yes</label><label><input type="radio" name="Prior Experience" value="No"> No</label></div></div>
+      <button type="submit" class="submit-btn">Submit Popcorn Signup</button>
+      <div class="success-msg" id="success-popcorn">✅ You're popping in! Signup recorded 🍿</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ PRETZELS ══ -->
+<div id="tab-f11" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap">
+    <h2>🥨 Pretzels Signup <span class="req-badge med">2 wks out</span></h2>
+    <p class="form-desc">Staff the pretzel station — warm, salty, and crowd-pleasing!</p>
+    <form onsubmit="submitForm(event,'pretzels',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Volunteer Name <span class="req">*</span></label><input type="text" name="Volunteer Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Shift Preference <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Shift Preference" value="Morning" required> Morning</label><label><input type="radio" name="Shift Preference" value="Afternoon"> Afternoon</label><label><input type="radio" name="Shift Preference" value="All day"> All day</label></div></div>
+      <div class="form-group"><label>Prior Experience Running a Food Station? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Prior Experience" value="Yes" required> Yes</label><label><input type="radio" name="Prior Experience" value="No"> No</label></div></div>
+      <button type="submit" class="submit-btn">Submit Pretzels Signup</button>
+      <div class="success-msg" id="success-pretzels">✅ Twisted and registered! Signup recorded 🥨</div>
+    </form>
+  </div>
+</div>
+
+<!-- ══ SITE COORDINATOR ══ -->
+<div id="tab-f12" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap" style="max-width:860px">
+    <h2>📋 Unity Fest Contacts</h2>
+    <p class="form-desc">Site coordinators and activity leads for Zion Unity Fest 2026. Contact information is maintained by event leadership.</p>
+    <div id="contacts-body">
+      <div style="text-align:center;padding:40px 0;color:#888">
+        <div style="font-size:2rem;margin-bottom:12px">⏳</div>
+        <div>Loading contacts…</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ COMBINED CHOIR ══ -->
+<div id="tab-f13" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap choir-wrap">
+    <h2>🎶 Combined Choir Signup <span class="req-badge choir-badge">All Sites Welcome</span></h2>
+    <p class="form-desc">Join the Zion Unity Fest 2026 Combined Choir! Singers from all 8 sites will come together for a unified worship experience. Rehearsal details will be shared after registration closes.</p>
+    <form onsubmit="submitForm(event,'choir',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
+      <div class="form-group"><label>Singer Name <span class="req">*</span></label><input type="text" name="Singer Name" required placeholder="Full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
+      <div class="form-group"><label>Voice Part <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="Voice Part" value="Soprano" required> Soprano</label>
+          <label><input type="radio" name="Voice Part" value="Alto"> Alto</label>
+          <label><input type="radio" name="Voice Part" value="Tenor"> Tenor</label>
+          <label><input type="radio" name="Voice Part" value="Bass"> Bass</label>
+          <label><input type="radio" name="Voice Part" value="Not sure"> Not sure / flexible</label>
+        </div>
+      </div>
+      <div class="form-group"><label>Willing to Lead a Song? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="Willing to Lead" value="Yes — I'd love to lead a song" required> Yes — I'd love to lead a song</label>
+          <label><input type="radio" name="Willing to Lead" value="Yes — open to it if needed"> Yes — open to it if needed</label>
+          <label><input type="radio" name="Willing to Lead" value="No — prefer to sing in the choir"> No — prefer to sing in the choir</label>
+        </div>
+      </div>
+      <div class="form-group"><label>Available for Rehearsal? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label><input type="radio" name="Rehearsal Available" value="Yes — I can attend rehearsal" required> Yes — I can attend rehearsal</label>
+          <label><input type="radio" name="Rehearsal Available" value="Depends on schedule"> Depends on schedule</label>
+          <label><input type="radio" name="Rehearsal Available" value="No — event day only"> No — event day only</label>
+        </div>
+      </div>
+      <div class="form-group"><label>Rehearsal Availability Notes</label><textarea name="Rehearsal Notes" placeholder="Days/times that work best for you (optional)"></textarea></div>
+      <div class="form-group"><label>Song Suggestions / Additional Comments</label><textarea name="Comments" placeholder="Songs you'd love to sing, special requests, etc. (optional)"></textarea></div>
+      <button type="submit" class="submit-btn choir-btn-submit">Submit Choir Signup 🎶</button>
+      <div class="success-msg" id="success-choir">✅ Welcome to the choir! Rehearsal details coming soon 🎶</div>
+    </form>
+  </div>
+</div>
+
+</main>
+<footer>Zion Unity Fest 2026 &nbsp;·&nbsp; Oct 4, 2026 &nbsp;·&nbsp; Questions? <a href="mailto:zccunityfest@gmail.com" style="color:#888">zccunityfest@gmail.com</a></footer>
+
+<script>
+const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwGvcmsrJ5lmd12dsyc5_heOMwztBhCEkwDxFUEl146beOPnm6tZf8_z7YAHVYv9CdcsQ/exec';
+
+const TABS = {home:0,matrix:1,f1:2,f2:3,f3:4,f4:5,f5:6,f6:7,f7:8,f8:9,f9:10,f10:11,f11:12,f12:13,f13:14};
+
+const SITES_LIST  = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
+                     'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
+const SITE_KEYS   = ['cathedral','newbeg','newport','hampton','kecoughtan','ingleside','norfolk','franklin'];
+const SITE_COLORS = ['#C0392B','#1565C0','#6D4C41','#7CB342','#4CAF50','#E65100','#C62828','#2E7D32'];
+
+const DASH_ACTS = [
+  {key:'food',       emoji:'\uD83C\uDF7D', label:'Food'},
+  {key:'drinks',     emoji:'\uD83E\uDD64', label:'Drinks'},
+  {key:'games',      emoji:'\uD83C\uDFAF', label:'Games'},
+  {key:'dj',         emoji:'\uD83C\uDFB5', label:'DJ'},
+  {key:'karaoke',    emoji:'\uD83C\uDFA4', label:'Karaoke'},
+  {key:'basketball', emoji:'\uD83C\uDFC0', label:'Basketball'},
+  {key:'kidgames',   emoji:'\uD83D\uDC66', label:'Kid Games'},
+  {key:'parking',    emoji:'\uD83C\uDD7F', label:'Parking'},
+  {key:'setup',      emoji:'\u26FA',        label:'Site Setup'},
+  {key:'popcorn',    emoji:'\uD83C\uDF7F', label:'Popcorn'},
+  {key:'pretzels',   emoji:'\uD83E\uDD68', label:'Pretzels'},
+  {key:'coordinator',emoji:'\uD83D\uDCCB', label:'Coordinators'},
+  {key:'choir',      emoji:'\uD83C\uDFB6', label:'Choir'},
+];
+
+const REQUIREMENTS = {
+  food:     {cathedral:8,newbeg:5,newport:5,hampton:5,kecoughtan:6,ingleside:5,norfolk:5,franklin:5},
+  drinks:   {cathedral:5,newbeg:1,newport:1,hampton:1,kecoughtan:2,ingleside:1,norfolk:1,franklin:1},
+  games:    {cathedral:5,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  dj:       {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  karaoke:  {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  basketball:{cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  kidgames: {cathedral:2,newbeg:2,newport:2,hampton:2,kecoughtan:2,ingleside:2,norfolk:2,franklin:2},
+  parking:  {cathedral:4,newbeg:0,newport:1,hampton:1,kecoughtan:2,ingleside:1,norfolk:0,franklin:1},
+  setup:    {cathedral:3,newbeg:3,newport:3,hampton:3,kecoughtan:3,ingleside:3,norfolk:3,franklin:3},
+  popcorn:  {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  pretzels: {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  coordinator:{cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  choir:    {cathedral:0,newbeg:0,newport:0,hampton:0,kecoughtan:0,ingleside:0,norfolk:0,franklin:0},
+};
+
+const LIVE_COUNTS = {};
+
+// ── COUNTDOWN ───────────────────────────────────────────────
+function updateCountdown() {
+  var diff = new Date('2026-10-04T09:00:00') - new Date();
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent  = '00';
+    document.getElementById('cd-hours').textContent = '00';
+    document.getElementById('cd-mins').textContent  = '00';
+    document.getElementById('cd-secs').textContent  = '00';
+    return;
+  }
+  document.getElementById('cd-days').textContent  = String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
+  document.getElementById('cd-mins').textContent  = String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+  document.getElementById('cd-secs').textContent  = String(Math.floor(diff%60000/1000)).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+// ── DASHBOARD LOAD ───────────────────────────────────────────
+function loadDash() {
+  var el = document.getElementById('stat-updated');
+  if (el) el.textContent = 'Loading...';
+  if (WEB_APP_URL && WEB_APP_URL.indexOf('YOUR_WEB_APP') < 0 && window.location.protocol !== 'file:') {
+    fetch(WEB_APP_URL + '?action=counts')
+      .then(function(r){ return r.json(); })
+      .then(function(data){ renderDash(data); })
+      .catch(function(){ renderDash({}); });
+  } else {
+    renderDash({});
+  }
+}
+
+function renderDash(data) {
+  DASH_ACTS.forEach(function(a){ LIVE_COUNTS[a.key] = data[a.key] || 0; });
+  renderActOverview();
+  renderSitesOverview(data);
+  updateQRCounts();
+  // Total active signups
+  var total = DASH_ACTS.filter(function(a){ return a.key!=='coordinator'; }).reduce(function(s,a){ return s+(LIVE_COUNTS[a.key]||0); }, 0);
+  var elT = document.getElementById('stat-total'); if (elT) elT.textContent = total;
+  // Total volunteers needed (requirement total minus active signups)
+  var totalNeeded = 0;
+  DASH_ACTS.filter(function(a){ return a.key!=='coordinator'; }).forEach(function(a){
+    var req = REQUIREMENTS[a.key] || {};
+    totalNeeded += Object.values(req).reduce(function(s,v){ return s+v; }, 0);
+  });
+  var remaining = Math.max(0, totalNeeded - total);
+  var elN = document.getElementById('stat-needed'); if (elN) elN.textContent = remaining;
+  var upd = document.getElementById('stat-updated'); if (upd) upd.textContent = new Date().toLocaleTimeString();
+}
+
+function renderActOverview() {
+  var grid = document.getElementById('act-overview');
+  if (!grid) return;
+  grid.innerHTML = '';
+  DASH_ACTS.forEach(function(act, idx) {
+    var signed = LIVE_COUNTS[act.key] || 0;
+    var needed = Object.values(REQUIREMENTS[act.key]||{}).reduce(function(s,v){ return s+v; }, 0);
+    var pct    = needed > 0 ? Math.min(100, Math.round(signed/needed*100)) : (signed>0?100:0);
+    var color  = pct>=100?'#375623':pct>=50?'#BF8F00':'#6D28D9';
+    var tile = document.createElement('div');
+    tile.className = 'act-tile';
+    tile.style.borderColor = color;
+    tile.title = act.label;
+    tile.innerHTML =
+      '<div style="font-size:2rem;line-height:1;margin-bottom:2px">' + act.emoji + '</div>' +
+      '<div class="act-tile-num" style="color:'+color+'">' + signed + '</div>' +
+      '<div class="act-tile-pct" style="color:'+color+'">' + (needed>0?pct+'%':'Open') + '</div>' +
+      '<div class="act-tile-bar"><div class="act-tile-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
+    var tabKey = ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13'][idx];
+    tile.onclick = function(){ showTab(tabKey || 'home'); };
+    grid.appendChild(tile);
+  });
+}
+
+function renderSitesOverview(data) {
+  var grid = document.getElementById('sites-overview');
+  if (!grid) return;
+  grid.innerHTML = '';
+  SITES_LIST.forEach(function(site, si) {
+    var sk = SITE_KEYS[si];
+    var color = SITE_COLORS[si];
+    var siteNeeded = 0;
+    DASH_ACTS.forEach(function(a){ siteNeeded += (REQUIREMENTS[a.key]||{})[sk]||0; });
+    var siteTotal = (data.bySite && data.bySite[sk]) ? data.bySite[sk] : 0;
+    var pct = siteNeeded>0 ? Math.min(100,Math.round(siteTotal/siteNeeded*100)) : 0;
+    var barColor = pct>=100?'#375623':pct>=50?'#BF8F00':color;
+    var tile = document.createElement('div');
+    tile.className = 'site-tile';
+    tile.style.borderLeftColor = color;
+    tile.innerHTML =
+      '<div class="site-tile-hdr">' +
+        '<span class="site-tile-name">' + site + '</span>' +
+        '<span class="site-tile-badge" style="background:'+color+'">' + siteTotal + '</span>' +
+      '</div>' +
+      '<div style="font-size:2rem;font-weight:900;color:'+color+';line-height:1;margin:6px 0 4px">' + siteTotal + '</div>' +
+      '<div class="site-tile-bar"><div class="site-tile-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div>';
+    grid.appendChild(tile);
+  });
+}
+
+function updateQRCounts() {
+  DASH_ACTS.forEach(function(act) {
+    var el = document.getElementById('qrc-'+act.key);
+    if (el) el.textContent = LIVE_COUNTS[act.key] || '0';
+  });
+}
+
+// ── TAB NAVIGATION ───────────────────────────────────────────
+function showTab(id) {
+  var panels = document.querySelectorAll('.form-panel');
+  for (var i=0; i<panels.length; i++) panels[i].classList.remove('active');
+  var btns = document.querySelectorAll('.tab-btn');
+  for (var i=0; i<btns.length; i++) btns[i].classList.remove('active');
+  var panel = document.getElementById('tab-'+id);
+  if (panel) panel.classList.add('active');
+  if (TABS[id] !== undefined) {
+    var btn = btns[TABS[id]];
+    if (btn) btn.classList.add('active');
+  }
+  window.scrollTo(0,0);
+  if (id === 'f12') loadContacts();
+}
+
+// ── UNITY FEST CONTACTS ──────────────────────────────────────────
+var _contactsLoaded = false;
+function loadContacts() {
+  if (_contactsLoaded) return;
+  var url = WEB_APP_URL + '?action=leadership&t=' + Date.now();
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){ renderContacts(data); _contactsLoaded = true; })
+    .catch(function(){ renderContacts(null); });
+}
+
+function renderContacts(data) {
+  var el = document.getElementById('contacts-body');
+  if (!el) return;
+  if (!data || (!data.siteCoordinators.length && !data.siteActivityLeads.length && !data.projectLeads.length)) {
+    el.innerHTML = '<p style="text-align:center;color:#888;padding:32px 0">No contacts have been added yet. Leadership information will appear here once entered in the master sheet.</p>';
+    return;
+  }
+
+  var SITES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
+               'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
+  var SITE_COLORS = ['#C0392B','#1565C0','#6D4C41','#7CB342','#4CAF50','#E65100','#C62828','#2E7D32'];
+
+  var html = '';
+
+  // ── SECTION 1: BY SITE ──
+  html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
+
+  SITES.forEach(function(site, si) {
+    var color = SITE_COLORS[si];
+    var coord = data.siteCoordinators.filter(function(r){ return r.site === site; })[0];
+    var actLeads = data.siteActivityLeads.filter(function(r){ return r.site === site; });
+
+    if (!coord && !actLeads.length) return; // skip empty sites
+
+    html += '<div style="border:2px solid '+color+';border-radius:10px;margin-bottom:22px;overflow:hidden">';
+    // Site header
+    html += '<div style="background:'+color+';color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px">';
+    html += '<strong style="font-size:1.05rem">'+site+'</strong>';
+    html += '</div>';
+    html += '<div style="padding:14px 16px">';
+
+    // Site coordinator
+    if (coord) {
+      html += '<div style="background:#f8f4ff;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
+      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
+      html += '<div style="font-weight:700;font-size:1rem;color:#1a1a1a">'+escHtml(coord.name)+'</div>';
+      if (coord.phone) html += '<div style="color:#555;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
+      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#6D28D9">'+escHtml(coord.email)+'</a></div>';
+      html += '</div>';
+    }
+
+    // Activity leads for this site
+    if (actLeads.length) {
+      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity Leads</div>';
+      html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
+      html += '<tr style="background:#f0f0f0"><th style="padding:6px 10px;text-align:left;color:#333">Activity</th><th style="padding:6px 10px;text-align:left;color:#333">Name</th><th style="padding:6px 10px;text-align:left;color:#333">Phone</th><th style="padding:6px 10px;text-align:left;color:#333">Email</th></tr>';
+      actLeads.forEach(function(r, ri) {
+        var bg = ri % 2 === 0 ? '#fff' : '#faf9ff';
+        html += '<tr style="background:'+bg+'">';
+        html += '<td style="padding:6px 10px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+        html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
+        html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
+        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+        html += '</tr>';
+      });
+      html += '</table>';
+    }
+
+    html += '</div></div>'; // end padding + site card
+  });
+
+  // ── SECTION 2: PROJECT-WIDE LEADS ──
+  if (data.projectLeads.length) {
+    html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
+    html += '<p style="color:#555;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
+    html += '<tr style="background:#3B0764;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
+    data.projectLeads.forEach(function(r, ri) {
+      var bg = ri % 2 === 0 ? '#fff' : '#f8f4ff';
+      html += '<tr style="background:'+bg+'">';
+      html += '<td style="padding:8px 12px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+      html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
+      html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
+      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+      html += '</tr>';
+    });
+    html += '</table>';
+  }
+
+  el.innerHTML = html;
+}
+
+function escHtml(s) {
+  return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.addEventListener('load', function() {
+  var h = window.location.hash.replace('#','');
+  if (h && document.getElementById('tab-'+h)) showTab(h);
+});
+
+function toggleActivityField(show) {
+  var el = document.getElementById('activity-field');
+  var sel = document.getElementById('activity-select');
+  if (el) el.style.display = show ? 'block' : 'none';
+  if (sel) sel.required = show;
+}
+
+function submitForm(e, key, form) {
+  e.preventDefault();
+  var msg = document.getElementById('success-'+key);
+  var btn = form.querySelector('.submit-btn');
+  if (btn) { btn.disabled=true; btn.textContent='Submitting...'; }
+  var params = {activity: key};
+  var inputs = form.querySelectorAll('[name]');
+  for (var i=0; i<inputs.length; i++) {
+    var el = inputs[i];
+    if (el.type==='radio'||el.type==='checkbox') {
+      if (!el.checked) continue;
+      params[el.name] = params[el.name] ? params[el.name]+', '+el.value : el.value;
+    } else if (el.value) {
+      params[el.name] = el.value;
+    }
+  }
+  if (WEB_APP_URL && WEB_APP_URL.indexOf('YOUR_WEB_APP') < 0) {
+    fetch(WEB_APP_URL, {method:'POST', mode:'no-cors', body: new URLSearchParams(params)})
+      .catch(function(err){ console.log('Fetch error:', err); });
+  }
+  if (msg) msg.style.display='block';
+  form.reset();
+  if (btn) { btn.disabled=false; btn.textContent=btn.getAttribute('data-label')||'Submit'; }
+  setTimeout(function(){ if(msg) msg.style.display='none'; }, 8000);
+  loadDash();
+}
+
+// ── MATRIX ───────────────────────────────────────────────────
+var SITES_M = ['The Cathedral','Kecoughtan Road','New Beginnings','Newport News','Downtown Hampton','Ingleside Road','Port Norfolk','Downtown Franklin'];
+var ACTS_M = [
+  {name:'Food Servers',     vals:[8,6,5,5,5,5,5,5],  dlWeeks:3},
+  {name:'Drinks',           vals:[5,2,1,1,1,1,1,1],  dlWeeks:3},
+  {name:'Games',            vals:[5,1,1,1,1,1,1,1],  dlWeeks:2},
+  {name:'DJ / Music',       vals:[1,1,1,1,1,1,1,1],  dlWeeks:2},
+  {name:'Karaoke',          vals:[1,1,1,1,1,1,1,1],  dlWeeks:2},
+  {name:'Basketball (teams)',vals:[1,1,1,1,1,1,1,1], dlWeeks:3},
+  {name:'Kid Games',        vals:[2,2,2,2,2,2,2,2],  dlWeeks:2},
+  {name:'Parking',          vals:[4,2,1,1,1,1,0,1],  dlWeeks:2},
+  {name:'Site Setup',       vals:[3,3,3,3,3,3,3,3],  dlWeeks:2},
+  {name:'Popcorn Machine',  vals:[1,1,1,1,1,1,1,1],  dlWeeks:2},
+  {name:'Pretzels',         vals:[1,1,1,1,1,1,1,1],  dlWeeks:2},
+];
+(function(){
+  var tbody = document.getElementById('matrix-body');
+  if (!tbody) return;
+  ACTS_M.forEach(function(act){
+    var tr=document.createElement('tr');
+    var td0=document.createElement('td'); td0.textContent=act.name; tr.appendChild(td0);
+    var rowTotal=0;
+    act.vals.forEach(function(v,si){
+      rowTotal+=v;
+      var td=document.createElement('td'); td.textContent=v;
+      var siteClasses=['cathedral','newbeg','newport','hampton','kecoughtan','ingleside','norfolk','franklin'];
+      if(siteClasses[si]) td.classList.add(siteClasses[si]);
+      tr.appendChild(td);
+    });
+    var tdT=document.createElement('td'); tdT.textContent=rowTotal; tdT.classList.add('total-col'); tr.appendChild(tdT);
+    var tdDl=document.createElement('td');
+    var eventDate=new Date('2026-10-04');
+    var dlDate=new Date(eventDate); dlDate.setDate(dlDate.getDate()-act.dlWeeks*7);
+    var now=new Date(); var msLeft=dlDate-now; var daysLeft=Math.ceil(msLeft/86400000);
+    var weeksLeft=act.dlWeeks; // original weeks before event
+    // Calculate actual calendar date string
+    var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var dlLabel=months[dlDate.getMonth()]+' '+dlDate.getDate();
+    tdDl.textContent=dlLabel+' ('+weeksLeft+' wks out)';
+    if(daysLeft<=7)  { tdDl.style.background='#FFB3C1'; tdDl.style.fontWeight='900'; }
+    else if(daysLeft<=14){ tdDl.style.background='#FFF176'; tdDl.style.fontWeight='700'; }
+    tr.appendChild(tdDl);
+    tbody.appendChild(tr);
+  });
+  var trow=document.createElement('tr'); trow.classList.add('total-row');
+  var t0=document.createElement('td'); t0.textContent='SITE TOTAL'; trow.appendChild(t0);
+  var grand=0;
+  var siteClasses2=['cathedral','newbeg','newport','hampton','kecoughtan','ingleside','norfolk','franklin'];
+  for(var si=0;si<SITES_M.length;si++){
+    var st=ACTS_M.reduce(function(s,a){ return s+a.vals[si]; },0); grand+=st;
+    var td=document.createElement('td'); td.textContent=st; if(siteClasses2[si]) td.classList.add(siteClasses2[si]); trow.appendChild(td);
+  }
+  var tdG=document.createElement('td'); tdG.textContent=grand; tdG.classList.add('total-col'); trow.appendChild(tdG);
+  var tdX=document.createElement('td'); tdX.textContent=''; trow.appendChild(tdX);
+  tbody.appendChild(trow);
+})();
+
+// ── QR GRID ──────────────────────────────────────────────────
+var QR_ACTS = [
+  {id:'f1', key:'food',        emoji:'\uD83C\uDF7D', label:'Food Signup'},
+  {id:'f2', key:'drinks',      emoji:'\uD83E\uDD64', label:'Drinks Signup'},
+  {id:'f3', key:'games',       emoji:'\uD83C\uDFAF', label:'Games Signup'},
+  {id:'f4', key:'dj',          emoji:'\uD83C\uDFB5', label:'DJ / Music'},
+  {id:'f5', key:'karaoke',     emoji:'\uD83C\uDFA4', label:'Karaoke Signup'},
+  {id:'f6', key:'basketball',  emoji:'\uD83C\uDFC0', label:'Basketball'},
+  {id:'f7', key:'kidgames',    emoji:'\uD83D\uDC66', label:'Kid Games'},
+  {id:'f8', key:'parking',     emoji:'\uD83C\uDD7F', label:'Parking'},
+  {id:'f9', key:'setup',       emoji:'\u26FA',        label:'Site Setup'},
+  {id:'f10',key:'popcorn',     emoji:'\uD83C\uDF7F', label:'Popcorn Machine'},
+  {id:'f11',key:'pretzels',    emoji:'\uD83E\uDD68', label:'Pretzels'},
+  {id:'f12',key:'coordinator', emoji:'\uD83D\uDCCB', label:'Unity Fest Contacts'},
+  {id:'f13',key:'choir',       emoji:'\uD83C\uDFB6', label:'Combined Choir'},
+];
+
+window.addEventListener('load', function() {
+  var grid = document.getElementById('qr-grid');
+  if (!grid) return;
+  // Build two flex rows using .qr-grid-row class
+  var row1 = document.createElement('div');
+  row1.className = 'qr-grid-row';
+  var row2 = document.createElement('div');
+  row2.className = 'qr-grid-row';
+  // Row 2 has 6 cards — pad sides so they're centered under row 1's 7
+  row2.style.paddingLeft = row2.style.paddingRight = 'calc((100% + 5px) / 14)';
+  grid.appendChild(row1);
+  grid.appendChild(row2);
+  QR_ACTS.forEach(function(act, idx){
+    var rowEl = idx < 7 ? row1 : row2;
+    var card = document.createElement('div');
+    card.className = 'qr-card';
+    card.onclick = function(){ showTab(act.id); };
+
+    var lbl = document.createElement('div');
+    lbl.className = 'qr-label';
+    lbl.textContent = act.emoji + ' ' + act.label;
+    card.appendChild(lbl);
+
+    var qd = document.createElement('div'); qd.className = 'qr-canvas';
+    var qi = document.createElement('div'); qi.id = 'qr-' + act.id;
+    qd.appendChild(qi); card.appendChild(qd);
+
+    var hint = document.createElement('div');
+    hint.className = 'qr-scan-hint'; hint.textContent = 'Scan to open on your phone';
+    card.appendChild(hint);
+
+    var countEl = document.createElement('div');
+    countEl.className = 'qr-count'; countEl.id = 'qrc-' + act.key; countEl.textContent = '0';
+    card.appendChild(countEl);
+
+    var btn = document.createElement('button');
+    btn.className = 'qr-open-btn'; btn.textContent = 'Open Form';
+    btn.onclick = function(ev){ ev.stopPropagation(); showTab(act.id); };
+    card.appendChild(btn);
+
+    rowEl.appendChild(card);
+
+    if (typeof QRCode !== 'undefined') {
+      try {
+        var url = window.location.href.split('#')[0] + '#' + act.id;
+        new QRCode(qi, {text:url, width:80, height:80, colorDark:'#3B0764', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
+      } catch(e) { qi.textContent = act.emoji; qi.style.fontSize='3rem'; }
+    } else {
+      qi.textContent = act.emoji; qi.style.fontSize='3rem'; qi.style.padding='20px';
+    }
+  });
+
+  loadDash();
+  setInterval(loadDash, 120000);
+
+
+  // ── Cancel / Update token handling + status banner ──
+  (function() {
+    var params = new URLSearchParams(window.location.search);
+    var cancelToken = params.get('cancel');
+    var updateToken = params.get('update');
+    var msg         = params.get('msg');
+
+    function showBanner(text, cls, isHtml) {
+      var banner = document.getElementById('status-banner');
+      var msgEl  = document.getElementById('status-msg');
+      if (!banner || !msgEl) return;
+      if (isHtml) msgEl.innerHTML = text; else msgEl.textContent = text;
+      banner.className = 'status-banner ' + cls;
+      banner.style.display = 'block';
+      setTimeout(function(){ banner.style.display='none'; }, 15000);
+    }
+
+    // ── Cancel / Update token handling ──
+    // Cancel: fire-and-forget to Apps Script (no response needed), show immediate banner
+    // Update: read activity from URL param — no API call needed
+
+    function showBanner(text, cls, isHtml) {
+      var b = document.getElementById('status-banner');
+      var m = document.getElementById('status-msg');
+      if (!b || !m) return;
+      if (isHtml) m.innerHTML = text; else m.textContent = text;
+      b.className = 'status-banner ' + cls;
+      b.style.display = 'block';
+      setTimeout(function(){ b.style.display='none'; }, 18000);
+    }
+
+    var params       = new URLSearchParams(window.location.search);
+    var cancelToken  = params.get('cancel');
+    var updateToken  = params.get('update');
+    var actParam     = decodeURIComponent(params.get('act') || 'your signup');
+    var msg          = params.get('msg');
+
+    if (cancelToken) {
+      // Fire-and-forget: browser hits the URL, Apps Script processes cancel regardless of response
+      var fireUrl = WEB_APP_URL + '?action=cancel&token=' + encodeURIComponent(cancelToken) + '&t=' + Date.now();
+      // Method 1: fetch no-cors (modern browsers)
+      if (window.fetch) {
+        fetch(fireUrl, {mode:'no-cors'}).catch(function(){});
+      }
+      // Method 2: Image tag (universal fallback)
+      new Image().src = fireUrl + '&m=img';
+      // Show immediate confirmation — no waiting for server response
+      showBanner('Your signup has been cancelled. A confirmation email will be sent to you shortly.', 'cancelled');
+      loadDash();
+      history.replaceState({}, '', window.location.pathname);
+    }
+
+    else if (updateToken) {
+      var cancelLink = window.location.origin + window.location.pathname + '?cancel=' + encodeURIComponent(updateToken);
+      var actParam2  = decodeURIComponent(params.get('act') || 'your signup');
+      var txt = 'To update your <strong>' + actParam2 + '</strong> signup: ' +
+        '<a href="' + cancelLink + '" style="color:#7B5800;font-weight:700;text-decoration:underline">Cancel Current Signup</a>' +
+        ' then re-register below.';
+      showBanner(txt, 'update', true);
+      history.replaceState({}, '', window.location.pathname);
+    }
+
+    else if (msg) {
+      var who  = decodeURIComponent(params.get('who') || '');
+      var actParam3 = decodeURIComponent(params.get('act') || 'your signup');
+      if (msg === 'cancelled') {
+        showBanner((who ? who + ' — ' : '') + 'Your signup has been cancelled. A confirmation email has been sent.', 'cancelled');
+      } else if (msg === 'update') {
+        var clink = decodeURIComponent(params.get('clink') || '');
+        var txt2 = (who ? '<strong>' + who + '</strong>: ' : '') + 'To update your <strong>' + actParam3 + '</strong> signup — ' +
+          (clink ? '<a href="' + clink + '" style="color:#7B5800;font-weight:700">Cancel Current Signup</a> then re-register.' : 'cancel then re-register.');
+        showBanner(txt2, 'update', true);
+      } else if (msg === 'invalid') {
+        showBanner('This link is invalid or has already been used.', 'invalid');
+      }
+      history.replaceState({}, '', window.location.pathname);
+    }
+
+  })();
+
+  // Matrix unlock
+  document.getElementById('matrix-code').addEventListener('keydown', function(e){
+    if(e.key==='Enter') unlockMatrix();
+  });
+});
+
+function unlockMatrix() {
+  var code = document.getElementById('matrix-code').value;
+  if (code === 'unity2026') {
+    document.getElementById('matrix-lock').style.display = 'none';
+    document.getElementById('matrix-content').style.display = 'block';
+  } else {
+    document.getElementById('matrix-err').style.display = 'block';
+    document.getElementById('matrix-code').value = '';
+  }
+}
+
+// ── UNITY FEST CONTACTS ──────────────────────────────────────────
+var _contactsLoaded = false;
+function loadContacts() {
+  if (_contactsLoaded) return;
+  var url = WEB_APP_URL + '?action=leadership&t=' + Date.now();
+  fetch(url)
+    .then(function(r){ return r.json(); })
+    .then(function(data){ renderContacts(data); _contactsLoaded = true; })
+    .catch(function(){ renderContacts(null); });
+}
+
+function renderContacts(data) {
+  var el = document.getElementById('contacts-body');
+  if (!el) return;
+  if (!data || (!data.siteCoordinators.length && !data.siteActivityLeads.length && !data.projectLeads.length)) {
+    el.innerHTML = '<p style="text-align:center;color:#888;padding:32px 0">No contacts have been added yet. Leadership information will appear here once entered in the master sheet.</p>';
+    return;
+  }
+
+  var SITES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
+               'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
+  var SITE_COLORS = ['#C0392B','#1565C0','#6D4C41','#7CB342','#4CAF50','#E65100','#C62828','#2E7D32'];
+
+  var html = '';
+
+  // ── SECTION 1: BY SITE ──
+  html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
+
+  SITES.forEach(function(site, si) {
+    var color = SITE_COLORS[si];
+    var coord = null;
+    for (var ci = 0; ci < data.siteCoordinators.length; ci++) {
+      if (data.siteCoordinators[ci].site === site) { coord = data.siteCoordinators[ci]; break; }
+    }
+    var actLeads = data.siteActivityLeads.filter(function(r){ return r.site === site; });
+    if (!coord && !actLeads.length) return;
+
+    html += '<div style="border:2px solid '+color+';border-radius:10px;margin-bottom:22px;overflow:hidden">';
+    html += '<div style="background:'+color+';color:#fff;padding:10px 16px">';
+    html += '<strong style="font-size:1.05rem">'+escHtml(site)+'</strong>';
+    html += '</div><div style="padding:14px 16px">';
+
+    if (coord) {
+      html += '<div style="background:#f8f4ff;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
+      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
+      html += '<div style="font-weight:700;font-size:1rem">'+escHtml(coord.name)+'</div>';
+      if (coord.phone) html += '<div style="color:#555;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
+      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#6D28D9">'+escHtml(coord.email)+'</a></div>';
+      html += '</div>';
+    }
+
+    if (actLeads.length) {
+      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity Leads</div>';
+      html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
+      html += '<tr style="background:#f0f0f0"><th style="padding:6px 10px;text-align:left">Activity</th><th style="padding:6px 10px;text-align:left">Name</th><th style="padding:6px 10px;text-align:left">Phone</th><th style="padding:6px 10px;text-align:left">Email</th></tr>';
+      actLeads.forEach(function(r, ri) {
+        var bg = ri % 2 === 0 ? '#fff' : '#faf9ff';
+        html += '<tr style="background:'+bg+'">';
+        html += '<td style="padding:6px 10px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+        html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
+        html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
+        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+        html += '</tr>';
+      });
+      html += '</table>';
+    }
+    html += '</div></div>';
+  });
+
+  // ── SECTION 2: PROJECT-WIDE LEADS ──
+  if (data.projectLeads.length) {
+    html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
+    html += '<p style="color:#555;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
+    html += '<tr style="background:#3B0764;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
+    data.projectLeads.forEach(function(r, ri) {
+      var bg = ri % 2 === 0 ? '#fff' : '#f8f4ff';
+      html += '<tr style="background:'+bg+'">';
+      html += '<td style="padding:8px 12px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+      html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
+      html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
+      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+      html += '</tr>';
+    });
+    html += '</table>';
+  }
+
+  el.innerHTML = html;
+}
+
+function escHtml(s) {
+  return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>

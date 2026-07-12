@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Unity Fest 2026 — Zion Community Church</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Montserrat:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:#000;color:#fff;overflow:hidden;height:100vh}
+
+/* ── SLOW BOUNCE ANIMATION ──────────────────────────────────────────────────── */
+@keyframes slow-bounce {
+  0%,100%{transform:translateX(-50%) translateY(0px)}
+  50%{transform:translateX(-50%) translateY(22px)}
+}
+
+/* ── WHITE TOP BAR ──────────────────────────────────────────────────────────── */
+.top-bar{
+  background:#fff;
+  height:36px;
+  width:100%;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PANEL 1 — HERO (full viewport, floating Unity Fest text)
+══════════════════════════════════════════════════════════════════════════════ */
+.hero{
+  position:relative;
+  width:100%;
+  height:calc(65vh - 166px);
+  min-height:340px;
+  overflow:visible;
+  background:#0a0a0a;
+}
+.hero-overlay{
+  position:absolute;
+  inset:0;
+  background:#0a0a0a;
+}
+
+/* Floating brand — bounces slowly, centered upper-third */
+.hero-brand{
+  position:absolute;
+  top:2%;
+  left:50%;
+  /* bounce uses translateX(-50%) so we encode it in the animation */
+  transform:translateX(-50%);
+  animation:slow-bounce 3.2s ease-in-out infinite;
+  text-align:center;
+  color:#fff;
+  width:92%;
+  max-width:1100px;
+  text-shadow:0 3px 30px rgba(0,0,0,.75);
+  pointer-events:none;
+}
+
+
+/* "Unity" — same size as "Fest" */
+.hero-script-small{
+  font-family:'Pinyon Script',cursive;
+  font-size:clamp(8rem,18vw,16rem);
+  line-height:.85;
+  display:block;
+  letter-spacing:-0.03em;
+}
+
+/* "Fest" — same size as "Unity" */
+.hero-script-large{
+  font-family:'Pinyon Script',cursive;
+  font-size:clamp(8rem,18vw,16rem);
+  line-height:.85;
+  display:block;
+  letter-spacing:-0.03em;
+}
+
+/* "@ ZION COMMUNITY CHURCH" — italic Montserrat, matching site style */
+.hero-at-line{
+  font-family:'Montserrat',sans-serif;
+  font-size:clamp(1.1rem,3.2vw,2.6rem);
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  display:block;
+  margin-top:6px;
+  color:#fff;
+}
+
+
+/* ── COUNTDOWN STRIP ──────────────────────────────────────────────────────── */
+.countdown-strip{
+  background:#0d0d0d;
+  border-top:2px solid #8B0000;
+  border-bottom:2px solid #8B0000;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:10px 20px;
+  flex-shrink:0;
+  height:96px;
+}
+.cd-label{
+  font-family:'Montserrat',sans-serif;
+  font-size:.84rem;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+  color:#C9A227;
+  margin-bottom:6px;
+}
+.cd-boxes{
+  display:flex;
+  gap:8px;
+}
+.cd-box{
+  background:#1a1a1a;
+  border:1px solid #8B0000;
+  border-radius:6px;
+  padding:5px 12px;
+  text-align:center;
+  min-width:58px;
+}
+.cd-num{
+  font-family:'Montserrat',sans-serif;
+  font-size:1.62rem;
+  font-weight:700;
+  color:#fff;
+  line-height:1.1;
+}
+.cd-unit{
+  font-family:'Montserrat',sans-serif;
+  font-size:.66rem;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:#aaa;
+}
+/* ══════════════════════════════════════════════════════════════════════════════
+   PANEL 2 — VIDEO (70% of original, city skyline sketch bg like zionva.org)
+══════════════════════════════════════════════════════════════════════════════ */
+.video-section{
+  background:#000;
+  width:100%;
+  height:calc(35vh - 36px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+.video-section video{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PANEL 3 — EVENT INFO (black footer, exact zionva.org match)
+   Moves up to reclaim the space saved from panel 2
+══════════════════════════════════════════════════════════════════════════════ */
+
+/* "Enter Site" button under video */
+
+.hero-address{
+  font-family:'Montserrat',sans-serif;
+  font-size:clamp(.85rem,1.4vw,1.1rem);
+  font-weight:400;
+  color:#fff;
+  letter-spacing:.06em;
+  display:block;
+  margin-top:4px;
+}
+.enter-site-btn{
+  display:inline-block;
+  margin-top:16px;
+  pointer-events:auto;
+  padding:12px 44px;
+  background:transparent;
+  border:2px solid #fff;
+  color:#fff;
+  font-family:'Montserrat',sans-serif;
+  font-size:clamp(1rem,1.8vw,1.25rem);
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  text-decoration:none;
+  cursor:pointer;
+  transition:background .25s,color .25s;
+}
+.enter-site-btn:hover{background:#fff;color:#000}
+.info-panel{
+  background:#8B0000;
+  color:#fff;
+  text-align:center;
+  padding:14px 24px;
+  border-top:none;
+}
+
+
+
+/* Email link */
+.info-email{
+  font-family:'Montserrat',sans-serif;
+  font-size:clamp(1.3rem,1.95vw,1.5rem);
+  font-weight:400;
+  color:#fff;
+  text-decoration:none;
+  letter-spacing:.01em;
+  display:inline-block;
+  margin-top:2px;
+}
+.info-email:hover{text-decoration:underline}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   PANEL 4 — BLANK WHITE (Become a eSite Member — placeholder)
+══════════════════════════════════════════════════════════════════════════════ */
+.member-panel{
+  background:#fff;
+  min-height:80px;
+  width:100%;
+}
+</style>
+</head>
+<body>
+
+<!-- ══ WHITE TOP BAR ══ -->
+<div class="top-bar"></div>
+
+<!-- ══ PANEL 1: HERO ══ -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+
+  <div class="hero-brand">
+    <span class="hero-script-small">Unity</span>
+    <span class="hero-script-large">Fest</span>
+    <span class="hero-at-line">@ The Cathedral at Zion Community Church</span>
+    <span class="hero-address">2500 E Washington Street, Suffolk, VA 23435</span>
+    <a class="enter-site-btn" href="ZUF2026_Portal.html">Enter Site</a>
+  </div>
+</section>
+
+<!-- ══ COUNTDOWN STRIP ══ -->
+<div class="countdown-strip">
+  <div class="cd-label">Countdown to Event Day</div>
+  <div class="cd-boxes">
+    <div class="cd-box"><div class="cd-num" id="cd-days">--</div><div class="cd-unit">Days</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-hours">--</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-mins">--</div></div>
+    <div class="cd-box"><div class="cd-num" id="cd-secs">--</div></div>
+  </div>
+</div>
+
+<!-- ══ PANEL 2: VIDEO (city skyline sketch bg, 30% reduced height) ══ -->
+<section class="video-section">
+  <video autoplay loop playsinline controls>
+    <source src="unity_fest_video.mp4" type="video/mp4">
+  </video>
+</section>
+
+<!-- ══ PANEL 3: EVENT INFO (moves up, matches zionva.org footer exactly) ══ -->
+<section class="info-panel">
+  <a class="info-email" href="mailto:zccunityfest@gmail.com">zccunityfest@gmail.com</a>
+</section>
+
+<!-- ══ PANEL 4: BLANK WHITE (Become a eSite Member — leave empty) ══ -->
+<section class="member-panel"></section>
+
+<script>
+function updateCountdown() {
+  var diff = new Date('2026-10-04T09:00:00') - new Date();
+  if (diff <= 0) {
+    ['cd-days','cd-hours','cd-mins','cd-secs'].forEach(function(id){ document.getElementById(id).textContent='00'; });
+    return;
+  }
+  document.getElementById('cd-days').textContent  = String(Math.floor(diff/86400000)).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
+  document.getElementById('cd-mins').textContent  = String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+  document.getElementById('cd-secs').textContent  = String(Math.floor(diff%60000/1000)).padStart(2,'0');
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+</script>
+</body>
+</html>

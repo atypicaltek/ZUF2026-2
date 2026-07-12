@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Zion Unity Fest 2026 — Live Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Arial',sans-serif;background:#0f1b2d;color:#fff;min-height:100vh}
+.header{background:linear-gradient(135deg,#1F3864,#2F5496);padding:24px 32px;text-align:center;border-bottom:4px solid #FFD700}
+.header h1{font-size:2rem;font-weight:900;letter-spacing:1px}
+.header p{opacity:.8;margin-top:4px;font-size:.95rem}
+
+/* COUNTDOWN */
+.countdown-section{background:#1a2d4a;padding:20px;text-align:center;border-bottom:2px solid #2F5496}
+.countdown-label{font-size:.85rem;color:#aaa;text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+.countdown-boxes{display:flex;justify-content:center;gap:16px;flex-wrap:wrap}
+.countdown-box{background:#1F3864;border:2px solid #2F5496;border-radius:12px;padding:14px 20px;min-width:80px}
+.countdown-num{font-size:2.4rem;font-weight:900;color:#FFD700;line-height:1}
+.countdown-unit{font-size:.7rem;color:#aaa;text-transform:uppercase;margin-top:4px}
+.event-date{margin-top:12px;font-size:1rem;color:#FFD700;font-weight:700}
+
+/* STATS BAR */
+.stats-bar{display:flex;justify-content:center;gap:24px;padding:16px;background:#162236;flex-wrap:wrap;border-bottom:1px solid #2F5496}
+.stat-pill{background:#1F3864;border-radius:20px;padding:8px 18px;font-size:.85rem}
+.stat-pill strong{color:#FFD700}
+
+/* GRID */
+.dashboard{padding:24px;max-width:1400px;margin:0 auto}
+.section-title{font-size:1.1rem;font-weight:700;color:#FFD700;margin-bottom:16px;padding-bottom:8px;border-bottom:2px solid #2F5496;text-transform:uppercase;letter-spacing:1px}
+.sites-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;margin-bottom:32px}
+.site-card{background:#162236;border-radius:12px;overflow:hidden;border:1px solid #2F5496}
+.site-header{padding:14px 18px;display:flex;justify-content:space-between;align-items:center}
+.site-name{font-size:1rem;font-weight:800}
+.site-badge{background:#FFD700;color:#1F3864;border-radius:20px;padding:3px 12px;font-size:.78rem;font-weight:700}
+.activity-list{padding:0 0 8px}
+.activity-row{display:flex;align-items:center;padding:7px 18px;border-bottom:1px solid #1F3864;gap:10px}
+.activity-row:last-child{border-bottom:none}
+.act-name{flex:1;font-size:.82rem;color:#ccc}
+.act-bar-wrap{flex:2;background:#0f1b2d;border-radius:4px;height:8px;overflow:hidden}
+.act-bar{height:100%;border-radius:4px;transition:width .5s}
+.act-counts{font-size:.78rem;width:60px;text-align:right;white-space:nowrap}
+.full{color:#70AD47}.partial{color:#FFD700}.empty{color:#E74C3C}
+
+/* ACTIVITY SUMMARY */
+.activity-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:32px}
+.act-card{background:#162236;border-radius:10px;padding:16px;border:1px solid #2F5496;text-align:center}
+.act-card-name{font-size:.8rem;color:#aaa;text-transform:uppercase;margin-bottom:8px}
+.act-card-total{font-size:2rem;font-weight:900;color:#FFD700}
+.act-card-needed{font-size:.8rem;color:#aaa;margin-top:2px}
+.act-progress{background:#0f1b2d;border-radius:4px;height:6px;margin-top:10px;overflow:hidden}
+.act-progress-bar{height:100%;border-radius:4px;background:#2F5496;transition:width .5s}
+
+/* FOOTER */
+.footer{text-align:center;padding:20px;color:#555;font-size:.8rem;border-top:1px solid #1F3864}
+.last-updated{color:#666;font-size:.75rem;margin-top:6px}
+
+/* LOADING */
+.loading{text-align:center;padding:40px;color:#aaa;font-size:1rem}
+.dot{animation:blink 1.4s infinite}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:0}40%{opacity:1}}
+
+.refresh-btn{background:#2F5496;border:none;color:#fff;padding:8px 20px;border-radius:20px;cursor:pointer;font-size:.85rem;margin-left:12px}
+.refresh-btn:hover{background:#1F3864}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ ZION UNITY FEST 2026</h1>
+  <p>Live Volunteer Signup Dashboard • 8 Sites • 11 Activities</p>
+</div>
+
+<div class="countdown-section">
+  <div class="countdown-label">Countdown to Event Day</div>
+  <div class="countdown-boxes">
+    <div class="countdown-box"><div class="countdown-num" id="cd-days">--</div><div class="countdown-unit">Days</div></div>
+    <div class="countdown-box"><div class="countdown-num" id="cd-hours">--</div><div class="countdown-unit">Hours</div></div>
+    <div class="countdown-box"><div class="countdown-num" id="cd-mins">--</div><div class="countdown-unit">Minutes</div></div>
+    <div class="countdown-box"><div class="countdown-num" id="cd-secs">--</div><div class="countdown-unit">Seconds</div></div>
+  </div>
+  <div class="event-date">Saturday, October 4, 2026</div>
+</div>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat-pill">Total Signed Up: <strong id="total-signups">--</strong></div>
+  <div class="stat-pill">Total Needed: <strong>159</strong></div>
+  <div class="stat-pill">Sites: <strong>8</strong></div>
+  <div class="stat-pill">Activities: <strong>11</strong></div>
+  <div class="stat-pill" style="display:flex;align-items:center">
+    Last Updated: <strong id="last-updated" style="margin-left:6px">--</strong>
+    <button class="refresh-btn" onclick="loadData()">↻ Refresh</button>
+  </div>
+</div>
+
+<div class="dashboard">
+  <div class="section-title">📊 Activity Overview</div>
+  <div class="activity-grid" id="activity-grid">
+    <div class="loading">Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+  </div>
+
+  <div class="section-title">📍 Signups by Site</div>
+  <div class="sites-grid" id="sites-grid">
+    <div class="loading">Loading<span class="dot">.</span><span class="dot">.</span><span class="dot">.</span></div>
+  </div>
+</div>
+
+<div class="footer">
+  Zion Unity Fest 2026 — Live Dashboard
+  <div class="last-updated" id="footer-updated"></div>
+</div>
+
+<script>
+const WEB_APP_URL = 'YOUR_WEB_APP_URL_HERE'; // << PASTE YOUR /exec URL HERE
+
+const SITES_LIST = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
+                    'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
+const SITE_KEYS  = ['cathedral','newbeg','newport','hampton','kecoughtan','ingleside','norfolk','franklin'];
+
+const SITE_COLORS = ['#C0392B','#8E44AD','#2980B9','#27AE60','#D35400','#16A085','#7F8C8D','#2C3E50'];
+
+const ACTIVITIES = [
+  {key:'food',    label:'Food Servers'},
+  {key:'drinks',  label:'Drinks'},
+  {key:'games',   label:'Games'},
+  {key:'dj',      label:'DJ / Music'},
+  {key:'karaoke', label:'Karaoke'},
+  {key:'basketball',label:'Basketball'},
+  {key:'kidgames',label:'Kid Games'},
+  {key:'parking', label:'Parking'},
+  {key:'setup',   label:'Site Setup'},
+  {key:'popcorn', label:'Popcorn Machine'},
+  {key:'pretzels',label:'Pretzels'},
+];
+
+const REQUIREMENTS = {
+  food:     {cathedral:8,newbeg:5,newport:5,hampton:5,kecoughtan:6,ingleside:5,norfolk:5,franklin:5},
+  drinks:   {cathedral:5,newbeg:1,newport:1,hampton:1,kecoughtan:2,ingleside:1,norfolk:1,franklin:1},
+  games:    {cathedral:5,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
+  dj:       Object.fromEntries(SITE_KEYS.map(k=>[k,1])),
+  karaoke:  Object.fromEntries(SITE_KEYS.map(k=>[k,1])),
+  basketball:Object.fromEntries(SITE_KEYS.map(k=>[k,1])),
+  kidgames: Object.fromEntries(SITE_KEYS.map(k=>[k,2])),
+  parking:  {cathedral:4,newbeg:0,newport:1,hampton:1,kecoughtan:2,ingleside:1,norfolk:0,franklin:1},
+  setup:    Object.fromEntries(SITE_KEYS.map(k=>[k,3])),
+  popcorn:  Object.fromEntries(SITE_KEYS.map(k=>[k,1])),
+  pretzels: Object.fromEntries(SITE_KEYS.map(k=>[k,1])),
+};
+
+// Countdown
+function updateCountdown() {
+  const event = new Date('2026-10-04T09:00:00');
+  const now   = new Date();
+  const diff  = event - now;
+  if (diff <= 0) {
+    document.getElementById('cd-days').textContent = '🎉';
+    document.getElementById('cd-hours').textContent = 'IT\'S';
+    document.getElementById('cd-mins').textContent = 'EVENT';
+    document.getElementById('cd-secs').textContent = 'DAY!';
+    return;
+  }
+  const days  = Math.floor(diff / 86400000);
+  const hours = Math.floor((diff % 86400000) / 3600000);
+  const mins  = Math.floor((diff % 3600000) / 60000);
+  const secs  = Math.floor((diff % 60000) / 1000);
+  document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+  document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+  document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+  document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+}
+setInterval(updateCountdown, 1000);
+updateCountdown();
+
+async function loadData() {
+  document.getElementById('last-updated').textContent = 'Refreshing...';
+  let data = {};
+
+  if (WEB_APP_URL && WEB_APP_URL !== 'YOUR_WEB_APP_URL_HERE') {
+    try {
+      const r = await fetch(WEB_APP_URL);
+      data = await r.json();
+    } catch(e) { console.log('Fetch error:', e); }
+  }
+
+  renderActivityGrid(data);
+  renderSitesGrid(data);
+
+  const now = new Date().toLocaleTimeString();
+  document.getElementById('last-updated').textContent = now;
+  document.getElementById('footer-updated').textContent = 'Last updated: ' + new Date().toLocaleString();
+
+  // Total signups
+  let total = 0;
+  ACTIVITIES.forEach(a => {
+    const counts = data[a.key] || {};
+    SITE_KEYS.forEach(sk => { total += (counts[sk]||0); });
+  });
+  document.getElementById('total-signups').textContent = total;
+}
+
+function renderActivityGrid(data) {
+  const grid = document.getElementById('activity-grid');
+  grid.innerHTML = '';
+  ACTIVITIES.forEach(act => {
+    const counts   = data[act.key] || {};
+    const reqs     = REQUIREMENTS[act.key] || {};
+    const totalSignedUp = SITE_KEYS.reduce((s,k)=>s+(counts[k]||0),0);
+    const totalNeeded   = SITE_KEYS.reduce((s,k)=>s+(reqs[k]||0),0);
+    const pct = totalNeeded > 0 ? Math.min(100, Math.round(totalSignedUp/totalNeeded*100)) : 0;
+    const color = pct>=100?'#70AD47':pct>=50?'#FFD700':'#E74C3C';
+    const card = document.createElement('div');
+    card.className = 'act-card';
+    card.innerHTML = `
+      <div class="act-card-name">${act.label}</div>
+      <div class="act-card-total" style="color:${color}">${totalSignedUp}</div>
+      <div class="act-card-needed">of ${totalNeeded} needed</div>
+      <div class="act-progress"><div class="act-progress-bar" style="width:${pct}%;background:${color}"></div></div>
+      <div style="font-size:.7rem;color:${color};margin-top:4px">${pct}% filled</div>`;
+    grid.appendChild(card);
+  });
+}
+
+function renderSitesGrid(data) {
+  const grid = document.getElementById('sites-grid');
+  grid.innerHTML = '';
+  SITES_LIST.forEach((site, si) => {
+    const sk    = SITE_KEYS[si];
+    const color = SITE_COLORS[si];
+    let siteTotal=0, siteNeeded=0;
+    ACTIVITIES.forEach(a => {
+      siteTotal  += (data[a.key]||{})[sk]||0;
+      siteNeeded += (REQUIREMENTS[a.key]||{})[sk]||0;
+    });
+    const card = document.createElement('div');
+    card.className = 'site-card';
+    card.innerHTML = `
+      <div class="site-header" style="background:${color}20;border-bottom:2px solid ${color}">
+        <span class="site-name">${site}</span>
+        <span class="site-badge" style="background:${color};color:#fff">${siteTotal}/${siteNeeded}</span>
+      </div>
+      <div class="activity-list">
+        ${ACTIVITIES.map(act=>{
+          const signed = (data[act.key]||{})[sk]||0;
+          const needed = (REQUIREMENTS[act.key]||{})[sk]||0;
+          if (needed===0) return '';
+          const pct   = needed>0?Math.min(100,Math.round(signed/needed*100)):0;
+          const barColor = pct>=100?'#70AD47':pct>=50?'#FFD700':'#E74C3C';
+          const cls   = pct>=100?'full':pct>0?'partial':'empty';
+          return `<div class="activity-row">
+            <span class="act-name">${act.label}</span>
+            <div class="act-bar-wrap"><div class="act-bar" style="width:${pct}%;background:${barColor}"></div></div>
+            <span class="act-counts ${cls}">${signed}/${needed}</span>
+          </div>`;
+        }).join('')}
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+// Auto-refresh every 2 minutes
+loadData();
+setInterval(loadData, 120000);
+</script>
+</body>
+</html>
