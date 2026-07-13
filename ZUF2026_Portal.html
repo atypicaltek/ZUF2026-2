@@ -10,7 +10,7 @@
   --navy:#0d0d0d;--blue:#8B0000;--light-blue:#1a0808;--gold:#C9A227;
   --gold-light:#1a1508;--white:#fff;--gray:#111111;--text:#f0ece4;
   --success:#1a3a1a;--success-bg:#1e3b1e;--warn:#C9A227;
-  --choir:#4A0E7F;--coord:#6B0000;
+  --choir:#8B0000;--coord:#8B0000;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,html{height:100%}body{height:100%;overflow:hidden;display:flex;flex-direction:column}
@@ -20,7 +20,7 @@ header h1{font-size:2.1rem;font-weight:900;line-height:1.15;letter-spacing:.5px;
 header span{font-size:1.1rem;opacity:.75}
 .tab-bar{display:flex;flex-wrap:nowrap;gap:3px;background:#0d0d0d;padding:0 6px 6px;justify-content:space-between;flex-shrink:0;overflow:hidden;position:relative;z-index:10;border-bottom:2px solid #8B0000}
 .tab-btn{background:#222;color:#f0ece4;border:none;padding:4px 4px 5px;border-radius:5px 5px 0 0;cursor:pointer;font-size:.93rem;font-weight:600;transition:.2s;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;overflow:hidden}
-.tab-btn:hover{background:#6B0000;color:#fff}
+.tab-btn:hover{background:#8B0000;color:#fff}
 .tab-btn.active{background:#8B0000;color:#fff;font-weight:900}
 .tab-lbl{font-size:.72rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%;text-align:center}
 .tab-icon{font-size:1.1rem;line-height:1}
@@ -64,7 +64,7 @@ textarea{resize:vertical;min-height:80px}
 .radio-group input,.check-group input{width:auto;margin:0}
 .hint{font-size:.78rem;color:#888;margin-top:3px}
 .submit-btn{width:100%;padding:13px;background:#8B0000;color:#fff;border:none;border-radius:8px;font-size:1rem;font-weight:700;cursor:pointer;margin-top:8px;transition:.2s}
-.submit-btn:hover{background:#6B0000}
+.submit-btn:hover{background:#8B0000}
 .submit-btn.choir-btn-submit{background:var(--choir)}
 .submit-btn.coord-btn-submit{background:var(--coord)}
 .success-msg{display:none;background:var(--success-bg);border:1.5px solid var(--success);color:var(--success);border-radius:8px;padding:16px;text-align:center;font-weight:600;margin-top:16px}
@@ -637,7 +637,7 @@ function renderActOverview() {
     var signed = LIVE_COUNTS[act.key] || 0;
     var needed = Object.values(REQUIREMENTS[act.key]||{}).reduce(function(s,v){ return s+v; }, 0);
     var pct    = needed > 0 ? Math.min(100, Math.round(signed/needed*100)) : (signed>0?100:0);
-    var color  = pct>=100?'#375623':pct>=50?'#BF8F00':'#6D28D9';
+    var color  = pct>=100?'#375623':pct>=50?'#BF8F00':'#C9A227';
     var tile = document.createElement('div');
     tile.className = 'act-tile';
     tile.style.borderColor = color;
@@ -728,7 +728,7 @@ function renderContacts(data) {
   var html = '';
 
   // ── SECTION 1: BY SITE ──
-  html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
+  html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
 
   SITES.forEach(function(site, si) {
     var color = SITE_COLORS[si];
@@ -750,7 +750,7 @@ function renderContacts(data) {
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
       html += '<div style="font-weight:700;font-size:1rem;color:#1a1a1a">'+escHtml(coord.name)+'</div>';
       if (coord.phone) html += '<div style="color:#555;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
-      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#6D28D9">'+escHtml(coord.email)+'</a></div>';
+      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
       html += '</div>';
     }
 
@@ -765,7 +765,7 @@ function renderContacts(data) {
         html += '<td style="padding:6px 10px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
-        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
         html += '</tr>';
       });
       html += '</table>';
@@ -776,7 +776,7 @@ function renderContacts(data) {
 
   // ── SECTION 2: PROJECT-WIDE LEADS ──
   if (data.projectLeads.length) {
-    html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
+    html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
     html += '<p style="color:#555;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
     html += '<tr style="background:#3B0764;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
@@ -786,7 +786,7 @@ function renderContacts(data) {
       html += '<td style="padding:8px 12px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
-      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
       html += '</tr>';
     });
     html += '</table>';
@@ -1056,7 +1056,7 @@ window.addEventListener('load', function() {
 
 function unlockMatrix() {
   var code = document.getElementById('matrix-code').value;
-  if (code === 'unity2026') {
+  if (code === '5132') {
     document.getElementById('matrix-lock').style.display = 'none';
     document.getElementById('matrix-content').style.display = 'block';
   } else {
@@ -1091,7 +1091,7 @@ function renderContacts(data) {
   var html = '';
 
   // ── SECTION 1: BY SITE ──
-  html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
+  html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
 
   SITES.forEach(function(site, si) {
     var color = SITE_COLORS[si];
@@ -1112,7 +1112,7 @@ function renderContacts(data) {
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
       html += '<div style="font-weight:700;font-size:1rem">'+escHtml(coord.name)+'</div>';
       if (coord.phone) html += '<div style="color:#555;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
-      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#6D28D9">'+escHtml(coord.email)+'</a></div>';
+      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
       html += '</div>';
     }
 
@@ -1126,7 +1126,7 @@ function renderContacts(data) {
         html += '<td style="padding:6px 10px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
-        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
         html += '</tr>';
       });
       html += '</table>';
@@ -1136,7 +1136,7 @@ function renderContacts(data) {
 
   // ── SECTION 2: PROJECT-WIDE LEADS ──
   if (data.projectLeads.length) {
-    html += '<h3 style="color:#3B0764;border-bottom:2px solid #6D28D9;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
+    html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
     html += '<p style="color:#555;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
     html += '<tr style="background:#3B0764;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
@@ -1146,7 +1146,7 @@ function renderContacts(data) {
       html += '<td style="padding:8px 12px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
-      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#6D28D9">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
       html += '</tr>';
     });
     html += '</table>';

@@ -9,7 +9,7 @@ const EVENT_NAME   = 'Zion Unity Fest 2026';
 const EVENT_DATE   = 'Saturday, October 4, 2026';
 const REPLY_TO     = 'zccunityfest@gmail.com';
 const NOTIFY_EMAIL = 'zccunityfest@gmail.com';
-const PORTAL_URL   = 'https://atypicaltek.github.io/ZCCUnityFest/ZUF2026_Portal.html';
+const PORTAL_URL   = 'https://atypicaltek.github.io/ZUF2026-2/ZUF2026_Portal.html';
 const WEB_APP_URL  = 'https://script.google.com/macros/s/AKfycbwGvcmsrJ5lmd12dsyc5_heOMwztBhCEkwDxFUEl146beOPnm6tZf8_z7YAHVYv9CdcsQ/exec';
 
 // ─── SHEET TAB NAMES ────────────────────────────────────────────
@@ -326,12 +326,12 @@ function sendChoirEmail(email, name, site, params, token) {
   const html = emailWrap(name,
     '<p>Welcome to the <strong>' + EVENT_NAME + ' Combined Choir!</strong> Your signup has been recorded.</p>' +
     '<table style="border-collapse:collapse;width:100%;background:#f3f0ff;border-radius:8px;overflow:hidden">' +
-    '<tr><td style="padding:6px 12px;font-weight:bold;color:#4A0E7F">Site</td><td style="padding:6px 12px">' + escHtml(site) + '</td></tr>' +
-    '<tr><td style="padding:6px 12px;font-weight:bold;color:#4A0E7F">Voice Part</td><td style="padding:6px 12px">' + escHtml(findVal(params,['voice part'])) + '</td></tr>' +
-    '<tr><td style="padding:6px 12px;font-weight:bold;color:#4A0E7F">Willing to Lead</td><td style="padding:6px 12px">' + escHtml(findVal(params,['willing to lead'])) + '</td></tr>' +
-    '<tr><td style="padding:6px 12px;font-weight:bold;color:#4A0E7F">Available for Rehearsal</td><td style="padding:6px 12px">' + escHtml(findVal(params,['rehearsal available'])) + '</td></tr>' +
+    '<tr><td style="padding:6px 12px;font-weight:bold;color:#8B0000">Site</td><td style="padding:6px 12px">' + escHtml(site) + '</td></tr>' +
+    '<tr><td style="padding:6px 12px;font-weight:bold;color:#8B0000">Voice Part</td><td style="padding:6px 12px">' + escHtml(findVal(params,['voice part'])) + '</td></tr>' +
+    '<tr><td style="padding:6px 12px;font-weight:bold;color:#8B0000">Willing to Lead</td><td style="padding:6px 12px">' + escHtml(findVal(params,['willing to lead'])) + '</td></tr>' +
+    '<tr><td style="padding:6px 12px;font-weight:bold;color:#8B0000">Available for Rehearsal</td><td style="padding:6px 12px">' + escHtml(findVal(params,['rehearsal available'])) + '</td></tr>' +
     '</table>' +
-    btnRow(updateUrl, 'Update My Choir Signup', '#4A0E7F') +
+    btnRow(updateUrl, 'Update My Choir Signup', '#8B0000') +
     btnRow(cancelUrl, 'Cancel My Choir Signup', '#c0392b') +
     btnRow(PORTAL_URL, 'Return to Volunteer Signup Portal', '#1F3864')
   );
@@ -482,7 +482,7 @@ function initQRLinksSheet() {
 
   const headers = ['Activity','Form Link','Embed Code (iframe)'];
   sheet.getRange(1, 1, 1, 3).setValues([headers])
-       .setFontWeight('bold').setBackground('#3B0764').setFontColor('#fff');
+       .setFontWeight('bold').setBackground('#8B0000').setFontColor('#fff');
   sheet.setFrozenRows(1);
 
   const rows = activities.map(function(a) {
@@ -571,7 +571,7 @@ function initLeadershipSheet() {
   }
   const headers = ['Type','Site','Activity','Name','Phone','Email','Notes'];
   sheet.getRange(1, 1, 1, headers.length).setValues([headers])
-       .setFontWeight('bold').setBackground('#3B0764').setFontColor('#fff');
+       .setFontWeight('bold').setBackground('#8B0000').setFontColor('#fff');
   sheet.setFrozenRows(1);
   sheet.setColumnWidth(1, 160); // Type
   sheet.setColumnWidth(2, 160); // Site
@@ -700,7 +700,7 @@ function initAllSheets() {
 
 function emailWrap(name, bodyHtml) {
   return '<!DOCTYPE html><html><body style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;padding:20px;background:#f5f6fa">' +
-    '<div style="background:#3B0764;color:#fff;padding:20px 24px;border-radius:10px 10px 0 0;text-align:center">' +
+    '<div style="background:#8B0000;color:#fff;padding:20px 24px;border-radius:10px 10px 0 0;text-align:center">' +
     '<h2 style="margin:0">⛪ ' + EVENT_NAME + '</h2>' +
     '<p style="margin:4px 0 0;opacity:.8">' + EVENT_DATE + '</p></div>' +
     '<div style="background:#fff;padding:24px;border-radius:0 0 10px 10px;box-shadow:0 2px 8px rgba(0,0,0,.1)">' +
@@ -729,7 +729,7 @@ function pageWrap(title, bodyHtml) {
     '<title>' + escHtml(title) + '</title>' +
     '<style>' +
       'body{font-family:Arial,sans-serif;max-width:560px;margin:40px auto;padding:20px 24px;background:#f5f6fa;color:#222}' +
-      'h2{color:#3B0764;margin-bottom:16px}' +
+      'h2{color:#8B0000;margin-bottom:16px}' +
       'a{color:#6D28D9}' +
       'p{line-height:1.6;margin:0 0 14px}' +
     '</style>' +
