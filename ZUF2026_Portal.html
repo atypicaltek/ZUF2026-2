@@ -246,7 +246,20 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
           <th class="total-col">TOTAL</th><th>Deadline</th>
         </tr>
       </thead>
-      <tbody id="matrix-body"></tbody>
+      <tbody id="matrix-body">
+        <tr><td>Food Servers</td><td class="cathedral">8</td><td class="kecoughtan">6</td><td class="newbeg">5</td><td class="newport">5</td><td class="hampton">5</td><td class="ingleside">5</td><td class="norfolk">5</td><td class="franklin">5</td><td class="total-col">44</td><td>Sep 13 (3 wks out)</td></tr>
+        <tr><td>Drinks</td><td class="cathedral">5</td><td class="kecoughtan">2</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">13</td><td>Sep 13 (3 wks out)</td></tr>
+        <tr><td>Games</td><td class="cathedral">5</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">12</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr><td>DJ / Music</td><td class="cathedral">1</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">8</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr><td>Karaoke</td><td class="cathedral">1</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">8</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr><td>Basketball (teams)</td><td class="cathedral">1</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">8</td><td>Sep 13 (3 wks out)</td></tr>
+        <tr><td>Kid Games</td><td class="cathedral">2</td><td class="kecoughtan">2</td><td class="newbeg">2</td><td class="newport">2</td><td class="hampton">2</td><td class="ingleside">2</td><td class="norfolk">2</td><td class="franklin">2</td><td class="total-col">16</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr><td>Parking</td><td class="cathedral">4</td><td class="kecoughtan">2</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">0</td><td class="franklin">1</td><td class="total-col">11</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr><td>Site Setup</td><td class="cathedral">3</td><td class="kecoughtan">3</td><td class="newbeg">3</td><td class="newport">3</td><td class="hampton">3</td><td class="ingleside">3</td><td class="norfolk">3</td><td class="franklin">3</td><td class="total-col">24</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr><td>Popcorn Machine</td><td class="cathedral">1</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">8</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr><td>Pretzels</td><td class="cathedral">1</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">8</td><td>Sep 20 (2 wks out)</td></tr>
+        <tr class="total-row"><td>SITE TOTAL</td><td class="cathedral">32</td><td class="kecoughtan">21</td><td class="newbeg">17</td><td class="newport">17</td><td class="hampton">17</td><td class="ingleside">17</td><td class="norfolk">16</td><td class="franklin">17</td><td class="total-col">154</td><td></td></tr>
+      </tbody>
     </table>
   </div>
   <div style="text-align:center;margin-top:24px"><a href="https://docs.google.com/spreadsheets/d/1JmUA5WzgHxuLnODD-96rtYtgH68dJvSaNaW5Vhp2pSI/view" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#1565C0;color:#fff;border-radius:24px;font-size:1.28rem;font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.15)">📊 View Master Google Sheet</a></div>
@@ -930,7 +943,7 @@ window.addEventListener('load', function() {
     var card = document.createElement('div');
     card.className = 'qr-card';
     card.style.cursor = 'pointer';
-    card.addEventListener('click', function(){ showTab(act.id); });
+    card.onclick = function(){ showTab(act.id); };
 
     var emojiEl = document.createElement('div');
     emojiEl.style.cssText = 'font-size:2rem;line-height:1;padding:4px 0';
