@@ -868,8 +868,7 @@ var ACTS_M = [
 ];
 function buildMatrix(){
   var tbody = document.getElementById('matrix-body');
-  if (!tbody) return;
-  tbody.innerHTML = ''; // clear and rebuild
+  if (!tbody || tbody.rows.length > 0) return; // static HTML already in place
   ACTS_M.forEach(function(act){
     var tr=document.createElement('tr');
     var td0=document.createElement('td'); td0.textContent=act.name; tr.appendChild(td0);
