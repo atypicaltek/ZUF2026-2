@@ -855,7 +855,8 @@ var ACTS_M = [
 ];
 function buildMatrix(){
   var tbody = document.getElementById('matrix-body');
-  if (!tbody || tbody.rows.length > 0) return; // already built
+  if (!tbody) return;
+  tbody.innerHTML = ''; // clear and rebuild
   ACTS_M.forEach(function(act){
     var tr=document.createElement('tr');
     var td0=document.createElement('td'); td0.textContent=act.name; tr.appendChild(td0);
@@ -1045,6 +1046,7 @@ function unlockMatrix() {
   if (code === '5732') {
     document.getElementById('matrix-lock').style.display = 'none';
     document.getElementById('matrix-content').style.display = 'block';
+    buildMatrix();
   } else {
     document.getElementById('matrix-err').style.display = 'block';
     document.getElementById('matrix-code').value = '';
