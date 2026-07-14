@@ -79,7 +79,7 @@ textarea{resize:vertical;min-height:80px}
 .matrix-table{width:100%;border-collapse:collapse;font-size:1.05rem;table-layout:fixed}
 .matrix-table th{background:#8B0000;color:#fff;padding:12px 8px;text-align:center;word-wrap:break-word}
 .matrix-table th:first-child{text-align:left;min-width:130px}
-.matrix-table td{padding:10px 8px;border:1px solid #dde;text-align:center}
+.matrix-table td{padding:10px 8px;border:1px solid #dde;text-align:center;color:#0d0d0d}
 .matrix-table tr:nth-child(even) td{background:#f8f9fd}
 .matrix-table td:first-child{text-align:left;font-weight:600;color:#0d0d0d}
 .cathedral{background:#0d0d0d!important;color:#fff!important}
@@ -91,7 +91,7 @@ textarea{resize:vertical;min-height:80px}
 .norfolk{background:#C62828!important;color:#fff!important}
 .franklin{background:#2E7D32!important;color:#fff!important}
 
-.total-col{background:#1a1508!important;font-weight:700;color:#0d0d0d!important}
+.total-col{background:#8B0000!important;font-weight:700;color:#fff!important}
 .total-row td{background:#0d0d0d!important;color:#fff!important;font-weight:700}
 .info-banner{background:linear-gradient(135deg,#e8f4fd,#f0f8ff);border:1px solid #8B0000;border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:.88rem;color:#0d0d0d;line-height:1.6}
 .info-banner strong{display:block;font-size:.95rem;margin-bottom:6px}
@@ -254,7 +254,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <!-- QR Signup Codes -->
   <div style="margin:28px 0 16px">
     <p class="section-title" style="text-align:center;margin-bottom:4px">📱 Volunteer Signup QR Codes</p>
-    <p class="section-sub" style="text-align:center">Scan or tap any tile to open the volunteer signup form</p>
+    <p class="section-sub" style="text-align:center">Tap any tile to open the volunteer signup form</p>
     <div class="qr-grid" id="qr-grid"></div>
   </div>
   </div><!-- end matrix-content -->
@@ -876,8 +876,8 @@ var ACTS_M = [
     var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var dlLabel=months[dlDate.getMonth()]+' '+dlDate.getDate();
     tdDl.textContent=dlLabel+' ('+weeksLeft+' wks out)';
-    if(daysLeft<=7)  { tdDl.style.background='#FFB3C1'; tdDl.style.fontWeight='900'; }
-    else if(daysLeft<=14){ tdDl.style.background='#FFF176'; tdDl.style.fontWeight='700'; }
+    if(daysLeft<=7)  { tdDl.style.background='#FFB3C1'; tdDl.style.color='#7B0000'; tdDl.style.fontWeight='900'; }
+    else if(daysLeft<=14){ tdDl.style.background='#FFF176'; tdDl.style.color='#5a4000'; tdDl.style.fontWeight='700'; }
     tr.appendChild(tdDl);
     tbody.appendChild(tr);
   });
@@ -927,40 +927,26 @@ window.addEventListener('load', function() {
     var rowEl = idx < 7 ? row1 : row2;
     var card = document.createElement('div');
     card.className = 'qr-card';
-    card.onclick = function(){ showTab(act.id); };
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', function(){ showTab(act.id); });
+
+    var emojiEl = document.createElement('div');
+    emojiEl.style.cssText = 'font-size:2rem;line-height:1;padding:4px 0';
+    emojiEl.textContent = act.emoji;
+    card.appendChild(emojiEl);
 
     var lbl = document.createElement('div');
     lbl.className = 'qr-label';
-    lbl.textContent = act.emoji + ' ' + act.label;
+    lbl.style.color = '#f0ece4';
+    lbl.textContent = act.label;
     card.appendChild(lbl);
-
-    var qd = document.createElement('div'); qd.className = 'qr-canvas';
-    var qi = document.createElement('div'); qi.id = 'qr-' + act.id;
-    qd.appendChild(qi); card.appendChild(qd);
-
-    var hint = document.createElement('div');
-    hint.className = 'qr-scan-hint'; hint.textContent = 'Scan to open on your phone';
-    card.appendChild(hint);
 
     var countEl = document.createElement('div');
     countEl.className = 'qr-count'; countEl.id = 'qrc-' + act.key; countEl.textContent = '0';
+    countEl.style.color = '#C9A227';
     card.appendChild(countEl);
 
-    var btn = document.createElement('button');
-    btn.className = 'qr-open-btn'; btn.textContent = 'Open Form';
-    btn.onclick = function(ev){ ev.stopPropagation(); showTab(act.id); };
-    card.appendChild(btn);
-
     rowEl.appendChild(card);
-
-    if (typeof QRCode !== 'undefined') {
-      try {
-        var url = window.location.href.split('#')[0] + '#' + act.id;
-        new QRCode(qi, {text:url, width:80, height:80, colorDark:'#8B0000', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
-      } catch(e) { qi.textContent = act.emoji; qi.style.fontSize='3rem'; }
-    } else {
-      qi.textContent = act.emoji; qi.style.fontSize='3rem'; qi.style.padding='20px';
-    }
   });
 
   loadDash();
