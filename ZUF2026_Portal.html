@@ -118,8 +118,8 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 .dash-stat-num{font-size:1.8rem;font-weight:900;color:#C9A227;line-height:1}
 .dash-stat-lbl{font-size:.62rem;color:#777;text-transform:uppercase;letter-spacing:.5px}
 .dash-section-lbl{flex-shrink:0;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A227;margin:4px 0 3px;border-bottom:1.5px solid #C9A227;padding-bottom:2px;text-align:center;flex-shrink:0}
-.act-overview{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:0 0 auto;align-content:start}
-.act-tile{background:#1a1a1a;border-radius:8px;padding:9px 2px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #fff;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;max-height:138px}
+.act-overview{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;flex:0 0 auto;align-content:start}
+.act-tile{background:#1a1a1a;border-radius:8px;padding:9px 2px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #fff;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;max-height:138px;flex:0 0 calc(14.28% - 4px)}
 .act-tile:hover{border-color:#C9A227}
 .act-tile-num{font-size:3.6rem;font-weight:900;line-height:1;color:#C9A227}
 .act-tile-pct{font-size:1.73rem;margin-top:3px;font-weight:700;color:#f0ece4}
@@ -189,8 +189,8 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 <!-- ══ HOME ══ -->
 <div id="tab-home" class="form-panel active">
 
-  <!-- TOP 60%: stats + activity tiles -->
-  <div style="flex:3;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
+  <!-- TOP 65%: stats + activity tiles -->
+  <div style="flex:13;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
     <!-- Stats bar -->
     <div class="dash-statsbar">
       <div class="dash-stat"><div class="dash-stat-num" id="stat-total">--</div><div class="dash-stat-lbl">Total Signed Up</div></div>
@@ -205,8 +205,8 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
     <div class="act-overview" id="act-overview"></div>
   </div>
 
-  <!-- BOTTOM 40%: site tiles -->
-  <div style="flex:2;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
+  <!-- BOTTOM 35%: site tiles -->
+  <div style="flex:7;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
     <div class="dash-section-lbl">📍 Signups by Site</div>
     <div class="sites-overview" id="sites-overview" style="flex:1;align-content:start"></div>
   </div>
@@ -800,6 +800,7 @@ function escHtml(s) {
 window.addEventListener('load', function() {
   var h = window.location.hash.replace('#','');
   if (h && document.getElementById('tab-'+h)) showTab(h);
+  loadDash();
 });
 
 function toggleActivityField(show) {
