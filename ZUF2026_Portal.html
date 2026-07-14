@@ -117,9 +117,9 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 .dash-stat{background:#1a1a1a;border:1px solid #333;border-radius:8px;padding:5px 12px;flex:1;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.4)}
 .dash-stat-num{font-size:1.8rem;font-weight:900;color:#C9A227;line-height:1}
 .dash-stat-lbl{font-size:.62rem;color:#777;text-transform:uppercase;letter-spacing:.5px}
-.dash-section-lbl{flex-shrink:0;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A227;margin:4px 0 3px;border-bottom:1.5px solid #C9A227;padding-bottom:2px;text-align:center;flex-shrink:0}
+.dash-section-lbl{flex-shrink:0;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A227;margin:4px 0 3px;border-bottom:1.5px solid #C9A227;padding-bottom:2px;text-align:center}
 .act-overview{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;flex:0 0 auto;align-content:start}
-.act-tile{background:#1a1a1a;border-radius:8px;padding:6px 4px;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #fff;transition:.2s;display:flex;flex-direction:row;align-items:center;justify-content:space-between;min-height:0;max-height:138px;flex:0 0 calc(14.28% - 4px);gap:4px;overflow:hidden}
+.act-tile{background:#1a1a1a;border-radius:8px;padding:8px 6px;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #fff;transition:.2s;display:flex;flex-direction:row;align-items:center;justify-content:space-between;min-height:90px;max-height:200px;flex:0 0 calc(20% - 4px);gap:6px;overflow:hidden}
 .act-tile:hover{border-color:#C9A227}
 .act-tile-num{font-size:3.6rem;font-weight:900;line-height:1;color:#C9A227}
 .act-tile-pct{font-size:1.73rem;margin-top:3px;font-weight:700;color:#f0ece4}
@@ -660,10 +660,12 @@ function renderActOverview() {
     var left = document.createElement('div');
     left.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;text-align:center';
     left.innerHTML =
-      '<div style="font-size:1.5rem;line-height:1">' + act.emoji + '</div>' +
-      '<div style="font-size:1.6rem;font-weight:900;line-height:1;color:'+color+'">' + signed + '</div>' +
-      '<div style="font-size:.8rem;font-weight:700;color:'+color+'">' + (needed>0?pct+'%':'Open') + '</div>' +
-      '<div class="act-tile-bar" style="width:85%"><div class="act-tile-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
+      '<div style="display:flex;align-items:center;justify-content:center;gap:5px;line-height:1">' +
+        '<span style="font-size:1.8rem;line-height:1">' + act.emoji + '</span>' +
+        '<span style="font-size:1.1rem;font-weight:900;color:'+color+'">' + (needed>0?pct+'%':'Open') + '</span>' +
+      '</div>' +
+      '<div style="font-size:.78rem;font-weight:700;color:#f0ece4;margin-top:4px;text-align:center;line-height:1.2">' + act.label + '</div>' +
+      '<div class="act-tile-bar" style="width:90%;margin-top:5px"><div class="act-tile-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
 
     // RIGHT: QR code
     var qrWrap = document.createElement('div');
