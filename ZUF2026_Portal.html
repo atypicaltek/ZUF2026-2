@@ -118,15 +118,15 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 .dash-stat-num{font-size:1.8rem;font-weight:900;color:#C9A227;line-height:1}
 .dash-stat-lbl{font-size:.62rem;color:#777;text-transform:uppercase;letter-spacing:.5px}
 .dash-section-lbl{flex-shrink:0;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A227;margin:4px 0 3px;border-bottom:1.5px solid #C9A227;padding-bottom:2px;text-align:center;flex-shrink:0}
-.act-overview{display:grid;grid-template-columns:repeat(13,1fr);gap:4px;flex:0 0 auto;align-content:start}
-.act-tile{background:#1a1a1a;border-radius:8px;padding:9px 2px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #8B0000;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;max-height:138px}
+.act-overview{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:0 0 auto;align-content:start}
+.act-tile{background:#1a1a1a;border-radius:8px;padding:9px 2px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #fff;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:0;max-height:138px}
 .act-tile:hover{border-color:#C9A227}
 .act-tile-num{font-size:3.6rem;font-weight:900;line-height:1;color:#C9A227}
 .act-tile-pct{font-size:1.73rem;margin-top:3px;font-weight:700;color:#f0ece4}
 .act-tile-bar{background:#333;border-radius:2px;height:4px;margin-top:4px;overflow:hidden;width:70%}
 .act-tile-bar-fill{height:100%;border-radius:3px;transition:width .5s}
 .sites-overview{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;flex:0 0 auto;align-content:start}
-.site-tile{background:#1a1a1a;border-radius:6px;padding:4px 6px;box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #8B0000;display:flex;flex-direction:column;justify-content:center}
+.site-tile{background:#1a1a1a;border-radius:6px;padding:4px 6px;box-shadow:0 2px 6px rgba(0,0,0,.4);border:2px solid #fff;display:flex;flex-direction:column;justify-content:center}
 .site-tile-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:1px}
 .site-tile-name{font-size:.72rem;font-weight:700;color:#f0ece4}
 .site-tile-badge{font-size:.9rem;font-weight:900;padding:2px 7px;border-radius:20px;color:#fff}
@@ -188,11 +188,9 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 
 <!-- ══ HOME ══ -->
 <div id="tab-home" class="form-panel active">
-  <!-- TOP HALF: stats + activity tiles + site tiles -->
-  <div style="flex:1;display:flex;flex-direction:column;overflow:hidden;gap:0">
 
-    
-
+  <!-- TOP 60%: stats + activity tiles -->
+  <div style="flex:3;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
     <!-- Stats bar -->
     <div class="dash-statsbar">
       <div class="dash-stat"><div class="dash-stat-num" id="stat-total">--</div><div class="dash-stat-lbl">Total Signed Up</div></div>
@@ -202,16 +200,16 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
         <button class="dash-refresh" onclick="loadDash()">↻ Refresh</button>
       </div>
     </div>
-
-    <!-- Activity overview tiles -->
+    <!-- Activity overview tiles: 7 per row -->
     <div class="dash-section-lbl">📊 Activity Signups</div>
     <div class="act-overview" id="act-overview"></div>
+  </div>
 
-    <!-- Site overview -->
+  <!-- BOTTOM 40%: site tiles -->
+  <div style="flex:2;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
     <div class="dash-section-lbl">📍 Signups by Site</div>
-    <div class="sites-overview" id="sites-overview"></div>
-
-  </div><!-- end top half -->
+    <div class="sites-overview" id="sites-overview" style="flex:1;align-content:start"></div>
+  </div>
 
   <!-- T-SHIRT FLASH BANNER -->
   <div class="tshirt-banner">🎽 Purchase Your Unity Fest T-Shirts Today! 🎽</div>
