@@ -75,13 +75,13 @@ textarea{resize:vertical;min-height:80px}
 .req-badge.med{background:#8B0000;color:#fff}
 .req-badge.choir-badge{background:var(--choir);color:#fff}
 .req-badge.coord-badge{background:var(--coord);color:#fff}
-.matrix-section{background:#fff;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.10);overflow-x:visible}
+.matrix-section{background:#1a1a1a;border-radius:14px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,.40);overflow-x:auto}
 .matrix-table{width:100%;border-collapse:collapse;font-size:1.05rem;table-layout:fixed}
 .matrix-table th{background:#8B0000;color:#fff;padding:12px 8px;text-align:center;word-wrap:break-word}
 .matrix-table th:first-child{text-align:left;min-width:130px}
-.matrix-table td{padding:10px 8px;border:1px solid #dde;text-align:center;color:#0d0d0d}
-.matrix-table tr:nth-child(even) td{background:#f8f9fd}
-.matrix-table td:first-child{text-align:left;font-weight:600;color:#0d0d0d}
+.matrix-table td{padding:10px 8px;border:1px solid #333;text-align:center;color:#f0ece4}
+.matrix-table tr:nth-child(even) td{background:#222}
+.matrix-table td:first-child{text-align:left;font-weight:600;color:#f0ece4}
 .cathedral{background:#0d0d0d!important;color:#fff!important}
 .kecoughtan{background:#4CAF50!important;color:#fff!important}
 .newbeg{background:#1565C0!important;color:#fff!important}
@@ -91,7 +91,7 @@ textarea{resize:vertical;min-height:80px}
 .norfolk{background:#C62828!important;color:#fff!important}
 .franklin{background:#2E7D32!important;color:#fff!important}
 
-.total-col{background:#8B0000!important;font-weight:700;color:#fff!important}
+.total-col{background:#3a2800!important;font-weight:700;color:#fff!important}
 .total-row td{background:#0d0d0d!important;color:#fff!important;font-weight:700}
 .info-banner{background:linear-gradient(135deg,#e8f4fd,#f0f8ff);border:1px solid #8B0000;border-radius:10px;padding:16px 20px;margin-bottom:20px;font-size:.88rem;color:#0d0d0d;line-height:1.6}
 .info-banner strong{display:block;font-size:.95rem;margin-bottom:6px}
@@ -798,6 +798,7 @@ function escHtml(s) {
 }
 
 window.addEventListener('load', function() {
+  buildMatrix();
   var h = window.location.hash.replace('#','');
   if (h && document.getElementById('tab-'+h)) showTab(h);
   loadDash();
@@ -852,9 +853,9 @@ var ACTS_M = [
   {name:'Popcorn Machine',  vals:[1,1,1,1,1,1,1,1],  dlWeeks:2},
   {name:'Pretzels',         vals:[1,1,1,1,1,1,1,1],  dlWeeks:2},
 ];
-(function(){
+function buildMatrix(){
   var tbody = document.getElementById('matrix-body');
-  if (!tbody) return;
+  if (!tbody || tbody.rows.length > 0) return; // already built
   ACTS_M.forEach(function(act){
     var tr=document.createElement('tr');
     var td0=document.createElement('td'); td0.textContent=act.name; tr.appendChild(td0);
@@ -892,7 +893,7 @@ var ACTS_M = [
   var tdG=document.createElement('td'); tdG.textContent=grand; tdG.classList.add('total-col'); trow.appendChild(tdG);
   var tdX=document.createElement('td'); tdX.textContent=''; trow.appendChild(tdX);
   tbody.appendChild(trow);
-})();
+}
 
 // ── QR GRID ──────────────────────────────────────────────────
 var QR_ACTS = [
