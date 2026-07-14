@@ -110,6 +110,7 @@ function doPost(e) {
       case 'coordinator':   return handleCoordinatorPost(p);
       case 'choir':         return handleChoirPost(p);
       case 'contactemail':  return handleContactEmail(p);
+      case 'actlead':       return handleActLeadPost(p);
       default:              return jsonOut({success:false, error:'Unknown activity: ' + activity});
     }
   } catch (err) {
@@ -709,6 +710,89 @@ function handleContactEmail(p) {
     subject: '[ZUF 2026] ' + subject,
     body:    body,
   });
+
+  return jsonOut({ok: true});
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  ACTIVITY LEAD CONTACT SIGNUP HANDLER
+//  Accepts: siteKey, name, phone, email
+//  Looks up site coordinator email from the leadership sheet,
+//  sends notification to coordinator + zccunityfest@gmail.com.
+// ═══════════════════════════════════════════════════════════════
+
+function handleActLeadPost(p) {
+  const siteKey = (p.siteKey || '').toString().trim();
+  const name    = (p.name    || '').toString().trim();
+  const phone   = (p.phone   || '').toString().trim();
+  const email   = (p.email   || '').toString().trim();
+
+  if (!siteKey || !name || !phone || !email) {
+    return jsonOut({ok: false, error: 'Missing required fields.'});
+  }
+
+  // Map site keys to full names (must match what's stored in leadership sheet)
+  const SITE_MAP = {
+    'cathedral':     'The Cathedral',
+    'newbeginnings': 'New Beginnings',
+    'newportnews':   'Newport News',
+    'hampton':       'Downtown Hampton',
+    'kecoughtan':    'Kecoughtan Road',
+    'ingleside':     'Ingleside Road',
+    'norfolk':       'Port Norfolk',
+    'franklin':      'Downtown Franklin',
+  };
+  const siteName = SITE_MAP[siteKey];
+  if (!siteName) return jsonOut({ok: false, error: 'Unknown site key: ' + siteKey});
+
+  // Look up site coordinator email from leadership sheet
+  const ss    = getSpreadsheet();
+  const sheet = ss.getSheetByName(TAB_MAP['leadership']);
+  var coordEmail = '';
+  var coordName  = '';
+  if (sheet && sheet.getLastRow() > 1) {
+    const data = sheet.getDataRange().getValues();
+    // Cols: 0=Type, 1=Site, 2=Activity, 3=Name, 4=Phone, 5=Email
+    for (var i = 1; i < data.length; i++) {
+      if ((data[i][0]||'').toString().trim() === 'Site Coordinator' &&
+          (data[i][1]||'').toString().trim() === siteName) {
+        coordEmail = (data[i][5]||'').toString().trim();
+        coordName  = (data[i][3]||'').toString().trim();
+        break;
+      }
+    }
+  }
+
+  const body =
+    'A new Activity Lead has submitted their contact information via the ZUF 2026 portal.\n\n' +
+    'Site:    ' + siteName + '\n' +
+    'Name:    ' + name + '\n' +
+    'Phone:   ' + phone + '\n' +
+    'Email:   ' + email + '\n\n' +
+    '─────────────────────────────────\n' +
+    'This submission was received via the Activity Lead Contact Signup QR code.\n' +
+    'Reply to this person at: ' + email;
+
+  const recipients = ['zccunityfest@gmail.com'];
+  if (coordEmail) recipients.push(coordEmail);
+
+  MailApp.sendEmail({
+    to:      recipients.join(','),
+    replyTo: email,
+    subject: '[ZUF 2026] New Activity Lead — ' + siteName + ' — ' + name,
+    body:    body,
+  });
+
+  // Also log to the leadership sheet notes or a dedicated tab
+  try {
+    var logSheet = ss.getSheetByName('Activity Lead Signups');
+    if (!logSheet) {
+      logSheet = ss.insertSheet('Activity Lead Signups');
+      logSheet.getRange(1,1,1,5).setValues([['Timestamp','Site','Name','Phone','Email']]);
+      logSheet.getRange(1,1,1,5).setFontWeight('bold').setBackground('#8B0000').setFontColor('#fff');
+    }
+    logSheet.appendRow([new Date(), siteName, name, phone, email]);
+  } catch(e) { Logger.log('Could not log activity lead: ' + e); }
 
   return jsonOut({ok: true});
 }
