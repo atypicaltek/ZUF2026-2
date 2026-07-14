@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Zion Unity Fest 2026 — Volunteer Signup Portal</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
   --navy:#0d0d0d;--blue:#8B0000;--light-blue:#1a0808;--gold:#C9A227;
@@ -119,7 +118,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 .dash-stat-lbl{font-size:.62rem;color:#777;text-transform:uppercase;letter-spacing:.5px}
 .dash-section-lbl{flex-shrink:0;font-size:1.05rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#C9A227;margin:4px 0 3px;border-bottom:1.5px solid #C9A227;padding-bottom:2px;text-align:center}
 .act-overview{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;flex:0 0 auto;align-content:start}
-.act-tile{background:#1a1a1a;border-radius:8px;padding:8px 6px;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #fff;transition:.2s;display:flex;flex-direction:row;align-items:center;justify-content:space-between;min-height:90px;max-height:200px;flex:0 0 calc(20% - 4px);gap:6px;overflow:hidden}
+.act-tile{background:#1a1a1a;border-radius:8px;padding:10px 8px;box-shadow:0 2px 8px rgba(0,0,0,.4);cursor:pointer;border:2px solid #fff;transition:.2s;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:90px;max-height:200px;flex:0 0 calc(20% - 4px);gap:4px;overflow:hidden;text-align:center}
 .act-tile:hover{border-color:#C9A227}
 .act-tile-num{font-size:3.6rem;font-weight:900;line-height:1;color:#C9A227}
 .act-tile-pct{font-size:1.73rem;margin-top:3px;font-weight:700;color:#f0ece4}
@@ -643,7 +642,6 @@ function renderActOverview() {
   if (!grid) return;
   grid.innerHTML = '';
   var TAB_KEYS = ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13'];
-  var baseUrl = window.location.href.split('#')[0];
   DASH_ACTS.forEach(function(act, idx) {
     var signed = LIVE_COUNTS[act.key] || 0;
     var needed = Object.values(REQUIREMENTS[act.key]||{}).reduce(function(s,v){ return s+v; }, 0);
@@ -656,31 +654,14 @@ function renderActOverview() {
     tile.title = act.label;
     tile.onclick = function(){ showTab(tabKey); };
 
-    // LEFT: emoji + count + pct + bar
-    var left = document.createElement('div');
-    left.style.cssText = 'flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;text-align:center';
-    left.innerHTML =
+    tile.innerHTML =
       '<div style="display:flex;align-items:center;justify-content:center;gap:5px;line-height:1">' +
         '<span style="font-size:1.8rem;line-height:1">' + act.emoji + '</span>' +
         '<span style="font-size:1.1rem;font-weight:900;color:'+color+'">' + (needed>0?pct+'%':'Open') + '</span>' +
       '</div>' +
-      '<div style="font-size:.78rem;font-weight:700;color:#f0ece4;margin-top:4px;text-align:center;line-height:1.2">' + act.label + '</div>' +
+      '<div style="font-size:.78rem;font-weight:700;color:#f0ece4;margin-top:4px;line-height:1.2">' + act.label + '</div>' +
       '<div class="act-tile-bar" style="width:90%;margin-top:5px"><div class="act-tile-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
 
-    // RIGHT: QR code
-    var qrWrap = document.createElement('div');
-    qrWrap.style.cssText = 'flex:0 0 58px;width:58px;height:58px;background:#fff;border-radius:4px;overflow:hidden;display:flex;align-items:center;justify-content:center';
-    if (typeof QRCode !== 'undefined') {
-      try {
-        new QRCode(qrWrap, {text: baseUrl+'#'+tabKey, width:58, height:58, colorDark:'#8B0000', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
-      } catch(e) { qrWrap.textContent = act.emoji; }
-    } else {
-      qrWrap.style.cssText += ';font-size:1.5rem;background:#1a1a1a';
-      qrWrap.textContent = act.emoji;
-    }
-
-    tile.appendChild(left);
-    tile.appendChild(qrWrap);
     grid.appendChild(tile);
   });
 }
@@ -745,7 +726,58 @@ function loadContacts() {
     .catch(function(){ renderContacts(null); });
 }
 
+// ── CONTACT EMAIL STORE (populated by renderContacts, email never stored here) ──
+var _contactStore = [];
+var _emailTarget  = null;
+
+function openContactEmail(idx) {
+  _emailTarget = _contactStore[idx];
+  if (!_emailTarget) return;
+  document.getElementById('em-contact-name').textContent = _emailTarget.name;
+  document.getElementById('em-sender').value  = '';
+  document.getElementById('em-subject').value = '';
+  document.getElementById('em-body').value    = '';
+  var st = document.getElementById('em-status');
+  st.textContent = ''; st.style.color = '#aaa';
+  document.getElementById('contact-email-modal').style.display = 'flex';
+}
+
+function closeContactEmail() {
+  document.getElementById('contact-email-modal').style.display = 'none';
+  _emailTarget = null;
+}
+
+function submitContactEmail() {
+  if (!_emailTarget) return;
+  var sender  = document.getElementById('em-sender').value.trim();
+  var subject = document.getElementById('em-subject').value.trim();
+  var body    = document.getElementById('em-body').value.trim();
+  var st      = document.getElementById('em-status');
+  if (!sender || !subject || !body) {
+    st.style.color = '#f88'; st.textContent = 'Please fill in all fields.'; return;
+  }
+  st.style.color = '#aaa'; st.textContent = 'Sending…';
+  var data = new URLSearchParams();
+  data.append('activity',   'contactemail');
+  data.append('cIdx',       _emailTarget.cIdx);
+  data.append('senderName', sender);
+  data.append('subject',    subject);
+  data.append('message',    body);
+  fetch(WEB_APP_URL, {method:'POST', body:data})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if (d.ok) {
+        st.style.color = '#4CAF50'; st.textContent = '✓ Message sent!';
+        setTimeout(closeContactEmail, 2200);
+      } else {
+        st.style.color = '#f88'; st.textContent = d.error || 'Failed to send. Try again.';
+      }
+    })
+    .catch(function(){ st.style.color = '#f88'; st.textContent = 'Network error. Try again.'; });
+}
+
 function renderContacts(data) {
+  _contactStore = [];
   var el = document.getElementById('contacts-body');
   if (!el) return;
   if (!data || (!data.siteCoordinators.length && !data.siteActivityLeads.length && !data.projectLeads.length)) {
@@ -755,55 +787,52 @@ function renderContacts(data) {
 
   var SITES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
                'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
-  var SITE_COLORS = ['#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000'];
+  var color = '#8B0000';
+  var html  = '';
 
-  var html = '';
+  function emailBtn(contact) {
+    var idx = _contactStore.length;
+    _contactStore.push({cIdx: contact.cIdx, name: contact.name});
+    return '<button onclick="openContactEmail('+idx+')" style="background:#8B0000;color:#fff;border:none;border-radius:5px;padding:5px 12px;font-size:.82rem;cursor:pointer;margin-top:4px">✉️ Send Email</button>';
+  }
 
   // ── SECTION 1: BY SITE ──
   html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
 
-  SITES.forEach(function(site, si) {
-    var color = SITE_COLORS[si];
-    var coord = data.siteCoordinators.filter(function(r){ return r.site === site; })[0];
+  SITES.forEach(function(site) {
+    var coord    = data.siteCoordinators.filter(function(r){ return r.site === site; })[0];
     var actLeads = data.siteActivityLeads.filter(function(r){ return r.site === site; });
-
-    if (!coord && !actLeads.length) return; // skip empty sites
+    if (!coord && !actLeads.length) return;
 
     html += '<div style="border:2px solid '+color+';border-radius:10px;margin-bottom:22px;overflow:hidden">';
-    // Site header
-    html += '<div style="background:'+color+';color:#fff;padding:10px 16px;display:flex;align-items:center;gap:10px">';
-    html += '<strong style="font-size:1.05rem">'+site+'</strong>';
-    html += '</div>';
+    html += '<div style="background:'+color+';color:#fff;padding:10px 16px"><strong style="font-size:1.05rem">'+escHtml(site)+'</strong></div>';
     html += '<div style="padding:14px 16px">';
 
-    // Site coordinator
     if (coord) {
       html += '<div style="background:#1a1a1a;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
       html += '<div style="font-weight:700;font-size:1rem;color:#f0ece4">'+escHtml(coord.name)+'</div>';
       if (coord.phone) html += '<div style="color:#aaa;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
-      if (coord.email) html += '<div style="color:#aaa;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
+      if (coord.hasEmail) html += emailBtn(coord);
       html += '</div>';
     }
 
-    // Activity leads for this site
     if (actLeads.length) {
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity Leads</div>';
       html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-      html += '<tr style="background:#8B0000"><th style="padding:6px 10px;text-align:left;color:#fff">Activity</th><th style="padding:6px 10px;text-align:left;color:#fff">Name</th><th style="padding:6px 10px;text-align:left;color:#fff">Phone</th><th style="padding:6px 10px;text-align:left;color:#fff">Email</th></tr>';
+      html += '<tr style="background:#8B0000"><th style="padding:6px 10px;text-align:left;color:#fff">Activity</th><th style="padding:6px 10px;text-align:left;color:#fff">Name</th><th style="padding:6px 10px;text-align:left;color:#fff">Phone</th><th style="padding:6px 10px;text-align:left;color:#fff">Contact</th></tr>';
       actLeads.forEach(function(r, ri) {
         var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
         html += '<tr style="background:'+bg+'">';
         html += '<td style="padding:6px 10px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
-        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+        html += '<td style="padding:6px 10px">'+(r.hasEmail ? emailBtn(r) : '—')+'</td>';
         html += '</tr>';
       });
       html += '</table>';
     }
-
-    html += '</div></div>'; // end padding + site card
+    html += '</div></div>';
   });
 
   // ── SECTION 2: PROJECT-WIDE LEADS ──
@@ -811,14 +840,14 @@ function renderContacts(data) {
     html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
     html += '<p style="color:#aaa;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-    html += '<tr style="background:#8B0000;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
+    html += '<tr style="background:#8B0000;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Contact</th></tr>';
     data.projectLeads.forEach(function(r, ri) {
       var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
       html += '<tr style="background:'+bg+'">';
       html += '<td style="padding:8px 12px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
-      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
+      html += '<td style="padding:8px 12px">'+(r.hasEmail ? emailBtn(r) : '—')+'</td>';
       html += '</tr>';
     });
     html += '</table>';
@@ -1088,97 +1117,23 @@ function unlockMatrix() {
 
 // ── UNITY FEST CONTACTS ──────────────────────────────────────────
 var _contactsLoaded = false;
-function loadContacts() {
-  if (_contactsLoaded) return;
-  var url = WEB_APP_URL + '?action=leadership&t=' + Date.now();
-  fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(data){ renderContacts(data); _contactsLoaded = true; })
-    .catch(function(){ renderContacts(null); });
-}
-
-function renderContacts(data) {
-  var el = document.getElementById('contacts-body');
-  if (!el) return;
-  if (!data || (!data.siteCoordinators.length && !data.siteActivityLeads.length && !data.projectLeads.length)) {
-    el.innerHTML = '<p style="text-align:center;color:#888;padding:32px 0">No contacts have been added yet. Leadership information will appear here once entered in the master sheet.</p>';
-    return;
-  }
-
-  var SITES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
-               'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
-  var SITE_COLORS = ['#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000'];
-
-  var html = '';
-
-  // ── SECTION 1: BY SITE ──
-  html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
-
-  SITES.forEach(function(site, si) {
-    var color = SITE_COLORS[si];
-    var coord = null;
-    for (var ci = 0; ci < data.siteCoordinators.length; ci++) {
-      if (data.siteCoordinators[ci].site === site) { coord = data.siteCoordinators[ci]; break; }
-    }
-    var actLeads = data.siteActivityLeads.filter(function(r){ return r.site === site; });
-    if (!coord && !actLeads.length) return;
-
-    html += '<div style="border:2px solid '+color+';border-radius:10px;margin-bottom:22px;overflow:hidden">';
-    html += '<div style="background:'+color+';color:#fff;padding:10px 16px">';
-    html += '<strong style="font-size:1.05rem">'+escHtml(site)+'</strong>';
-    html += '</div><div style="padding:14px 16px">';
-
-    if (coord) {
-      html += '<div style="background:#1a1a1a;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
-      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
-      html += '<div style="font-weight:700;font-size:1rem">'+escHtml(coord.name)+'</div>';
-      if (coord.phone) html += '<div style="color:#aaa;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
-      if (coord.email) html += '<div style="color:#aaa;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
-      html += '</div>';
-    }
-
-    if (actLeads.length) {
-      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity Leads</div>';
-      html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-      html += '<tr style="background:#8B0000"><th style="padding:6px 10px;text-align:left;color:#fff">Activity</th><th style="padding:6px 10px;text-align:left;color:#fff">Name</th><th style="padding:6px 10px;text-align:left;color:#fff">Phone</th><th style="padding:6px 10px;text-align:left;color:#fff">Email</th></tr>';
-      actLeads.forEach(function(r, ri) {
-        var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
-        html += '<tr style="background:'+bg+'">';
-        html += '<td style="padding:6px 10px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
-        html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
-        html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
-        html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
-        html += '</tr>';
-      });
-      html += '</table>';
-    }
-    html += '</div></div>';
-  });
-
-  // ── SECTION 2: PROJECT-WIDE LEADS ──
-  if (data.projectLeads.length) {
-    html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
-    html += '<p style="color:#aaa;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
-    html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-    html += '<tr style="background:#8B0000;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
-    data.projectLeads.forEach(function(r, ri) {
-      var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
-      html += '<tr style="background:'+bg+'">';
-      html += '<td style="padding:8px 12px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
-      html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
-      html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
-      html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
-      html += '</tr>';
-    });
-    html += '</table>';
-  }
-
-  el.innerHTML = html;
-}
-
-function escHtml(s) {
-  return (s||'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
 </script>
+
+<!-- ── CONTACT EMAIL MODAL ── -->
+<div id="contact-email-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#1a1a1a;border:2px solid #C9A227;border-radius:14px;padding:28px;max-width:460px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.7)">
+    <h3 style="color:#C9A227;margin:0 0 4px;font-size:1.1rem">✉️ Send Message</h3>
+    <div style="color:#aaa;font-size:.88rem;margin-bottom:18px">To: <strong id="em-contact-name" style="color:#f0ece4"></strong> &nbsp;·&nbsp; Replies go to zccunityfest@gmail.com</div>
+    <input id="em-sender"  placeholder="Your Name"  style="width:100%;box-sizing:border-box;background:#111;border:1px solid #444;border-radius:6px;padding:9px 12px;color:#f0ece4;margin-bottom:10px;font-size:.95rem">
+    <input id="em-subject" placeholder="Subject"    style="width:100%;box-sizing:border-box;background:#111;border:1px solid #444;border-radius:6px;padding:9px 12px;color:#f0ece4;margin-bottom:10px;font-size:.95rem">
+    <textarea id="em-body" placeholder="Your message…" rows="5" style="width:100%;box-sizing:border-box;background:#111;border:1px solid #444;border-radius:6px;padding:9px 12px;color:#f0ece4;resize:vertical;font-size:.95rem;margin-bottom:12px"></textarea>
+    <div id="em-status" style="font-size:.88rem;min-height:1.3em;margin-bottom:10px"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeContactEmail()" style="background:#333;color:#f0ece4;border:none;border-radius:6px;padding:9px 20px;cursor:pointer">Cancel</button>
+      <button onclick="submitContactEmail()" style="background:#8B0000;color:#fff;border:none;border-radius:6px;padding:9px 22px;cursor:pointer;font-weight:700">Send</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

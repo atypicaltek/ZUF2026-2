@@ -107,9 +107,10 @@ function doPost(e) {
       case 'setup':       return handleGenericPost(p, 'setup');
       case 'popcorn':     return handleGenericPost(p, 'popcorn');
       case 'pretzels':    return handleGenericPost(p, 'pretzels');
-      case 'coordinator': return handleCoordinatorPost(p);
-      case 'choir':       return handleChoirPost(p);
-      default:            return jsonOut({success:false, error:'Unknown activity: ' + activity});
+      case 'coordinator':   return handleCoordinatorPost(p);
+      case 'choir':         return handleChoirPost(p);
+      case 'contactemail':  return handleContactEmail(p);
+      default:              return jsonOut({success:false, error:'Unknown activity: ' + activity});
     }
   } catch (err) {
     Logger.log('doPost error: ' + err);
@@ -613,21 +614,26 @@ function getLeadershipContacts() {
 
   const data = sheet.getDataRange().getValues();
   // Cols: 0=Type, 1=Site, 2=Activity, 3=Name, 4=Phone, 5=Email, 6=Notes
+  // NOTE: email is intentionally NOT returned to the client — only cIdx is returned
+  // so the frontend can request an email to be sent without ever seeing the address.
   for (var i = 1; i < data.length; i++) {
     const type = (data[i][0] || '').toString().trim();
     if (!type) continue;
+    const name  = (data[i][3] || '').toString().trim();
+    const email = (data[i][5] || '').toString().trim();
+    if (!name) continue; // skip empty rows
     const row = {
+      cIdx:     i,                                       // data-row index; used by handleContactEmail to look up email
       site:     (data[i][1] || '').toString().trim(),
       activity: (data[i][2] || '').toString().trim(),
-      name:     (data[i][3] || '').toString().trim(),
+      name:     name,
       phone:    (data[i][4] || '').toString().trim(),
-      email:    (data[i][5] || '').toString().trim(),
+      hasEmail: email.length > 0,                       // let frontend know if email button should show
       notes:    (data[i][6] || '').toString().trim(),
     };
-    if (!row.name) continue; // skip empty rows
-    if (type === 'Site Coordinator')   result.siteCoordinators.push(row);
+    if (type === 'Site Coordinator')        result.siteCoordinators.push(row);
     else if (type === 'Site Activity Lead') result.siteActivityLeads.push(row);
-    else if (type === 'Project Lead')  result.projectLeads.push(row);
+    else if (type === 'Project Lead')       result.projectLeads.push(row);
   }
   return result;
 }
@@ -655,6 +661,110 @@ function findVal(params, keys) {
 }
 
 // ═══════════════════════════════════════════════════════════════
+//  CONTACT EMAIL HANDLER
+//  Sends message to a contact via their sheet row index (cIdx).
+//  The contact's email is NEVER exposed to the portal frontend.
+//  All replies are directed to zccunityfest@gmail.com.
+// ═══════════════════════════════════════════════════════════════
+
+function handleContactEmail(p) {
+  const cIdx       = parseInt(p.cIdx || '-1', 10);
+  const senderName = (p.senderName || '').toString().trim();
+  const subject    = (p.subject    || '').toString().trim();
+  const message    = (p.message    || '').toString().trim();
+
+  if (cIdx < 1 || !senderName || !subject || !message) {
+    return jsonOut({ok: false, error: 'Missing required fields.'});
+  }
+
+  const ss    = getSpreadsheet();
+  const sheet = ss.getSheetByName(TAB_MAP['leadership']);
+  if (!sheet || sheet.getLastRow() < cIdx + 1) {
+    return jsonOut({ok: false, error: 'Contact not found.'});
+  }
+
+  // cIdx is the data-array index (1 = first data row = sheet row 2)
+  const rowData     = sheet.getRange(cIdx + 1, 1, 1, 6).getValues()[0];
+  const contactEmail = (rowData[5] || '').toString().trim();
+  const contactName  = (rowData[3] || '').toString().trim();
+
+  if (!contactEmail) {
+    return jsonOut({ok: false, error: 'No email address on file for this contact.'});
+  }
+
+  const body =
+    'You have received a message via the Zion Unity Fest 2026 volunteer portal.\n\n' +
+    'From: ' + senderName + '\n' +
+    'To: ' + contactName + '\n\n' +
+    '─────────────────────────────────\n' +
+    message + '\n' +
+    '─────────────────────────────────\n\n' +
+    'To reply, send email to: zccunityfest@gmail.com\n' +
+    'This message was sent via the ZUF 2026 Portal.';
+
+  MailApp.sendEmail({
+    to:      contactEmail,
+    cc:      'zccunityfest@gmail.com',
+    replyTo: 'zccunityfest@gmail.com',
+    subject: '[ZUF 2026] ' + subject,
+    body:    body,
+  });
+
+  return jsonOut({ok: true});
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  QR CODE LINKS SHEET (printable stationery)
+//  Creates / refreshes a visible "QR Code Links" sheet in the
+//  master spreadsheet with activity names, URLs, and embedded
+//  QR images (via Google Charts API) ready for printing.
+// ═══════════════════════════════════════════════════════════════
+
+function setupQRSheet() {
+  const ss = getSpreadsheet();
+  var sheet = ss.getSheetByName('QR Code Links');
+  if (!sheet) sheet = ss.insertSheet('QR Code Links');
+  sheet.clearContents();
+  sheet.clearFormats();
+
+  const baseUrl  = PORTAL_URL + '#';
+  const TAB_KEYS = ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13'];
+  const LABELS   = [
+    'Food Servers','Drinks','Games','DJ / Music','Karaoke',
+    'Basketball (Teams)','Kid Games','Parking','Site Setup',
+    'Popcorn Machine','Pretzels','Site Coordinator','Choir Sign-Up'
+  ];
+
+  // Header row
+  sheet.getRange(1, 1, 1, 3).setValues([['Activity', 'Signup URL', 'QR Code (scan to open)']]);
+  sheet.getRange(1, 1, 1, 3)
+    .setFontWeight('bold')
+    .setBackground('#8B0000')
+    .setFontColor('#ffffff')
+    .setFontSize(11);
+
+  // Data rows
+  for (var i = 0; i < LABELS.length; i++) {
+    const url    = baseUrl + TAB_KEYS[i];
+    const qrUrl  = 'https://chart.googleapis.com/chart?chs=160x160&cht=qr&chl=' + encodeURIComponent(url) + '&choe=UTF-8';
+    const shRow  = i + 2;
+    sheet.getRange(shRow, 1).setValue(LABELS[i]).setFontWeight('bold');
+    sheet.getRange(shRow, 2).setValue(url).setFontColor('#1155CC').setWrap(true);
+    sheet.getRange(shRow, 3).setFormula('=IMAGE("' + qrUrl + '",1)');
+    sheet.setRowHeight(shRow, 170);
+  }
+
+  // Column widths
+  sheet.setColumnWidth(1, 200);
+  sheet.setColumnWidth(2, 420);
+  sheet.setColumnWidth(3, 175);
+  sheet.setFrozenRows(1);
+
+  SpreadsheetApp.flush();
+  Logger.log('QR Code Links sheet updated with ' + LABELS.length + ' entries.');
+}
+
+// ═══════════════════════════════════════════════════════════════
 //  INIT ALL SHEETS
 // ═══════════════════════════════════════════════════════════════
 
@@ -679,6 +789,9 @@ function initAllSheets() {
   // Event Leadership tab — visible, manually filled
   initLeadershipSheet();
 
+  // QR Code Links tab — printable stationery sheet
+  setupQRSheet();
+
   try {
     SpreadsheetApp.getUi().alert(
       '✅ All sheets initialized!\n\n' +
@@ -686,7 +799,8 @@ function initAllSheets() {
       '• Cancel Tokens tab (hidden)\n' +
       '• Cancellations tab\n' +
       '• QR Form Links tab (hidden)\n' +
-      '• Event Leadership tab (fill in coordinators here)\n\n' +
+      '• Event Leadership tab (fill in coordinators here)\n' +
+      '• QR Code Links tab (printable QR codes for stationery)\n\n' +
       'To view hidden tabs: Format → Hidden sheets'
     );
   } catch(e) {
