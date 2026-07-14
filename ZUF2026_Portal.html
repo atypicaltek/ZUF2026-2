@@ -723,12 +723,12 @@ function renderContacts(data) {
 
   var SITES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
                'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
-  var SITE_COLORS = ['#C0392B','#1565C0','#6D4C41','#7CB342','#4CAF50','#E65100','#C62828','#2E7D32'];
+  var SITE_COLORS = ['#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000'];
 
   var html = '';
 
   // ── SECTION 1: BY SITE ──
-  html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
+  html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
 
   SITES.forEach(function(site, si) {
     var color = SITE_COLORS[si];
@@ -746,11 +746,11 @@ function renderContacts(data) {
 
     // Site coordinator
     if (coord) {
-      html += '<div style="background:#f8f4ff;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
+      html += '<div style="background:#1a1a1a;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
-      html += '<div style="font-weight:700;font-size:1rem;color:#1a1a1a">'+escHtml(coord.name)+'</div>';
-      if (coord.phone) html += '<div style="color:#555;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
-      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
+      html += '<div style="font-weight:700;font-size:1rem;color:#f0ece4">'+escHtml(coord.name)+'</div>';
+      if (coord.phone) html += '<div style="color:#aaa;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
+      if (coord.email) html += '<div style="color:#aaa;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
       html += '</div>';
     }
 
@@ -758,11 +758,11 @@ function renderContacts(data) {
     if (actLeads.length) {
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity Leads</div>';
       html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-      html += '<tr style="background:#f0f0f0"><th style="padding:6px 10px;text-align:left;color:#333">Activity</th><th style="padding:6px 10px;text-align:left;color:#333">Name</th><th style="padding:6px 10px;text-align:left;color:#333">Phone</th><th style="padding:6px 10px;text-align:left;color:#333">Email</th></tr>';
+      html += '<tr style="background:#8B0000"><th style="padding:6px 10px;text-align:left;color:#fff">Activity</th><th style="padding:6px 10px;text-align:left;color:#fff">Name</th><th style="padding:6px 10px;text-align:left;color:#fff">Phone</th><th style="padding:6px 10px;text-align:left;color:#fff">Email</th></tr>';
       actLeads.forEach(function(r, ri) {
-        var bg = ri % 2 === 0 ? '#fff' : '#faf9ff';
+        var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
         html += '<tr style="background:'+bg+'">';
-        html += '<td style="padding:6px 10px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+        html += '<td style="padding:6px 10px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
         html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
@@ -776,14 +776,14 @@ function renderContacts(data) {
 
   // ── SECTION 2: PROJECT-WIDE LEADS ──
   if (data.projectLeads.length) {
-    html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
-    html += '<p style="color:#555;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
+    html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
+    html += '<p style="color:#aaa;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-    html += '<tr style="background:#3B0764;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
+    html += '<tr style="background:#8B0000;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
     data.projectLeads.forEach(function(r, ri) {
-      var bg = ri % 2 === 0 ? '#fff' : '#f8f4ff';
+      var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
       html += '<tr style="background:'+bg+'">';
-      html += '<td style="padding:8px 12px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+      html += '<td style="padding:8px 12px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
       html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
@@ -957,7 +957,7 @@ window.addEventListener('load', function() {
     if (typeof QRCode !== 'undefined') {
       try {
         var url = window.location.href.split('#')[0] + '#' + act.id;
-        new QRCode(qi, {text:url, width:80, height:80, colorDark:'#3B0764', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
+        new QRCode(qi, {text:url, width:80, height:80, colorDark:'#8B0000', colorLight:'#ffffff', correctLevel:QRCode.CorrectLevel.M});
       } catch(e) { qi.textContent = act.emoji; qi.style.fontSize='3rem'; }
     } else {
       qi.textContent = act.emoji; qi.style.fontSize='3rem'; qi.style.padding='20px';
@@ -1056,7 +1056,7 @@ window.addEventListener('load', function() {
 
 function unlockMatrix() {
   var code = document.getElementById('matrix-code').value;
-  if (code === '5132') {
+  if (code === '5732') {
     document.getElementById('matrix-lock').style.display = 'none';
     document.getElementById('matrix-content').style.display = 'block';
   } else {
@@ -1086,12 +1086,12 @@ function renderContacts(data) {
 
   var SITES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
                'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
-  var SITE_COLORS = ['#C0392B','#1565C0','#6D4C41','#7CB342','#4CAF50','#E65100','#C62828','#2E7D32'];
+  var SITE_COLORS = ['#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000','#8B0000'];
 
   var html = '';
 
   // ── SECTION 1: BY SITE ──
-  html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
+  html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:0 0 20px">By Site</h3>';
 
   SITES.forEach(function(site, si) {
     var color = SITE_COLORS[si];
@@ -1108,22 +1108,22 @@ function renderContacts(data) {
     html += '</div><div style="padding:14px 16px">';
 
     if (coord) {
-      html += '<div style="background:#f8f4ff;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
+      html += '<div style="background:#1a1a1a;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
       html += '<div style="font-weight:700;font-size:1rem">'+escHtml(coord.name)+'</div>';
-      if (coord.phone) html += '<div style="color:#555;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
-      if (coord.email) html += '<div style="color:#555;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
+      if (coord.phone) html += '<div style="color:#aaa;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
+      if (coord.email) html += '<div style="color:#aaa;font-size:.9rem">✉️ <a href="mailto:'+escHtml(coord.email)+'" style="color:#C9A227">'+escHtml(coord.email)+'</a></div>';
       html += '</div>';
     }
 
     if (actLeads.length) {
       html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity Leads</div>';
       html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-      html += '<tr style="background:#f0f0f0"><th style="padding:6px 10px;text-align:left">Activity</th><th style="padding:6px 10px;text-align:left">Name</th><th style="padding:6px 10px;text-align:left">Phone</th><th style="padding:6px 10px;text-align:left">Email</th></tr>';
+      html += '<tr style="background:#8B0000"><th style="padding:6px 10px;text-align:left;color:#fff">Activity</th><th style="padding:6px 10px;text-align:left;color:#fff">Name</th><th style="padding:6px 10px;text-align:left;color:#fff">Phone</th><th style="padding:6px 10px;text-align:left;color:#fff">Email</th></tr>';
       actLeads.forEach(function(r, ri) {
-        var bg = ri % 2 === 0 ? '#fff' : '#faf9ff';
+        var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
         html += '<tr style="background:'+bg+'">';
-        html += '<td style="padding:6px 10px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+        html += '<td style="padding:6px 10px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
         html += '<td style="padding:6px 10px">'+escHtml(r.phone||'—')+'</td>';
         html += '<td style="padding:6px 10px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
@@ -1136,14 +1136,14 @@ function renderContacts(data) {
 
   // ── SECTION 2: PROJECT-WIDE LEADS ──
   if (data.projectLeads.length) {
-    html += '<h3 style="color:#3B0764;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
-    html += '<p style="color:#555;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
+    html += '<h3 style="color:#8B0000;border-bottom:2px solid #C9A227;padding-bottom:6px;margin:28px 0 16px">Project-Wide Activity Leads</h3>';
+    html += '<p style="color:#aaa;font-size:.9rem;margin-bottom:14px">These leaders oversee each activity across all 8 sites.</p>';
     html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-    html += '<tr style="background:#3B0764;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
+    html += '<tr style="background:#8B0000;color:#fff"><th style="padding:8px 12px;text-align:left">Activity</th><th style="padding:8px 12px;text-align:left">Lead Name</th><th style="padding:8px 12px;text-align:left">Phone</th><th style="padding:8px 12px;text-align:left">Email</th></tr>';
     data.projectLeads.forEach(function(r, ri) {
-      var bg = ri % 2 === 0 ? '#fff' : '#f8f4ff';
+      var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
       html += '<tr style="background:'+bg+'">';
-      html += '<td style="padding:8px 12px;font-weight:600;color:#3B0764">'+escHtml(r.activity)+'</td>';
+      html += '<td style="padding:8px 12px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.name)+'</td>';
       html += '<td style="padding:8px 12px">'+escHtml(r.phone||'—')+'</td>';
       html += '<td style="padding:8px 12px">'+(r.email ? '<a href="mailto:'+escHtml(r.email)+'" style="color:#C9A227">'+escHtml(r.email)+'</a>' : '—')+'</td>';
