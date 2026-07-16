@@ -262,7 +262,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
       </tbody>
     </table>
   </div>
-  <div style="text-align:center;margin-top:24px"><a href="https://docs.google.com/spreadsheets/d/1JmUA5WzgHxuLnODD-96rtYtgH68dJvSaNaW5Vhp2pSI/preview" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#1565C0;color:#fff;border-radius:24px;font-size:1.28rem;font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.15)">📊 View Master Google Sheet</a></div>
+  <div style="text-align:center;margin-top:24px"><a href="https://docs.google.com/spreadsheets/d/1JmUA5WzgHxuLnODD-96rtYtgH68dJvSaNaW5Vhp2pSI/edit?usp=sharing" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:#1565C0;color:#fff;border-radius:24px;font-size:1.28rem;font-weight:700;text-decoration:none;box-shadow:0 2px 8px rgba(0,0,0,.15)">📊 View Master Google Sheet</a></div>
 
   <!-- QR Signup Codes -->
   <div style="margin:28px 0 16px">
@@ -610,7 +610,7 @@ const REQUIREMENTS = {
   karaoke:  {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
   basketball:{cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
   kidgames: {cathedral:2,newbeg:2,newport:2,hampton:2,kecoughtan:2,ingleside:2,norfolk:2,franklin:2},
-  parking:  {cathedral:4,newbeg:0,newport:1,hampton:1,kecoughtan:2,ingleside:1,norfolk:0,franklin:1},
+  parking:  {cathedral:4,newbeg:1,newport:1,hampton:1,kecoughtan:2,ingleside:1,norfolk:0,franklin:1},
   setup:    {cathedral:3,newbeg:3,newport:3,hampton:3,kecoughtan:3,ingleside:3,norfolk:3,franklin:3},
   popcorn:  {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
   pretzels: {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
@@ -859,32 +859,30 @@ function renderContacts(data) {
 
     html += '<div style="border:2px solid '+color+';border-radius:10px;margin-bottom:22px;overflow:hidden">';
     html += '<div style="background:'+color+';color:#fff;padding:10px 16px"><strong style="font-size:1.05rem">'+escHtml(site)+'</strong></div>';
-    html += '<div style="padding:14px 16px">';
+    html += '<div style="padding:10px 14px">';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
+    html += '<tr style="background:#8B0000"><th style="padding:6px 10px;text-align:left;color:#fff">Role / Activity</th><th style="padding:6px 10px;text-align:left;color:#fff">Name</th><th style="padding:6px 10px;text-align:left;color:#fff">Phone</th><th style="padding:6px 10px;text-align:left;color:#fff">Contact</th></tr>';
 
     if (coord) {
-      html += '<div style="background:#1a1a1a;border-radius:7px;padding:10px 14px;margin-bottom:12px">';
-      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Site Coordinator</div>';
-      html += '<div style="font-weight:700;font-size:1rem;color:#f0ece4">'+escHtml(coord.name)+'</div>';
-      if (coord.phone) html += '<div style="color:#aaa;font-size:.9rem">📞 '+escHtml(coord.phone)+'</div>';
-      if (coord.hasEmail) html += emailBtn(coord);
-      html += '</div>';
+      html += '<tr style="background:#2a0000">';
+      html += '<td style="padding:7px 10px;font-weight:700;color:#C9A227">📍 Site Coordinator</td>';
+      html += '<td style="padding:7px 10px;font-weight:700;color:#f0ece4">'+escHtml(coord.name)+'</td>';
+      html += '<td style="padding:7px 10px;color:#aaa">'+(coord.phone ? '📞 '+escHtml(coord.phone) : '—')+'</td>';
+      html += '<td style="padding:7px 10px">'+(coord.hasEmail ? emailBtn(coord) : '—')+'</td>';
+      html += '</tr>';
     }
 
-    if (actLeads.length) {
-      html += '<div style="font-size:.75rem;font-weight:700;color:'+color+';text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Activity Leads</div>';
-      html += '<table style="width:100%;border-collapse:collapse;font-size:.88rem">';
-      html += '<tr style="background:#8B0000"><th style="padding:6px 10px;text-align:left;color:#fff">Activity</th><th style="padding:6px 10px;text-align:left;color:#fff">Name</th><th style="padding:6px 10px;text-align:left;color:#fff">Phone</th><th style="padding:6px 10px;text-align:left;color:#fff">Contact</th></tr>';
-      actLeads.forEach(function(r, ri) {
-        var bg = ri % 2 === 0 ? '#1a1a1a' : '#111';
-        html += '<tr style="background:'+bg+'">';
-        html += '<td style="padding:6px 10px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
-        html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
-        html += '<td style="padding:6px 10px">'+(r.phone ? '📞 '+escHtml(r.phone) : '—')+'</td>';
-        html += '<td style="padding:6px 10px">'+(r.hasEmail ? emailBtn(r) : '—')+'</td>';
-        html += '</tr>';
-      });
-      html += '</table>';
-    }
+    actLeads.forEach(function(r, ri) {
+      var bg = (coord ? ri + 1 : ri) % 2 === 0 ? '#1a1a1a' : '#111';
+      html += '<tr style="background:'+bg+'">';
+      html += '<td style="padding:6px 10px;font-weight:600;color:#8B0000">'+escHtml(r.activity)+'</td>';
+      html += '<td style="padding:6px 10px">'+escHtml(r.name)+'</td>';
+      html += '<td style="padding:6px 10px">'+(r.phone ? '📞 '+escHtml(r.phone) : '—')+'</td>';
+      html += '<td style="padding:6px 10px">'+(r.hasEmail ? emailBtn(r) : '—')+'</td>';
+      html += '</tr>';
+    });
+
+    html += '</table>';
     html += '</div></div>';
   });
 

@@ -497,7 +497,6 @@ function initQRLinksSheet() {
   sheet.setColumnWidth(1, 200);
   sheet.setColumnWidth(2, 400);
   sheet.setColumnWidth(3, 500);
-  sheet.hideSheet(); // hidden from viewers; editors: Format → Hidden sheets
   return sheet;
 }
 
@@ -852,16 +851,35 @@ function setupQRSheet() {
 //  INIT ALL SHEETS
 // ═══════════════════════════════════════════════════════════════
 
+// ═══════════════════════════════════════════════════════════════
+//  MAKE SHEET PUBLIC READ-ONLY
+//  Run this ONCE from the Apps Script editor (Run → makeSheetPublicReadOnly)
+//  to allow anyone with the link to VIEW all tabs without editing.
+// ═══════════════════════════════════════════════════════════════
+
+function makeSheetPublicReadOnly() {
+  const file = DriveApp.getFileById(SHEET_ID);
+  file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
+  try {
+    SpreadsheetApp.getUi().alert(
+      '✅ Sheet is now public (view-only).\n\n' +
+      'Anyone with the link can view all tabs but cannot edit.\n' +
+      'Link: https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/edit?usp=sharing'
+    );
+  } catch(e) {
+    Logger.log('Sheet is now public view-only. Sheet ID: ' + SHEET_ID);
+  }
+}
+
 function initAllSheets() {
   // Create all activity tabs (no Token column)
   Object.keys(HEADERS).forEach(function(key) {
     getOrCreateSheet(TAB_MAP[key], HEADERS[key]);
   });
 
-  // Cancel Tokens tab — hidden
-  const tokSheet = getOrCreateSheet(TAB_MAP['tokens'],
+  // Cancel Tokens tab — visible (view-only when sheet is shared as viewer)
+  getOrCreateSheet(TAB_MAP['tokens'],
     ['Token','Activity','Tab','Name','Email','Site','Row','Created','Status']);
-  tokSheet.hideSheet();
 
   // Cancellations tab
   getOrCreateSheet(TAB_MAP['cancellations'],
