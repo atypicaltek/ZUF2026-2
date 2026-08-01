@@ -191,26 +191,10 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 
   <!-- TOP 65%: stats + activity tiles -->
   <div style="flex:13;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
-    <!-- Stats bar -->
+    <!-- Stats bar (compact — no countdown here) -->
     <div class="dash-statsbar">
-      <!-- Countdown -->
-      <div class="dash-stat" style="flex:3">
-        <div style="font-size:1.05rem;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px">Days Until Event</div>
-        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px">
-          <span class="dash-stat-num" id="cd-days" style="font-size:2.8rem">--</span>
-          <span style="font-size:1.1rem;color:#777">d</span>
-          <span class="dash-stat-num" id="cd-hours" style="font-size:1.9rem">--</span>
-          <span style="font-size:1.1rem;color:#777">h</span>
-          <span class="dash-stat-num" id="cd-mins" style="font-size:1.9rem">--</span>
-          <span style="font-size:1.1rem;color:#777">m</span>
-          <span class="dash-stat-num" id="cd-secs" style="font-size:1.6rem;color:#888">--</span>
-          <span style="font-size:1.1rem;color:#777">s</span>
-        </div>
-      </div>
-      <!-- Signups -->
       <div class="dash-stat"><div class="dash-stat-num" id="stat-total">--</div><div class="dash-stat-lbl">Total Signed Up</div></div>
       <div class="dash-stat"><div class="dash-stat-num" id="stat-needed">--</div><div class="dash-stat-lbl">Volunteers Needed</div></div>
-      <!-- Refresh -->
       <div class="dash-stat" style="display:flex;align-items:center;justify-content:center;gap:6px;flex-direction:column">
         <span style="font-size:.65rem;color:#888">Updated: <span id="stat-updated">--</span></span>
         <button class="dash-refresh" onclick="loadDash()">↻ Refresh</button>
@@ -225,6 +209,21 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <div style="flex:7;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
     <div class="dash-section-lbl">📍 Signups by Site</div>
     <div class="sites-overview" id="sites-overview" style="flex:1;align-content:start"></div>
+  </div>
+
+  <!-- COUNTDOWN -->
+  <div style="background:#1a1a1a;border-top:1px solid #333;padding:8px 0 6px;text-align:center;flex-shrink:0">
+    <div style="font-size:.7rem;color:#888;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px">⏳ Days Until Event — Oct 4, 2026</div>
+    <div style="display:flex;align-items:baseline;justify-content:center;gap:8px">
+      <span style="font-size:2.8rem;font-weight:900;color:#C9A227;line-height:1" id="cd-days">--</span>
+      <span style="font-size:1.1rem;color:#777">d</span>
+      <span style="font-size:1.9rem;font-weight:900;color:#C9A227;line-height:1" id="cd-hours">--</span>
+      <span style="font-size:1.1rem;color:#777">h</span>
+      <span style="font-size:1.9rem;font-weight:900;color:#C9A227;line-height:1" id="cd-mins">--</span>
+      <span style="font-size:1.1rem;color:#777">m</span>
+      <span style="font-size:1.6rem;font-weight:900;color:#888;line-height:1" id="cd-secs">--</span>
+      <span style="font-size:1.1rem;color:#777">s</span>
+    </div>
   </div>
 
   <!-- T-SHIRT FLASH BANNER -->
