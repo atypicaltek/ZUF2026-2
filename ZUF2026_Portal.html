@@ -193,10 +193,26 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <div style="flex:13;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
     <!-- Stats bar -->
     <div class="dash-statsbar">
+      <!-- Countdown -->
+      <div class="dash-stat" style="flex:2">
+        <div style="font-size:.6rem;color:#888;text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px">Days Until Event</div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:4px">
+          <span class="dash-stat-num" id="cd-days" style="font-size:1.6rem">--</span>
+          <span style="font-size:.65rem;color:#777">d</span>
+          <span class="dash-stat-num" id="cd-hours" style="font-size:1.1rem">--</span>
+          <span style="font-size:.65rem;color:#777">h</span>
+          <span class="dash-stat-num" id="cd-mins" style="font-size:1.1rem">--</span>
+          <span style="font-size:.65rem;color:#777">m</span>
+          <span class="dash-stat-num" id="cd-secs" style="font-size:.9rem;color:#888">--</span>
+          <span style="font-size:.65rem;color:#777">s</span>
+        </div>
+      </div>
+      <!-- Signups -->
       <div class="dash-stat"><div class="dash-stat-num" id="stat-total">--</div><div class="dash-stat-lbl">Total Signed Up</div></div>
       <div class="dash-stat"><div class="dash-stat-num" id="stat-needed">--</div><div class="dash-stat-lbl">Volunteers Needed</div></div>
-      <div class="dash-stat" style="flex:2;display:flex;align-items:center;justify-content:center;gap:8px">
-        <span style="font-size:.72rem;color:#888">Updated: <span id="stat-updated">--</span></span>
+      <!-- Refresh -->
+      <div class="dash-stat" style="display:flex;align-items:center;justify-content:center;gap:6px;flex-direction:column">
+        <span style="font-size:.65rem;color:#888">Updated: <span id="stat-updated">--</span></span>
         <button class="dash-refresh" onclick="loadDash()">↻ Refresh</button>
       </div>
     </div>
@@ -258,7 +274,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
         <tr><td>Site Setup</td><td class="cathedral">3</td><td class="kecoughtan">3</td><td class="newbeg">3</td><td class="newport">3</td><td class="hampton">3</td><td class="ingleside">3</td><td class="norfolk">3</td><td class="franklin">3</td><td class="total-col">24</td><td>Sep 20 (2 wks out)</td></tr>
         <tr><td>Popcorn Machine</td><td class="cathedral">1</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">8</td><td>Sep 20 (2 wks out)</td></tr>
         <tr><td>Pretzels</td><td class="cathedral">1</td><td class="kecoughtan">1</td><td class="newbeg">1</td><td class="newport">1</td><td class="hampton">1</td><td class="ingleside">1</td><td class="norfolk">1</td><td class="franklin">1</td><td class="total-col">8</td><td>Sep 20 (2 wks out)</td></tr>
-        <tr class="total-row"><td>SITE TOTAL</td><td class="cathedral">32</td><td class="kecoughtan">21</td><td class="newbeg">17</td><td class="newport">17</td><td class="hampton">17</td><td class="ingleside">17</td><td class="norfolk">16</td><td class="franklin">17</td><td class="total-col">154</td><td></td></tr>
+        <tr class="total-row"><td>SITE TOTAL</td><td class="cathedral">32</td><td class="kecoughtan">21</td><td class="newbeg">18</td><td class="newport">18</td><td class="hampton">18</td><td class="ingleside">18</td><td class="norfolk">17</td><td class="franklin">18</td><td class="total-col">160</td><td></td></tr>
       </tbody>
     </table>
   </div>
@@ -622,18 +638,21 @@ const LIVE_COUNTS = {};
 
 // ── COUNTDOWN ───────────────────────────────────────────────
 function updateCountdown() {
+  var dEl = document.getElementById('cd-days');
+  var hEl = document.getElementById('cd-hours');
+  var mEl = document.getElementById('cd-mins');
+  var sEl = document.getElementById('cd-secs');
+  if (!dEl) return;
   var diff = new Date('2026-10-04T09:00:00') - new Date();
   if (diff <= 0) {
-    document.getElementById('cd-days').textContent  = '00';
-    document.getElementById('cd-hours').textContent = '00';
-    document.getElementById('cd-mins').textContent  = '00';
-    document.getElementById('cd-secs').textContent  = '00';
+    dEl.textContent = '00'; hEl.textContent = '00';
+    mEl.textContent = '00'; sEl.textContent = '00';
     return;
   }
-  document.getElementById('cd-days').textContent  = String(Math.floor(diff/86400000)).padStart(2,'0');
-  document.getElementById('cd-hours').textContent = String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
-  document.getElementById('cd-mins').textContent  = String(Math.floor(diff%3600000/60000)).padStart(2,'0');
-  document.getElementById('cd-secs').textContent  = String(Math.floor(diff%60000/1000)).padStart(2,'0');
+  dEl.textContent = String(Math.floor(diff/86400000)).padStart(2,'0');
+  hEl.textContent = String(Math.floor(diff%86400000/3600000)).padStart(2,'0');
+  mEl.textContent = String(Math.floor(diff%3600000/60000)).padStart(2,'0');
+  sEl.textContent = String(Math.floor(diff%60000/1000)).padStart(2,'0');
 }
 setInterval(updateCountdown, 1000);
 updateCountdown();
@@ -676,7 +695,9 @@ function renderActOverview() {
   if (!grid) return;
   grid.innerHTML = '';
   var TAB_KEYS = ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13'];
+  var HIDE_FROM_HOME = {food: true, coordinator: true};
   DASH_ACTS.forEach(function(act, idx) {
+    if (HIDE_FROM_HOME[act.key]) return; // hidden from home page display only
     var signed = LIVE_COUNTS[act.key] || 0;
     var needed = Object.values(REQUIREMENTS[act.key]||{}).reduce(function(s,v){ return s+v; }, 0);
     var pct    = needed > 0 ? Math.min(100, Math.round(signed/needed*100)) : (signed>0?100:0);
