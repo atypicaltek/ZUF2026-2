@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Zion Unity Fest 2026 — Volunteer Signup Portal</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 :root{
   --navy:#0d0d0d;--blue:#8B0000;--light-blue:#1a0808;--gold:#C9A227;
@@ -394,8 +395,54 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
       <div class="form-group"><label>Team Captain Name <span class="req">*</span></label><input type="text" name="Team Captain" required placeholder="Full name"></div>
       <div class="form-group"><label>Captain Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
       <div class="form-group"><label>Captain Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
-      <div class="form-group"><label>Player Names (5–8 players) <span class="req">*</span></label><textarea name="Player Names" required placeholder="List one player per line&#10;1. &#10;2. &#10;3. &#10;4. &#10;5. "></textarea></div>
+      <!-- Individual player rows (5 required, 6–8 optional) -->
+      <div class="form-group">
+        <label>Players <span class="req">*</span> <span style="font-weight:400;font-size:.78rem;color:#aaa">(5 minimum, 8 maximum — each player will receive a waiver by email)</span></label>
+        <div style="display:grid;grid-template-columns:auto 1fr 1fr;gap:6px 10px;align-items:center;margin-top:6px">
+          <span style="font-size:.72rem;color:#888"></span>
+          <span style="font-size:.72rem;color:#aaa;font-weight:700">Full Name</span>
+          <span style="font-size:.72rem;color:#aaa;font-weight:700">Email Address</span>
+
+          <span style="font-size:.75rem;color:#C9A227;font-weight:700">P1 *</span>
+          <input type="text"  name="Player 1 Name"  required placeholder="Full name">
+          <input type="email" name="Player 1 Email" required placeholder="player@email.com">
+
+          <span style="font-size:.75rem;color:#C9A227;font-weight:700">P2 *</span>
+          <input type="text"  name="Player 2 Name"  required placeholder="Full name">
+          <input type="email" name="Player 2 Email" required placeholder="player@email.com">
+
+          <span style="font-size:.75rem;color:#C9A227;font-weight:700">P3 *</span>
+          <input type="text"  name="Player 3 Name"  required placeholder="Full name">
+          <input type="email" name="Player 3 Email" required placeholder="player@email.com">
+
+          <span style="font-size:.75rem;color:#C9A227;font-weight:700">P4 *</span>
+          <input type="text"  name="Player 4 Name"  required placeholder="Full name">
+          <input type="email" name="Player 4 Email" required placeholder="player@email.com">
+
+          <span style="font-size:.75rem;color:#C9A227;font-weight:700">P5 *</span>
+          <input type="text"  name="Player 5 Name"  required placeholder="Full name">
+          <input type="email" name="Player 5 Email" required placeholder="player@email.com">
+
+          <span style="font-size:.75rem;color:#888">P6</span>
+          <input type="text"  name="Player 6 Name"  placeholder="Full name (optional)">
+          <input type="email" name="Player 6 Email" placeholder="player@email.com (optional)">
+
+          <span style="font-size:.75rem;color:#888">P7</span>
+          <input type="text"  name="Player 7 Name"  placeholder="Full name (optional)">
+          <input type="email" name="Player 7 Email" placeholder="player@email.com (optional)">
+
+          <span style="font-size:.75rem;color:#888">P8</span>
+          <input type="text"  name="Player 8 Name"  placeholder="Full name (optional)">
+          <input type="email" name="Player 8 Email" placeholder="player@email.com (optional)">
+        </div>
+      </div>
       <div class="form-group"><label>Jersey Color Preference</label><input type="text" name="Jersey Color" placeholder="Helps avoid same-color matchups (optional)"></div>
+
+      <!-- Waiver caveat -->
+      <div style="background:#1a0000;border:1px solid #8B0000;border-radius:8px;padding:12px 14px;margin-bottom:14px;font-size:.8rem;color:#f0ece4;line-height:1.6">
+        ⚠️ <strong style="color:#C9A227">Important:</strong> No player will be allowed to participate without a completed Athletic Waiver and Release of Liability. Upon registration, a waiver will be emailed to each player at the address provided above. Each player must sign and return or bring their signed waiver to the event. The team captain will receive a copy of all player emails sent.
+      </div>
+
       <button type="submit" class="submit-btn">Register Basketball Team</button>
       <div class="success-msg" id="success-basketball">✅ Team registered! Bracket info coming soon 🏀</div>
     </form>
@@ -655,6 +702,11 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 <script>
 const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbwGvcmsrJ5lmd12dsyc5_heOMwztBhCEkwDxFUEl146beOPnm6tZf8_z7YAHVYv9CdcsQ/exec';
 
+// ── EmailJS config — replace these with your values from emailjs.com ──
+const EMAILJS_PUBLIC_KEY  = 'RWIVsmPLwFkf-FqUt';
+const EMAILJS_SERVICE_ID  = 'service_r71zgyc';
+const EMAILJS_TEMPLATE_ID = 'RWIVsmPLwFkf-FqUt';
+
 const TABS = {home:0,matrix:1,f1:2,f2:3,f3:4,f4:5,f5:6,f6:7,f7:8,f8:9,f9:10,f10:11,f11:12,f12:13,f13:14};
 
 const SITES_LIST  = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
@@ -882,7 +934,6 @@ function submitBballWaiver() {
   err.style.display = 'none';
   document.getElementById('bball-waiver-modal').style.display = 'none';
 
-  // Inject waiver fields as hidden inputs so they go with the form submission
   var f = _bballFormRef;
   function setHidden(name, val) {
     var ex = f.querySelector('[name="'+name+'"]');
@@ -897,8 +948,79 @@ function submitBballWaiver() {
   var emerg = (document.getElementById('bball-waiver-emergency').value || '').trim();
   if (emerg) setHidden('Emergency Phone', emerg);
 
-  // Now submit the form through the normal flow
+  // Submit the registration to Apps Script first
   submitForm({preventDefault:function(){}}, 'basketball', f);
+
+  // ── Send waiver emails via EmailJS ──
+  if (!EMAILJS_PUBLIC_KEY || EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
+    console.warn('EmailJS not configured — skipping waiver emails.');
+    return;
+  }
+
+  emailjs.init({publicKey: EMAILJS_PUBLIC_KEY});
+
+  var captainName  = (f.querySelector('[name="Team Captain"]') || {}).value || '';
+  var captainEmail = (f.querySelector('[name="Email Address"]') || {}).value || '';
+  var teamName     = (f.querySelector('[name="Team Name"]') || {}).value || '';
+  var site         = (f.querySelector('[name="Site"]') || {}).value || '';
+  var waiverDate   = document.getElementById('bball-waiver-date').value;
+
+  var waiverBody =
+    'You have been registered on team "' + teamName + '" (' + site + ') for Zion Unity Fest 2026 Basketball.\n\n' +
+    '⚠️ You MUST complete and return a signed Athletic Waiver & Release of Liability to participate. No player will be allowed on the court without a completed waiver.\n\n' +
+    '─────────────────────────────────────────\n' +
+    'ZION COMMUNITY CHURCH\n' +
+    'ATHLETIC WAIVER AND RELEASE OF LIABILITY\n' +
+    'READ BEFORE SIGNING\n' +
+    '─────────────────────────────────────────\n\n' +
+    'In consideration of being allowed to participate in any way in Zion Community Church athletic sports program, related events and activities, the undersigned acknowledges, appreciates, and agrees that:\n\n' +
+    '1. The risk of injury from the activities involved in this event, including the potential for permanent paralysis and death, and while particular rules, equipment, and personal discipline may reduce this risk, the risk of serious injury does exist; and,\n\n' +
+    '2. I KNOWINGLY AND FREELY ASSUME ALL SUCH RISKS, both known and unknown, EVEN IF ARISING FROM THE NEGLIGENCE OF THE RELEASEES or others, and assume full responsibility for my participation; and,\n\n' +
+    '3. I willingly agree to comply with the stated and customary terms and conditions for participation. If, however, I observe any unusual significant hazard during my presence or participation, I will remove myself from participation and bring such to the attention of the nearest official immediately; and,\n\n' +
+    '4. I, for myself and on behalf of my heirs, assigns, personal representatives and next of kin, HEREBY RELEASE AND HOLD HARMLESS Zion Community Church, their officers, officials, agents, and/or employees, other participants, sponsoring agencies, sponsors, advertisers, and if applicable, owners and lessors of premises used to conduct the event ("RELEASEES"), WITH RESPECT TO ANY AND ALL INJURY, DISABILITY, DEATH, or loss or damage to person or property, WHETHER ARISING FROM THE NEGLIGENCE OF THE RELEASEES OR OTHERWISE, to the fullest extent permitted by law.\n\n' +
+    'I HAVE READ THIS RELEASE OF LIABILITY AND ASSUMPTION OF RISK AGREEMENT, FULLY UNDERSTAND ITS TERMS, UNDERSTAND THAT I HAVE GIVEN UP SUBSTANTIAL RIGHTS BY SIGNING IT, AND SIGN IT FREELY AND VOLUNTARILY WITHOUT ANY INDUCEMENT.\n\n' +
+    '─────────────────────────────────────────\n' +
+    'FOR PARTICIPANTS OF MINORITY AGE (UNDER AGE 18):\n' +
+    'This is to certify that I, as parent/guardian with legal responsibility for this participant, do consent and agree to his/her release as provided above of all the Releasees, and for myself, my heirs, assigns, and next of kin, I release and agree to indemnify and hold harmless the Releasees from any liabilities incident to my minor child\'s involvement or participation in these programs as provided above, EVEN IF ARISING FROM THEIR NEGLIGENCE, to the fullest extent permitted by law.\n\n' +
+    'Participant (or Parent/Guardian) Signature: ________________________________\n\n' +
+    'Date Signed: ________________________________\n\n' +
+    'Emergency Phone Number: ________________________________\n\n' +
+    '─────────────────────────────────────────\n' +
+    'Please print this email, sign it, and bring it to the event on October 4, 2026.\n' +
+    'Questions? Contact your team captain: ' + captainName + ' (' + captainEmail + ')\n';
+
+  // Collect players (name + email pairs)
+  var players = [];
+  for (var p = 1; p <= 8; p++) {
+    var pName  = (f.querySelector('[name="Player ' + p + ' Name"]')  || {}).value || '';
+    var pEmail = (f.querySelector('[name="Player ' + p + ' Email"]') || {}).value || '';
+    if (pName && pEmail) players.push({name: pName, email: pEmail});
+  }
+
+  var captainSummary = 'Waiver emails sent to:\n';
+
+  players.forEach(function(player) {
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_name:    player.name,
+      to_email:   player.email,
+      subject:    '[ZUF 2026] Basketball Waiver Required — ' + teamName,
+      message:    'Dear ' + player.name + ',\n\n' + waiverBody,
+      from_name:  'Zion Unity Fest 2026',
+      reply_to:   captainEmail
+    }).catch(function(e){ console.error('EmailJS error for ' + player.email, e); });
+    captainSummary += '  • ' + player.name + ' <' + player.email + '>\n';
+  });
+
+  // Send summary to captain
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+    to_name:   captainName,
+    to_email:  captainEmail,
+    subject:   '[ZUF 2026] Team "' + teamName + '" Registered — Waiver Summary',
+    message:   'Hi ' + captainName + ',\n\nYour team "' + teamName + '" (' + site + ') has been registered for the Zion Unity Fest 2026 Basketball Tournament.\n\n' +
+               captainSummary + '\nEach player has been emailed the Athletic Waiver. Please follow up with any player who has not returned their signed waiver before October 4, 2026.\n\nNo player will be allowed to participate without a completed waiver.\n\nGo ' + teamName + '! 🏀',
+    from_name: 'Zion Unity Fest 2026',
+    reply_to:  'zccunityfest@gmail.com'
+  }).catch(function(e){ console.error('EmailJS captain summary error', e); });
 }
 
 // ── CONTACT EMAIL STORE (populated by renderContacts, email never stored here) ──
