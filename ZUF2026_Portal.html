@@ -388,7 +388,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <div class="form-wrap">
     <h2>🏀 Basketball Tournament <span class="req-badge high">3 wks out</span></h2>
     <p class="form-desc">Register your site's team (5–8 players). One team per site.</p>
-    <form onsubmit="submitForm(event,'basketball',this)">
+    <form id="bball-form" onsubmit="openBballWaiver(event,this)">
       <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
       <div class="form-group"><label>Team Name <span class="req">*</span></label><input type="text" name="Team Name" required placeholder="e.g., Cathedral Kings"></div>
       <div class="form-group"><label>Team Captain Name <span class="req">*</span></label><input type="text" name="Team Captain" required placeholder="Full name"></div>
@@ -399,6 +399,67 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
       <button type="submit" class="submit-btn">Register Basketball Team</button>
       <div class="success-msg" id="success-basketball">✅ Team registered! Bracket info coming soon 🏀</div>
     </form>
+  </div>
+</div>
+
+<!-- ══ BASKETBALL WAIVER MODAL ══ -->
+<div id="bball-waiver-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;align-items:center;justify-content:center;padding:16px">
+  <div style="background:#1a1a1a;border:2px solid #C9A227;border-radius:14px;padding:28px 28px 24px;max-width:620px;width:100%;max-height:90vh;display:flex;flex-direction:column">
+    <h3 style="color:#C9A227;margin:0 0 4px;font-size:1.1rem;text-align:center">⚖️ Athletic Waiver &amp; Release of Liability</h3>
+    <p style="color:#aaa;font-size:.75rem;text-align:center;margin:0 0 14px">Read the full waiver below, then sign and agree to complete your registration.</p>
+
+    <!-- Scrollable waiver text -->
+    <div style="background:#111;border:1px solid #444;border-radius:8px;padding:16px;overflow-y:auto;flex:1;font-size:.8rem;color:#ddd;line-height:1.7;margin-bottom:16px">
+      <p style="text-align:center;font-weight:700;color:#C9A227;margin-bottom:8px">ZION COMMUNITY CHURCH<br>ATHLETIC WAIVER AND RELEASE OF LIABILITY</p>
+      <p style="text-align:center;font-style:italic;color:#aaa;margin-bottom:14px;font-size:.75rem">READ BEFORE SIGNING</p>
+
+      <p style="margin-bottom:10px">In consideration of being allowed to participate in any way in <strong>Zion Community Church</strong> athletic sports program, related events and activities, the undersigned acknowledges, appreciates, and agrees that:</p>
+
+      <p style="margin-bottom:8px"><strong>1.</strong> The risk of injury from the activities involved in this event, including the potential for permanent paralysis and death, and while particular rules, equipment, and personal discipline may reduce this risk, the risk of serious injury does exist; and,</p>
+
+      <p style="margin-bottom:8px"><strong>2.</strong> I KNOWINGLY AND FREELY ASSUME ALL SUCH RISKS, both known and unknown, EVEN IF ARISING FROM THE NEGLIGENCE OF THE RELEASEES or others, and assume full responsibility for my participation; and,</p>
+
+      <p style="margin-bottom:8px"><strong>3.</strong> I willingly agree to comply with the stated and customary terms and conditions for participation. If, however, I observe any unusual significant hazard during my presence or participation, I will remove myself from participation and bring such to the attention of the nearest official immediately; and,</p>
+
+      <p style="margin-bottom:14px"><strong>4.</strong> I, for myself and on behalf of my heirs, assigns, personal representatives and next of kin, HEREBY RELEASE AND HOLD HARMLESS <strong>Zion Community Church</strong>, their officers, officials, agents, and/or employees, other participants, sponsoring agencies, sponsors, advertisers, and if applicable, owners and lessors of premises used to conduct the event ("RELEASEES"), WITH RESPECT TO ANY AND ALL INJURY, DISABILITY, DEATH, or loss or damage to person or property, WHETHER ARISING FROM THE NEGLIGENCE OF THE RELEASEES OR OTHERWISE, to the fullest extent permitted by law.</p>
+
+      <p style="font-weight:700;color:#f0ece4;border-top:1px solid #444;padding-top:12px;margin-bottom:14px">I HAVE READ THIS RELEASE OF LIABILITY AND ASSUMPTION OF RISK AGREEMENT, FULLY UNDERSTAND ITS TERMS, UNDERSTAND THAT I HAVE GIVEN UP SUBSTANTIAL RIGHTS BY SIGNING IT, AND SIGN IT FREELY AND VOLUNTARILY WITHOUT ANY INDUCEMENT.</p>
+
+      <div style="border-top:1px solid #333;padding-top:14px;margin-bottom:12px">
+        <p style="color:#C9A227;font-weight:700;margin-bottom:8px">FOR PARTICIPANTS OF MINORITY AGE (UNDER AGE 18 AT TIME OF REGISTRATION)</p>
+        <p style="font-size:.75rem;color:#ccc">This is to certify that I, as parent/guardian with legal responsibility for this participant, do consent and agree to his/her release as provided above of all the Releasees, and for myself, my heirs, assigns, and next of kin, I release and agree to indemnify and hold harmless the Releasees from any liabilities incident to my minor child's involvement or participation in these programs as provided above, EVEN IF ARISING FROM THEIR NEGLIGENCE, to the fullest extent permitted by law.</p>
+      </div>
+    </div>
+
+    <!-- Signature fields -->
+    <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+      <div style="flex:2;min-width:180px">
+        <label style="font-size:.75rem;color:#aaa;display:block;margin-bottom:4px">Participant (or Parent/Guardian) Full Name — serves as signature <span style="color:#C9A227">*</span></label>
+        <input id="bball-waiver-sig" type="text" placeholder="Type your full legal name" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:8px 10px;color:#f0ece4;font-size:.85rem">
+      </div>
+      <div style="flex:1;min-width:120px">
+        <label style="font-size:.75rem;color:#aaa;display:block;margin-bottom:4px">Date</label>
+        <input id="bball-waiver-date" type="text" readonly style="width:100%;background:#222;border:1px solid #444;border-radius:6px;padding:8px 10px;color:#aaa;font-size:.85rem">
+      </div>
+    </div>
+
+    <div style="margin-bottom:16px">
+      <label style="font-size:.75rem;color:#aaa;display:block;margin-bottom:4px">Emergency Phone Number</label>
+      <input id="bball-waiver-emergency" type="tel" placeholder="(555) 555-5555" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:8px 10px;color:#f0ece4;font-size:.85rem">
+    </div>
+
+    <!-- Agree checkbox -->
+    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;margin-bottom:16px;font-size:.8rem;color:#f0ece4">
+      <input id="bball-waiver-agree" type="checkbox" style="margin-top:2px;accent-color:#C9A227;width:16px;height:16px;flex-shrink:0">
+      I have read and fully understand this Athletic Waiver and Release of Liability. I agree to its terms on behalf of myself and, if applicable, my minor child.
+    </label>
+
+    <div id="bball-waiver-err" style="color:#e55;font-size:.78rem;margin-bottom:10px;display:none"></div>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button onclick="closeBballWaiver()" style="background:#333;color:#aaa;border:1px solid #555;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.85rem">Cancel</button>
+      <button onclick="submitBballWaiver()" style="background:#8B0000;color:#fff;border:none;border-radius:8px;padding:10px 22px;cursor:pointer;font-weight:700;font-size:.85rem">✅ I Agree &amp; Register Team</button>
+    </div>
   </div>
 </div>
 
@@ -779,6 +840,65 @@ function loadContacts() {
     .then(function(r){ return r.json(); })
     .then(function(data){ renderContacts(data); _contactsLoaded = true; })
     .catch(function(){ renderContacts(null); });
+}
+
+// ── BASKETBALL WAIVER ──
+var _bballFormRef = null;
+
+function openBballWaiver(e, form) {
+  e.preventDefault();
+  _bballFormRef = form;
+  // Auto-fill today's date
+  var now = new Date();
+  var dd = String(now.getMonth()+1).padStart(2,'0')+'/'+String(now.getDate()).padStart(2,'0')+'/'+now.getFullYear();
+  document.getElementById('bball-waiver-date').value = dd;
+  // Clear previous state
+  document.getElementById('bball-waiver-sig').value = '';
+  document.getElementById('bball-waiver-emergency').value = '';
+  document.getElementById('bball-waiver-agree').checked = false;
+  document.getElementById('bball-waiver-err').style.display = 'none';
+  document.getElementById('bball-waiver-modal').style.display = 'flex';
+}
+
+function closeBballWaiver() {
+  document.getElementById('bball-waiver-modal').style.display = 'none';
+  _bballFormRef = null;
+}
+
+function submitBballWaiver() {
+  var sig   = (document.getElementById('bball-waiver-sig').value || '').trim();
+  var agree = document.getElementById('bball-waiver-agree').checked;
+  var err   = document.getElementById('bball-waiver-err');
+
+  if (!sig) {
+    err.textContent = 'Please type your full legal name as your signature.';
+    err.style.display = 'block'; return;
+  }
+  if (!agree) {
+    err.textContent = 'You must check the agreement box to continue.';
+    err.style.display = 'block'; return;
+  }
+
+  err.style.display = 'none';
+  document.getElementById('bball-waiver-modal').style.display = 'none';
+
+  // Inject waiver fields as hidden inputs so they go with the form submission
+  var f = _bballFormRef;
+  function setHidden(name, val) {
+    var ex = f.querySelector('[name="'+name+'"]');
+    if (ex) { ex.value = val; return; }
+    var h = document.createElement('input');
+    h.type='hidden'; h.name=name; h.value=val;
+    f.appendChild(h);
+  }
+  setHidden('Waiver Signature', sig);
+  setHidden('Waiver Date', document.getElementById('bball-waiver-date').value);
+  setHidden('Waiver Agreed', 'Yes');
+  var emerg = (document.getElementById('bball-waiver-emergency').value || '').trim();
+  if (emerg) setHidden('Emergency Phone', emerg);
+
+  // Now submit the form through the normal flow
+  submitForm({preventDefault:function(){}}, 'basketball', f);
 }
 
 // ── CONTACT EMAIL STORE (populated by renderContacts, email never stored here) ──
