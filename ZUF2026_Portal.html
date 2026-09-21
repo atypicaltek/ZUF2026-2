@@ -201,15 +201,14 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
         <button class="dash-refresh" onclick="loadDash()">↻ Refresh</button>
       </div>
     </div>
-    <!-- Activity overview tiles: 7 per row -->
-    <div class="dash-section-lbl">📊 Activity Signups &nbsp;·&nbsp; <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:.68rem">Tap any tile or scan QR to open the volunteer signup form</span></div>
+    <!-- Site volunteer tiles -->
+    <div class="dash-section-lbl">📍 Volunteer Slots by Site &nbsp;·&nbsp; <span style="font-weight:400;letter-spacing:0;text-transform:none;font-size:.68rem">Signed up / Total needed per site</span></div>
     <div class="act-overview" id="act-overview"></div>
   </div>
 
-  <!-- BOTTOM 35%: site tiles -->
-  <div style="flex:7;display:flex;flex-direction:column;overflow:hidden;gap:0;min-height:0">
-    <div class="dash-section-lbl">📍 Signups by Site</div>
-    <div class="sites-overview" id="sites-overview" style="flex:1;align-content:start"></div>
+  <!-- Site overview (hidden — replaced by act-overview above) -->
+  <div style="display:none">
+    <div class="sites-overview" id="sites-overview"></div>
   </div>
 
   <!-- COUNTDOWN -->
@@ -721,10 +720,11 @@ const EMAILJS_TEMPLATE_ID = 'RWIVsmPLwFkf-FqUt';
 
 const TABS = {home:0,matrix:1,f1:2,f2:3,f3:4,f4:5,f5:6,f6:7,f7:8,f8:9,f9:10,f10:11,f11:12,f12:13,f13:14};
 
-const SITES_LIST  = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
-                     'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
-const SITE_KEYS   = ['cathedral','newbeg','newport','hampton','kecoughtan','ingleside','norfolk','franklin'];
-const SITE_COLORS = ['#C0392B','#1565C0','#6D4C41','#7CB342','#4CAF50','#E65100','#C62828','#2E7D32'];
+const SITES_LIST  = ['The Cathedral','New Beginnings','Newport News','Chesapeake Square',
+                     'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin',
+                     'Iglesia Comunitaria Zion'];
+const SITE_KEYS   = ['cathedral','newbeg','newport','hampton','kecoughtan','ingleside','norfolk','franklin','iglesia'];
+const SITE_COLORS = ['#C0392B','#1565C0','#6D4C41','#7CB342','#4CAF50','#E65100','#C62828','#2E7D32','#7B1FA2'];
 
 const DASH_ACTS = [
   {key:'food',       emoji:'\uD83C\uDF7D', label:'Food'},
@@ -758,7 +758,21 @@ const REQUIREMENTS = {
   choir:    {cathedral:0,newbeg:0,newport:0,hampton:0,kecoughtan:0,ingleside:0,norfolk:0,franklin:0},
 };
 
-const LIVE_COUNTS = {};
+// ── Per-site volunteer slot requirements (overall totals) ──
+const SITE_REQUIREMENTS = {
+  cathedral:  25,
+  newbeg:      2,
+  newport:     2,
+  hampton:     5,   // Chesapeake Square
+  kecoughtan: 10,
+  ingleside:   3,
+  norfolk:     3,
+  franklin:    2,
+  iglesia:     2
+};
+
+const LIVE_COUNTS      = {};
+const LIVE_SITE_COUNTS = {};
 
 // ── COUNTDOWN ───────────────────────────────────────────────
 function updateCountdown() {
@@ -797,18 +811,24 @@ function loadDash() {
 
 function renderDash(data) {
   DASH_ACTS.forEach(function(a){ LIVE_COUNTS[a.key] = data[a.key] || 0; });
+  // Populate per-site live counts
+  SITE_KEYS.forEach(function(sk) {
+    LIVE_SITE_COUNTS[sk] = (data.bySite && data.bySite[sk]) ? data.bySite[sk] : 0;
+  });
   renderActOverview();
   renderSitesOverview(data);
   updateQRCounts();
-  // Total active signups
-  var total = DASH_ACTS.filter(function(a){ return a.key!=='coordinator'; }).reduce(function(s,a){ return s+(LIVE_COUNTS[a.key]||0); }, 0);
+  // Total signed up (sum across all sites if available, else sum activities)
+  var hasSiteData = data.bySite && Object.keys(data.bySite).length > 0;
+  var total;
+  if (hasSiteData) {
+    total = SITE_KEYS.reduce(function(s,sk){ return s + (LIVE_SITE_COUNTS[sk]||0); }, 0);
+  } else {
+    total = DASH_ACTS.filter(function(a){ return a.key!=='coordinator'; }).reduce(function(s,a){ return s+(LIVE_COUNTS[a.key]||0); }, 0);
+  }
   var elT = document.getElementById('stat-total'); if (elT) elT.textContent = total;
-  // Total volunteers needed (requirement total minus active signups)
-  var totalNeeded = 0;
-  DASH_ACTS.filter(function(a){ return a.key!=='coordinator'; }).forEach(function(a){
-    var req = REQUIREMENTS[a.key] || {};
-    totalNeeded += Object.values(req).reduce(function(s,v){ return s+v; }, 0);
-  });
+  // Total volunteers needed from site requirements
+  var totalNeeded = Object.values(SITE_REQUIREMENTS).reduce(function(s,v){ return s+v; }, 0);
   var remaining = Math.max(0, totalNeeded - total);
   var elN = document.getElementById('stat-needed'); if (elN) elN.textContent = remaining;
   var upd = document.getElementById('stat-updated'); if (upd) upd.textContent = new Date().toLocaleTimeString();
@@ -818,30 +838,24 @@ function renderActOverview() {
   var grid = document.getElementById('act-overview');
   if (!grid) return;
   grid.innerHTML = '';
-  var TAB_KEYS = ['f1','f2','f3','f4','f5','f6','f7','f8','f9','f10','f11','f12','f13'];
-  var HIDE_FROM_HOME = {food: true, coordinator: true, drinks: true, dj: true, parking: true, popcorn: true, pretzels: true};
-  DASH_ACTS.forEach(function(act, idx) {
-    if (HIDE_FROM_HOME[act.key]) return; // hidden from home page display only
-    var signed = LIVE_COUNTS[act.key] || 0;
-    var needed = Object.values(REQUIREMENTS[act.key]||{}).reduce(function(s,v){ return s+v; }, 0);
-    var pct    = needed > 0 ? Math.min(100, Math.round(signed/needed*100)) : (signed>0?100:0);
-    var color  = pct>=100?'#375623':pct>=50?'#BF8F00':'#C9A227';
-    var tabKey = TAB_KEYS[idx] || 'home';
+  SITE_KEYS.forEach(function(sk, si) {
+    var siteName = SITES_LIST[si];
+    var color    = SITE_COLORS[si];
+    var signed   = LIVE_SITE_COUNTS[sk] || 0;
+    var needed   = SITE_REQUIREMENTS[sk] || 0;
+    var pct      = needed > 0 ? Math.min(100, Math.round(signed/needed*100)) : (signed>0?100:0);
+    var barColor = pct>=100?'#375623':pct>=50?'#BF8F00':color;
     var tile = document.createElement('div');
     tile.className = 'act-tile';
-    tile.style.borderColor = '#fff';
-    tile.title = act.label;
-    tile.onclick = function(){ showTab(tabKey); };
-
+    tile.style.borderColor = color;
+    tile.title = siteName;
     tile.innerHTML =
-      '<div style="display:flex;align-items:center;justify-content:center;gap:5px;line-height:1">' +
-        '<span style="font-size:1.8rem;line-height:1">' + act.emoji + '</span>' +
-        '<span style="font-size:1.3rem;font-weight:900;color:'+color+'">' + signed + '</span>' +
-        (needed>0 ? '<span style="font-size:.8rem;font-weight:700;color:'+color+'">(' + pct + '%)</span>' : '') +
+      '<div style="display:flex;align-items:baseline;justify-content:center;gap:4px;line-height:1">' +
+        '<span style="font-size:1.5rem;font-weight:900;color:'+barColor+'">' + signed + '</span>' +
+        (needed>0 ? '<span style="font-size:.85rem;color:#666">/</span><span style="font-size:.85rem;font-weight:700;color:#aaa">' + needed + '</span>' : '') +
       '</div>' +
-      '<div style="font-size:.78rem;font-weight:700;color:#f0ece4;margin-top:4px;line-height:1.2">' + act.label + '</div>' +
-      '<div class="act-tile-bar" style="width:90%;margin-top:5px"><div class="act-tile-bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>';
-
+      '<div style="font-size:.72rem;font-weight:700;color:#f0ece4;margin-top:5px;line-height:1.2;text-align:center">' + siteName + '</div>' +
+      '<div class="act-tile-bar" style="width:90%;margin-top:5px"><div class="act-tile-bar-fill" style="width:'+pct+'%;background:'+barColor+'"></div></div>';
     grid.appendChild(tile);
   });
 }
