@@ -149,14 +149,11 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
 .qr-open-btn{display:inline-block;margin-top:3px;padding:2px 7px;background:#8B0000;color:#fff;border:none;border-radius:8px;font-size:.57rem;cursor:pointer;text-decoration:none;font-weight:600}
 .qr-open-btn:hover{background:#0d0d0d}
 
-/* ── T-SHIRT FLASH BANNER ── */
-@keyframes tshirt-flash {
-  0%,45%{opacity:1} 50%,95%{opacity:0} 100%{opacity:1}
-}
-.tshirt-banner{background:#8B0000;color:#fff;font-size:1.82rem;font-weight:900;
-  text-align:center;padding:13px 16px;border-radius:8px;flex-shrink:0;
-  letter-spacing:.5px;animation:tshirt-flash 1.8s infinite;margin:4px 0;
-  text-shadow:0 1px 4px rgba(0,0,0,.3)}
+/* ── T-SHIRT BANNER ── */
+.tshirt-banner{background:#8B0000;color:#fff;font-size:1.1rem;font-weight:900;
+  text-align:center;padding:10px 16px;border-radius:8px;flex-shrink:0;
+  letter-spacing:.5px;margin:4px 0;display:flex;align-items:center;
+  justify-content:center;gap:12px;text-shadow:0 1px 4px rgba(0,0,0,.3)}
 </style>
 </head>
 <body>
@@ -174,7 +171,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <button class="tab-btn" style="display:none" onclick="showTab('f2')"><span class="tab-lbl">Drinks</span><span class="tab-icon">🥤</span></button>
   <button class="tab-btn"         onclick="showTab('f3')"><span class="tab-lbl">Games</span><span class="tab-icon">🎯</span></button>
   <button class="tab-btn" style="display:none" onclick="showTab('f4')"><span class="tab-lbl">DJ</span><span class="tab-icon">🎵</span></button>
-  <button class="tab-btn"         onclick="showTab('f5')"><span class="tab-lbl">Karaoke</span><span class="tab-icon">🎤</span></button>
+  <button class="tab-btn"         onclick="showTab('f5')"><span class="tab-lbl">Stage</span><span class="tab-icon">🎤</span></button>
   <button class="tab-btn"         onclick="showTab('f6')"><span class="tab-lbl">Basketball</span><span class="tab-icon">🏀</span></button>
   <button class="tab-btn"         onclick="showTab('f7')"><span class="tab-lbl">Kid Games</span><span class="tab-icon">🧒</span></button>
   <button class="tab-btn" style="display:none" onclick="showTab('f8')"><span class="tab-lbl">Parking</span><span class="tab-icon">🅿</span></button>
@@ -226,8 +223,55 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
     </div>
   </div>
 
-  <!-- T-SHIRT FLASH BANNER -->
-  <div class="tshirt-banner">🎽 Purchase Your Unity Fest T-Shirts Today! 🎽</div>
+  <!-- T-SHIRT BANNER -->
+  <div class="tshirt-banner">
+    <span>🎽 Unity Fest T-Shirts Available!</span>
+    <button onclick="openShirtOrder()" style="background:#fff;color:#8B0000;border:none;border-radius:6px;padding:6px 14px;font-weight:900;font-size:.85rem;cursor:pointer;flex-shrink:0">Order Now</button>
+  </div>
+
+  <!-- T-SHIRT ORDER MODAL -->
+  <div id="shirt-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;align-items:center;justify-content:center;padding:16px">
+    <div style="background:#1a1a1a;border:2px solid #C9A227;border-radius:14px;padding:28px;max-width:440px;width:100%">
+      <h3 style="color:#C9A227;margin:0 0 4px;text-align:center">🎽 T-Shirt Order</h3>
+      <p style="color:#aaa;font-size:.78rem;text-align:center;margin:0 0 18px">Orders are fulfilled by Jordan Fedderman. Text Jordan at <strong style="color:#f0ece4">757-617-8861</strong> with any questions or changes.</p>
+
+      <div style="margin-bottom:12px">
+        <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Full Name <span style="color:#C9A227">*</span></label>
+        <input id="shirt-name" type="text" placeholder="Your full name" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
+      </div>
+      <div style="margin-bottom:12px">
+        <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Phone Number <span style="color:#C9A227">*</span></label>
+        <input id="shirt-phone" type="tel" placeholder="(555) 555-5555" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
+      </div>
+      <div style="display:flex;gap:12px;margin-bottom:12px">
+        <div style="flex:1">
+          <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Size <span style="color:#C9A227">*</span></label>
+          <select id="shirt-size" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
+            <option value="">— Select —</option>
+            <option>S</option><option>M</option><option>L</option>
+            <option>XL</option><option>XXL</option><option>XXXL</option>
+          </select>
+        </div>
+        <div style="flex:1">
+          <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Quantity <span style="color:#C9A227">*</span></label>
+          <input id="shirt-qty" type="number" min="1" max="20" placeholder="1" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
+        </div>
+      </div>
+
+      <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:.75rem;color:#aaa;line-height:1.6">
+        📞 Questions or changes? Text Jordan Fedderman at <strong style="color:#f0ece4">757-617-8861</strong><br>
+        ✉️ <a href="mailto:feddermanj@gmail.com" style="color:#C9A227">feddermanj@gmail.com</a>
+      </div>
+
+      <div id="shirt-err" style="color:#e55;font-size:.78rem;margin-bottom:10px;display:none"></div>
+      <div id="shirt-success" style="color:#4CAF50;font-size:.85rem;margin-bottom:10px;display:none;text-align:center">✅ Order submitted! Jordan will follow up with you.</div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end">
+        <button onclick="closeShirtOrder()" style="background:#333;color:#aaa;border:1px solid #555;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.85rem">Cancel</button>
+        <button onclick="submitShirtOrder()" id="shirt-submit-btn" style="background:#8B0000;color:#fff;border:none;border-radius:8px;padding:10px 22px;cursor:pointer;font-weight:700;font-size:.85rem">Submit Order</button>
+      </div>
+    </div>
+  </div>
 
 </div>
 
@@ -363,11 +407,11 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   </div>
 </div>
 
-<!-- ══ KARAOKE ══ -->
+<!-- ══ OUTSIDE STAGE PERFORMANCE ══ -->
 <div id="tab-f5" class="form-panel">
   <span class="back-link" onclick="showTab('home')">← Back</span>
   <div class="form-wrap">
-    <h2>🎤 Karaoke Signup <span class="req-badge med">2 wks out</span></h2>
+    <h2>🎤 Outside Stage Performance Signup <span class="req-badge med">2 wks out</span></h2>
     <p class="form-desc">Ready to take the stage? Solo, duet, or group — all welcome!</p>
     <form onsubmit="submitForm(event,'karaoke',this)">
       <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
@@ -670,7 +714,10 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <span class="back-link" onclick="showTab('home')">← Back</span>
   <div class="form-wrap choir-wrap">
     <h2>🎶 Combined Choir Signup <span class="req-badge choir-badge">All Sites Welcome</span></h2>
-    <p class="form-desc">Join the Zion Unity Fest 2026 Combined Choir! Singers from all 8 sites will come together for a unified worship experience. Rehearsal details will be shared after registration closes.</p>
+    <div style="text-align:center;margin:10px 0 16px">
+      <img src="choir_flyer.jpg" alt="Commonwealth District Choir Rehearsal Flyer" style="max-width:100%;max-height:420px;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.25)">
+    </div>
+    <p class="form-desc">Join the Zion Unity Fest 2026 Combined Choir! Singers from all 8 sites will come together for a unified worship experience. <strong>Rehearsal: Tuesday, September 29 at 7:00 PM — 2500 E Washington St, Suffolk, VA.</strong></p>
     <form onsubmit="submitForm(event,'choir',this)">
       <div class="form-group"><label>Site <span class="req">*</span></label><select name="Site" required><option value="">— Select your site —</option><option>The Cathedral</option><option>New Beginnings</option><option>Newport News</option><option>Downtown Hampton</option><option>Kecoughtan Road</option><option>Ingleside Road</option><option>Port Norfolk</option><option>Downtown Franklin</option></select></div>
       <div class="form-group"><label>Singer Name <span class="req">*</span></label><input type="text" name="Singer Name" required placeholder="Full name"></div>
@@ -1588,6 +1635,50 @@ var _contactsLoaded = false;
 </div>
 
 <script>
+// ── SHIRT ORDER ──
+function openShirtOrder() {
+  document.getElementById('shirt-name').value = '';
+  document.getElementById('shirt-phone').value = '';
+  document.getElementById('shirt-size').value = '';
+  document.getElementById('shirt-qty').value = '';
+  document.getElementById('shirt-err').style.display = 'none';
+  document.getElementById('shirt-success').style.display = 'none';
+  document.getElementById('shirt-submit-btn').disabled = false;
+  document.getElementById('shirt-submit-btn').textContent = 'Submit Order';
+  document.getElementById('shirt-modal').style.display = 'flex';
+}
+function closeShirtOrder() {
+  document.getElementById('shirt-modal').style.display = 'none';
+}
+function submitShirtOrder() {
+  var name  = (document.getElementById('shirt-name').value  || '').trim();
+  var phone = (document.getElementById('shirt-phone').value || '').trim();
+  var size  = document.getElementById('shirt-size').value;
+  var qty   = (document.getElementById('shirt-qty').value   || '').trim();
+  var err   = document.getElementById('shirt-err');
+  if (!name || !phone || !size || !qty) {
+    err.textContent = 'Please fill in all required fields.';
+    err.style.display = 'block'; return;
+  }
+  err.style.display = 'none';
+  var btn = document.getElementById('shirt-submit-btn');
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  var params = new URLSearchParams({
+    activity: 'shirts',
+    'Name': name,
+    'Phone Number': phone,
+    'Shirt Size': size,
+    'Quantity': qty
+  });
+  if (WEB_APP_URL && WEB_APP_URL.indexOf('YOUR_WEB_APP') < 0) {
+    fetch(WEB_APP_URL, {method:'POST', mode:'no-cors', body: params})
+      .catch(function(e){ console.error('Shirt order error', e); });
+  }
+  document.getElementById('shirt-success').style.display = 'block';
+  btn.textContent = 'Submitted ✓';
+  setTimeout(function(){ closeShirtOrder(); }, 2500);
+}
+
 var _adminHiddenTabs = [];
 
 function openAdminLogin() {

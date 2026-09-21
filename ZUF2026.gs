@@ -111,6 +111,7 @@ function doPost(e) {
       case 'choir':         return handleChoirPost(p);
       case 'contactemail':  return handleContactEmail(p);
       case 'actlead':       return handleActLeadPost(p);
+      case 'shirts':        return handleShirtOrder(p);
       default:              return jsonOut({success:false, error:'Unknown activity: ' + activity});
     }
   } catch (err) {
@@ -325,8 +326,17 @@ function sendChoirEmail(email, name, site, params, token) {
   const cancelUrl = PORTAL_URL + '?cancel=' + token;
   const updateUrl = PORTAL_URL + '?update=' + token + '&act=Combined%20Choir';
   const subject = EVENT_NAME + ' - Combined Choir Signup Confirmed';
+  const flyerUrl = 'https://atypicaltek.github.io/ZUF2026-2/choir_flyer.jpg';
   const html = emailWrap(name,
     '<p>Welcome to the <strong>' + EVENT_NAME + ' Combined Choir!</strong> Your signup has been recorded.</p>' +
+    '<div style="background:#8B0000;color:#fff;padding:12px 16px;border-radius:8px;margin:14px 0;text-align:center">' +
+      '<strong>📅 Choir Rehearsal</strong><br>' +
+      'Tuesday, September 29, 2026 · 7:00 PM<br>' +
+      '2500 E Washington St, Suffolk, VA' +
+    '</div>' +
+    '<div style="text-align:center;margin:14px 0">' +
+      '<img src="' + flyerUrl + '" alt="Choir Rehearsal Flyer" style="max-width:100%;border-radius:6px;box-shadow:0 2px 8px rgba(0,0,0,.2)">' +
+    '</div>' +
     '<table style="border-collapse:collapse;width:100%;background:#f3f0ff;border-radius:8px;overflow:hidden">' +
     '<tr><td style="padding:6px 12px;font-weight:bold;color:#8B0000">Site</td><td style="padding:6px 12px">' + escHtml(site) + '</td></tr>' +
     '<tr><td style="padding:6px 12px;font-weight:bold;color:#8B0000">Voice Part</td><td style="padding:6px 12px">' + escHtml(findVal(params,['voice part'])) + '</td></tr>' +
@@ -792,6 +802,46 @@ function handleActLeadPost(p) {
     }
     logSheet.appendRow([new Date(), siteName, name, phone, email]);
   } catch(e) { Logger.log('Could not log activity lead: ' + e); }
+
+  return jsonOut({ok: true});
+}
+
+// ═══════════════════════════════════════════════════════════════
+// T-SHIRT ORDERS
+// ═══════════════════════════════════════════════════════════════
+
+function handleShirtOrder(p) {
+  const ss    = SpreadsheetApp.openById(SHEET_ID);
+  const name  = (p['Name']         || '').toString().trim();
+  const phone = (p['Phone Number'] || '').toString().trim();
+  const size  = (p['Shirt Size']   || '').toString().trim();
+  const qty   = (p['Quantity']     || '').toString().trim();
+
+  // Get or create "Shirt Orders" sheet
+  var sheet = ss.getSheetByName('Shirt Orders');
+  if (!sheet) {
+    sheet = ss.insertSheet('Shirt Orders');
+    sheet.getRange(1,1,1,5).setValues([['Timestamp','Name','Phone','Size','Quantity']]);
+    sheet.getRange(1,1,1,5).setFontWeight('bold').setBackground('#8B0000').setFontColor('#fff');
+  }
+  sheet.appendRow([new Date(), name, phone, size, qty]);
+
+  // Email Jordan + CC zccunityfest
+  const body =
+    '🎽 New T-Shirt Order — Zion Unity Fest 2026\n\n' +
+    'Name:     ' + name  + '\n' +
+    'Phone:    ' + phone + '\n' +
+    'Size:     ' + size  + '\n' +
+    'Quantity: ' + qty   + '\n\n' +
+    'Order logged in the Shirt Orders tab of the master Google Sheet.\n' +
+    'Text the customer at: ' + phone;
+
+  MailApp.sendEmail({
+    to:      'feddermanj@gmail.com',
+    cc:      'zccunityfest@gmail.com',
+    subject: '[ZUF 2026] T-Shirt Order — ' + name + ' · ' + qty + 'x ' + size,
+    body:    body
+  });
 
   return jsonOut({ok: true});
 }
