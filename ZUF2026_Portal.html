@@ -1545,5 +1545,89 @@ var _contactsLoaded = false;
   </div>
 </div>
 
+<!-- ══ ADMIN BUTTON (bottom-right) ══ -->
+<button id="admin-fab" onclick="openAdminLogin()" title="Admin Access"
+  style="position:fixed;bottom:18px;right:18px;z-index:8000;background:#1a1a1a;border:1px solid #444;color:#666;border-radius:50%;width:40px;height:40px;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.5);transition:.2s"
+  onmouseenter="this.style.borderColor='#C9A227';this.style.color='#C9A227'"
+  onmouseleave="this.style.borderColor='#444';this.style.color='#666'">⚙️</button>
+
+<!-- Admin exit banner (shown in admin mode) -->
+<div id="admin-banner" style="display:none;position:fixed;top:0;left:0;right:0;z-index:8500;background:#8B0000;color:#fff;font-size:.8rem;font-weight:700;text-align:center;padding:6px 12px;letter-spacing:.5px">
+  🔐 ADMIN MODE — All tabs visible
+  <button onclick="exitAdminMode()" style="margin-left:16px;background:#fff;color:#8B0000;border:none;border-radius:4px;padding:2px 10px;cursor:pointer;font-weight:700;font-size:.75rem">Exit Admin</button>
+</div>
+
+<!-- Admin login modal -->
+<div id="admin-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:#1a1a1a;border:2px solid #C9A227;border-radius:14px;padding:28px;max-width:320px;width:90%;text-align:center">
+    <div style="font-size:1.6rem;margin-bottom:8px">🔐</div>
+    <h3 style="color:#C9A227;margin:0 0 16px;font-size:1rem">Admin Access</h3>
+    <input id="admin-code-input" type="password" placeholder="Enter admin code"
+      style="width:100%;background:#111;border:1px solid #555;border-radius:8px;padding:10px 12px;color:#f0ece4;font-size:1rem;text-align:center;margin-bottom:12px"
+      onkeydown="if(event.key==='Enter')submitAdminCode()">
+    <div id="admin-code-err" style="color:#e55;font-size:.78rem;margin-bottom:10px;display:none">Incorrect code. Try again.</div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button onclick="closeAdminLogin()" style="background:#333;color:#aaa;border:1px solid #555;border-radius:8px;padding:9px 20px;cursor:pointer;font-size:.85rem">Cancel</button>
+      <button onclick="submitAdminCode()" style="background:#8B0000;color:#fff;border:none;border-radius:8px;padding:9px 22px;cursor:pointer;font-weight:700;font-size:.85rem">Unlock</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var _adminHiddenTabs = [];
+
+function openAdminLogin() {
+  document.getElementById('admin-code-input').value = '';
+  document.getElementById('admin-code-err').style.display = 'none';
+  document.getElementById('admin-modal').style.display = 'flex';
+  setTimeout(function(){ document.getElementById('admin-code-input').focus(); }, 100);
+}
+
+function closeAdminLogin() {
+  document.getElementById('admin-modal').style.display = 'none';
+}
+
+function submitAdminCode() {
+  var code = (document.getElementById('admin-code-input').value || '').trim();
+  if (code === '1056') {
+    closeAdminLogin();
+    enableAdminMode();
+  } else {
+    document.getElementById('admin-code-err').style.display = 'block';
+    document.getElementById('admin-code-input').value = '';
+    document.getElementById('admin-code-input').focus();
+  }
+}
+
+function enableAdminMode() {
+  // Store and show all hidden tab buttons
+  _adminHiddenTabs = [];
+  var btns = document.querySelectorAll('.tab-btn');
+  btns.forEach(function(btn) {
+    if (btn.style.display === 'none') {
+      _adminHiddenTabs.push(btn);
+      btn.style.display = '';
+    }
+  });
+  document.getElementById('admin-banner').style.display = 'block';
+  document.getElementById('admin-fab').style.display = 'none';
+  // Push body content down so banner doesn't overlap
+  document.getElementById('app') && (document.getElementById('app').style.marginTop = '32px');
+}
+
+function exitAdminMode() {
+  // Re-hide tabs that were hidden before admin mode
+  _adminHiddenTabs.forEach(function(btn) {
+    btn.style.display = 'none';
+  });
+  _adminHiddenTabs = [];
+  document.getElementById('admin-banner').style.display = 'none';
+  document.getElementById('admin-fab').style.display = 'flex';
+  document.getElementById('app') && (document.getElementById('app').style.marginTop = '');
+  // Return to home tab in case an admin-only tab is currently shown
+  showTab('home');
+}
+</script>
+
 </body>
 </html>
