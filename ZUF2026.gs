@@ -11,6 +11,7 @@ const REPLY_TO     = 'zccunityfest@gmail.com';
 const NOTIFY_EMAIL = 'zccunityfest@gmail.com';
 const PORTAL_URL   = 'https://atypicaltek.github.io/ZUF2026-2/ZUF2026_Portal.html';
 const WEB_APP_URL  = 'https://script.google.com/macros/s/AKfycbwGvcmsrJ5lmd12dsyc5_heOMwztBhCEkwDxFUEl146beOPnm6tZf8_z7YAHVYv9CdcsQ/exec';
+const ADMIN_CODE   = '1056';
 
 // ─── SHEET TAB NAMES ────────────────────────────────────────────
 const TAB_MAP = {
@@ -88,6 +89,14 @@ function doGet(e) {
     if (callback) return jsonpOut(callback, data);
     return jsonOut(data);
   }
+  if (action === 'sitevolunteers') {
+    const siteKey = (e.parameter.site || '').toLowerCase().trim();
+    const code    = (e.parameter.code || '').trim();
+    const isAdmin = (code === ADMIN_CODE);
+    const data    = getSiteVolunteers(siteKey, isAdmin);
+    if (callback) return jsonpOut(callback, data);
+    return jsonOut(data);
+  }
 
   return redirect(PORTAL_URL);
 }
@@ -115,6 +124,7 @@ function doPost(e) {
       case 'actlead':       return handleActLeadPost(p);
       case 'shirts':        return handleShirtOrder(p);
       case 'general':       return handleGeneralVolunteer(p);
+      case 'admin_delete':  return handleAdminDelete(p);
       default:              return jsonOut({success:false, error:'Unknown activity: ' + activity});
     }
   } catch (err) {
@@ -521,10 +531,12 @@ function getLiveSignupCounts() {
   const ss       = getSpreadsheet();
   const result   = {};
   const bySite   = {};
-  const skip     = ['tokens','cancellations','qrlinks'];
-  const SITE_KEYS = ['cathedral','newbeg','newport','hampton','kecoughtan','ingleside','norfolk','franklin'];
+  const skip     = ['tokens','cancellations','qrlinks','leadership','shirts'];
+  const SITE_KEYS  = ['cathedral','newbeg','newport','hampton','chesapeake','kecoughtan','ingleside','norfolk','franklin','iglesia'];
   const SITE_NAMES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
-                      'Kecoughtan Road','Ingleside Road','Port Norfolk','Downtown Franklin'];
+                      'Chesapeake Square','Kecoughtan Road','Ingleside Road',
+                      'Port Norfolk','Downtown Franklin','Iglesia Comunitaria Zion'];
+  const SITE_ALIASES = {}; // no aliases needed — sites are distinct
 
   // Init bySite counts
   SITE_KEYS.forEach(function(k){ bySite[k] = 0; });
@@ -547,10 +559,12 @@ function getLiveSignupCounts() {
       // Count by site
       if (siteIdx >= 0) {
         var siteName = (data[i][siteIdx] || '').toString().trim();
-        var siteKeyIdx = SITE_NAMES.indexOf(siteName);
-        if (siteKeyIdx >= 0) {
-          bySite[SITE_KEYS[siteKeyIdx]]++;
+        var siteKey  = SITE_ALIASES[siteName];
+        if (!siteKey) {
+          var siteKeyIdx = SITE_NAMES.indexOf(siteName);
+          if (siteKeyIdx >= 0) siteKey = SITE_KEYS[siteKeyIdx];
         }
+        if (siteKey) bySite[siteKey]++;
       }
     }
     result[key] = activeCount;
@@ -558,6 +572,105 @@ function getLiveSignupCounts() {
 
   result.bySite = bySite;
   return result;
+}
+
+// ═══════════════════════════════════════════════════════════════
+//  SITE VOLUNTEER LIST  (for tile click-through)
+// ═══════════════════════════════════════════════════════════════
+
+function getSiteVolunteers(siteKey, isAdmin) {
+  const ss = getSpreadsheet();
+  const SITE_KEY_MAP = {
+    cathedral:'The Cathedral', newbeg:'New Beginnings', newport:'Newport News',
+    hampton:'Downtown Hampton', chesapeake:'Chesapeake Square',
+    kecoughtan:'Kecoughtan Road', ingleside:'Ingleside Road',
+    norfolk:'Port Norfolk', franklin:'Downtown Franklin', iglesia:'Iglesia Comunitaria Zion'
+  };
+  const ALIASES = {}; // sites are distinct — no aliases
+  const skip = ['tokens','cancellations','qrlinks','leadership','shirts'];
+  // Friendly activity names per sheet key
+  const ACT_LABELS = {
+    food:'Food Server', drinks:'Drinks', games:'Games', dj:'DJ/Music',
+    karaoke:'Outside Stage', basketball:'Basketball', kidgames:'Kid Games',
+    parking:'Parking', setup:'Site Setup', popcorn:'Popcorn', pretzels:'Pretzels',
+    coordinator:'Coordinator', choir:'Choir', general:'General Volunteer'
+  };
+
+  if (!siteKey || !SITE_KEY_MAP[siteKey]) {
+    return {ok:false, error:'Unknown site key: ' + siteKey};
+  }
+  const targetSiteName = SITE_KEY_MAP[siteKey];
+  const volunteers = [];
+
+  Object.keys(TAB_MAP).forEach(function(key) {
+    if (skip.indexOf(key) >= 0) return;
+    const sheet = ss.getSheetByName(TAB_MAP[key]);
+    if (!sheet || sheet.getLastRow() < 2) return;
+
+    const data      = sheet.getDataRange().getValues();
+    const hdr       = data[0];
+    const siteIdx   = hdr.indexOf('Site');
+    const statusIdx = hdr.indexOf('Status');
+    if (siteIdx < 0) return;
+
+    // Find name column
+    var nameCol = -1;
+    ['Name','Volunteer Name','Server Name','Singer Name','Helper Name','Team Captain','Coordinator Name'].forEach(function(n){
+      if (nameCol < 0 && hdr.indexOf(n) >= 0) nameCol = hdr.indexOf(n);
+    });
+    var phoneIdx = hdr.indexOf('Phone Number');
+
+    for (var i = 1; i < data.length; i++) {
+      var rowSite   = (data[i][siteIdx] || '').toString().trim();
+      var status    = statusIdx >= 0 ? (data[i][statusIdx] || '').toString().trim() : 'Active';
+      // Resolve alias
+      var resolvedKey = ALIASES[rowSite];
+      if (!resolvedKey) {
+        // Check normal match
+        Object.keys(SITE_KEY_MAP).forEach(function(k){ if (SITE_KEY_MAP[k] === rowSite) resolvedKey = k; });
+      }
+      if (resolvedKey !== siteKey) continue;
+      if (status === 'Cancelled') continue;
+
+      var vol = {
+        name:     nameCol >= 0 ? (data[i][nameCol]||'').toString().trim() : '—',
+        activity: ACT_LABELS[key] || key,
+        row:      i + 1,
+        sheet:    TAB_MAP[key]
+      };
+      if (isAdmin && phoneIdx >= 0) {
+        vol.phone = (data[i][phoneIdx]||'').toString().trim();
+      }
+      volunteers.push(vol);
+    }
+  });
+
+  // Sort by name
+  volunteers.sort(function(a,b){ return a.name.localeCompare(b.name); });
+  return {ok:true, site: targetSiteName, siteKey: siteKey, total: volunteers.length, volunteers: volunteers};
+}
+
+function handleAdminDelete(p) {
+  if ((p['code']||'').trim() !== ADMIN_CODE) {
+    return jsonOut({success:false, error:'Unauthorized'});
+  }
+  const sheetName = (p['sheet']||'').toString().trim();
+  const rowNum    = parseInt(p['row'], 10);
+  if (!sheetName || isNaN(rowNum) || rowNum < 2) {
+    return jsonOut({success:false, error:'Invalid parameters'});
+  }
+  const ss    = getSpreadsheet();
+  const sheet = ss.getSheetByName(sheetName);
+  if (!sheet) return jsonOut({success:false, error:'Sheet not found: ' + sheetName});
+
+  // Find Status column and mark Cancelled
+  const hdr       = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  const statusIdx = hdr.indexOf('Status');
+  if (statusIdx >= 0) {
+    sheet.getRange(rowNum, statusIdx + 1).setValue('Cancelled');
+  }
+  Logger.log('Admin delete: sheet=' + sheetName + ' row=' + rowNum);
+  return jsonOut({success:true});
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -866,7 +979,7 @@ function handleGeneralVolunteer(p) {
 
   const headers = HEADERS['general'];
   const sheet   = getOrCreateSheet(TAB_MAP['general'], headers);
-  sheet.appendRow([new Date(), site, name, phone, email, 'Pending']);
+  sheet.appendRow([new Date(), site, name, phone, email, 'Active']);
 
   // Send confirmation email if provided
   if (email) {
