@@ -28,7 +28,7 @@ header span{font-size:1.1rem;opacity:.75}
 main{flex:1;overflow:hidden;padding:0;min-height:0;display:flex;flex-direction:column}
 #tab-home{max-width:100%;text-align:center}
 #tab-matrix{max-width:100%;margin:0}
-#tab-f1,#tab-f2,#tab-f3,#tab-f4,#tab-f5,#tab-f6,#tab-f7,#tab-f8,#tab-f9,#tab-f10,#tab-f11,#tab-f12,#tab-f13{max-width:900px;margin:0 auto}
+#tab-f1,#tab-f2,#tab-f3,#tab-f4,#tab-f5,#tab-f6,#tab-f7,#tab-f8,#tab-f9,#tab-f10,#tab-f11,#tab-f12,#tab-f13,#tab-f14{max-width:900px;margin:0 auto}
 .qr-grid{display:flex;flex-direction:column;gap:5px;margin-top:8px}
 .qr-grid-row{display:flex;gap:5px;justify-content:center}
 .qr-card{background:#1a1a1a;border-radius:8px;padding:6px 4px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.4);cursor:pointer;border:2px solid #8B0000;transition:.2s;display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
@@ -179,6 +179,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <button class="tab-btn" style="display:none" onclick="showTab('f10')"><span class="tab-lbl">Popcorn</span><span class="tab-icon">🍿</span></button>
   <button class="tab-btn" style="display:none" onclick="showTab('f11')"><span class="tab-lbl">Pretzels</span><span class="tab-icon">🥨</span></button>
   <button class="tab-btn"         onclick="showTab('f13')"><span class="tab-lbl">Choir</span><span class="tab-icon">🎶</span></button>
+  <button class="tab-btn"         onclick="showTab('f14')"><span class="tab-lbl">Volunteer</span><span class="tab-icon">🙋</span></button>
 </div>
 
 <main>
@@ -230,41 +231,68 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   </div>
 
   <!-- T-SHIRT ORDER MODAL -->
-  <div id="shirt-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:9999;align-items:center;justify-content:center;padding:16px">
-    <div style="background:#1a1a1a;border:2px solid #C9A227;border-radius:14px;padding:28px;max-width:440px;width:100%">
-      <h3 style="color:#C9A227;margin:0 0 4px;text-align:center">🎽 T-Shirt Order</h3>
-      <p style="color:#aaa;font-size:.78rem;text-align:center;margin:0 0 18px">Orders are fulfilled by Jordan Fedderman. Text Jordan at <strong style="color:#f0ece4">757-617-8861</strong> with any questions or changes.</p>
+  <div id="shirt-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:9999;align-items:flex-start;justify-content:center;padding:16px;overflow-y:auto">
+    <div style="background:#1a1a1a;border:2px solid #C9A227;border-radius:14px;padding:24px 28px;max-width:500px;width:100%;margin:auto">
+      <h3 style="color:#C9A227;margin:0 0 14px;text-align:center">🎽 T-Shirt Order</h3>
 
-      <div style="margin-bottom:12px">
+      <!-- Shirt Preview -->
+      <div style="display:flex;gap:14px;margin-bottom:18px;justify-content:center">
+        <!-- Front -->
+        <div style="flex:1;max-width:200px;text-align:center">
+          <div style="font-size:.7rem;color:#C9A227;font-weight:700;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase">Front</div>
+          <div style="background:#111;border:1px solid #444;border-radius:8px;padding:14px 10px 10px;position:relative">
+            <!-- shirt shape SVG -->
+            <svg viewBox="0 0 120 130" style="width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30,10 Q38,2 50,2 Q55,12 60,12 Q65,12 70,2 Q82,2 90,10 L115,35 L98,48 L95,18 L95,125 L25,125 L25,18 L22,48 L5,35 Z" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
+              <image href="unityfest_logo.png" x="32" y="28" width="56" height="56"/>
+            </svg>
+          </div>
+        </div>
+        <!-- Back -->
+        <div style="flex:1;max-width:200px;text-align:center">
+          <div style="font-size:.7rem;color:#C9A227;font-weight:700;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase">Back</div>
+          <div style="background:#111;border:1px solid #444;border-radius:8px;padding:14px 10px 10px">
+            <svg viewBox="0 0 120 130" style="width:100%;display:block" xmlns="http://www.w3.org/2000/svg">
+              <path d="M30,10 Q38,2 50,2 Q55,12 60,12 Q65,12 70,2 Q82,2 90,10 L115,35 L98,48 L95,18 L95,125 L25,125 L25,18 L22,48 L5,35 Z" fill="#1a1a1a" stroke="#555" stroke-width="1.5"/>
+              <text x="60" y="58" text-anchor="middle" fill="#C9A227" font-size="9.5" font-family="Arial" font-weight="bold" font-style="italic">How May I</text>
+              <text x="60" y="72" text-anchor="middle" fill="#C9A227" font-size="9.5" font-family="Arial" font-weight="bold" font-style="italic">Serve You?</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact info -->
+      <div style="margin-bottom:14px">
         <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Full Name <span style="color:#C9A227">*</span></label>
         <input id="shirt-name" type="text" placeholder="Your full name" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
       </div>
-      <div style="margin-bottom:12px">
+      <div style="margin-bottom:14px">
         <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Phone Number <span style="color:#C9A227">*</span></label>
         <input id="shirt-phone" type="tel" placeholder="(555) 555-5555" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
       </div>
-      <div style="display:flex;gap:12px;margin-bottom:12px">
-        <div style="flex:1">
-          <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Size <span style="color:#C9A227">*</span></label>
-          <select id="shirt-size" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
-            <option value="">— Select —</option>
-            <option>S</option><option>M</option><option>L</option>
-            <option>XL</option><option>XXL</option><option>XXXL</option>
-          </select>
-        </div>
-        <div style="flex:1">
-          <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:4px">Quantity <span style="color:#C9A227">*</span></label>
-          <input id="shirt-qty" type="number" min="1" max="20" placeholder="1" style="width:100%;background:#111;border:1px solid #555;border-radius:6px;padding:9px 11px;color:#f0ece4;font-size:.9rem">
-        </div>
+
+      <!-- Size / Qty rows -->
+      <div style="margin-bottom:6px">
+        <label style="font-size:.78rem;color:#aaa;display:block;margin-bottom:6px">Sizes &amp; Quantities <span style="color:#C9A227">*</span> <span style="color:#888;font-weight:400">(fill in each size you need)</span></label>
+        <table id="shirt-rows" style="width:100%;border-collapse:collapse">
+          <thead>
+            <tr>
+              <th style="font-size:.72rem;color:#888;font-weight:600;padding:3px 6px;text-align:left;width:60%">Size</th>
+              <th style="font-size:.72rem;color:#888;font-weight:600;padding:3px 6px;text-align:left">Qty</th>
+            </tr>
+          </thead>
+          <tbody id="shirt-rows-body"></tbody>
+        </table>
       </div>
 
-      <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px 12px;margin-bottom:16px;font-size:.75rem;color:#aaa;line-height:1.6">
+      <div style="background:#111;border:1px solid #333;border-radius:8px;padding:10px 12px;margin-bottom:14px;font-size:.75rem;color:#aaa;line-height:1.6">
+        ⚠️ <strong style="color:#C9A227">Large orders (over 10 shirts) may require approval to assure availability.</strong><br>
         📞 Questions or changes? Text Jordan Fedderman at <strong style="color:#f0ece4">757-617-8861</strong><br>
         ✉️ <a href="mailto:feddermanj@gmail.com" style="color:#C9A227">feddermanj@gmail.com</a>
       </div>
 
       <div id="shirt-err" style="color:#e55;font-size:.78rem;margin-bottom:10px;display:none"></div>
-      <div id="shirt-success" style="color:#4CAF50;font-size:.85rem;margin-bottom:10px;display:none;text-align:center">✅ Order submitted! Jordan will follow up with you.</div>
+      <div id="shirt-success" style="color:#4CAF50;font-size:.85rem;margin-bottom:10px;display:none;text-align:center">✅ Order submitted! Jordan will follow up with you shortly.</div>
 
       <div style="display:flex;gap:10px;justify-content:flex-end">
         <button onclick="closeShirtOrder()" style="background:#333;color:#aaa;border:1px solid #555;border-radius:8px;padding:10px 20px;cursor:pointer;font-size:.85rem">Cancel</button>
@@ -754,6 +782,36 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   </div>
 </div>
 
+<!-- ══ GENERAL VOLUNTEER ══ -->
+<div id="tab-f14" class="form-panel">
+  <span class="back-link" onclick="showTab('home')">← Back</span>
+  <div class="form-wrap" style="--accent:#375623">
+    <h2 style="color:#375623">🙋 General Volunteer Signup <span class="req-badge" style="background:#375623;color:#fff">All Sites Welcome</span></h2>
+    <p class="form-desc">Want to help but not sure where? Sign up as a General Volunteer and we'll place you where you're needed most on the day of the event!</p>
+    <form onsubmit="submitForm(event,'general',this)">
+      <div class="form-group"><label>Site <span class="req">*</span></label>
+        <select name="Site" required>
+          <option value="">— Select your site —</option>
+          <option>The Cathedral</option>
+          <option>New Beginnings</option>
+          <option>Newport News</option>
+          <option>Chesapeake Square</option>
+          <option>Kecoughtan Road</option>
+          <option>Ingleside Road</option>
+          <option>Port Norfolk</option>
+          <option>Downtown Franklin</option>
+          <option>Iglesia Comunitaria Zion</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Full Name <span class="req">*</span></label><input type="text" name="Name" required placeholder="Your full name"></div>
+      <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
+      <div class="form-group"><label>Email Address <span style="color:#888;font-weight:400;font-size:.8rem">(optional)</span></label><input type="email" name="Email Address" placeholder="your@email.com"></div>
+      <button type="submit" class="submit-btn" style="background:#375623">Submit Volunteer Signup 🙋</button>
+      <div class="success-msg" id="success-general">✅ You're signed up! You will be placed where needed — thank you! 🙌</div>
+    </form>
+  </div>
+</div>
+
 </main>
 <footer>Zion Unity Fest 2026 &nbsp;·&nbsp; Oct 4, 2026 &nbsp;·&nbsp; Questions? <a href="mailto:zccunityfest@gmail.com" style="color:#888">zccunityfest@gmail.com</a></footer>
 
@@ -787,6 +845,7 @@ const DASH_ACTS = [
   {key:'pretzels',   emoji:'\uD83E\uDD68', label:'Pretzels'},
   {key:'coordinator',emoji:'\uD83D\uDCCB', label:'Coordinators'},
   {key:'choir',      emoji:'\uD83C\uDFB6', label:'Choir'},
+  {key:'general',    emoji:'\uD83D\uDE4B', label:'General Volunteer'},
 ];
 
 const REQUIREMENTS = {
@@ -803,6 +862,7 @@ const REQUIREMENTS = {
   pretzels: {cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
   coordinator:{cathedral:1,newbeg:1,newport:1,hampton:1,kecoughtan:1,ingleside:1,norfolk:1,franklin:1},
   choir:    {cathedral:0,newbeg:0,newport:0,hampton:0,kecoughtan:0,ingleside:0,norfolk:0,franklin:0},
+  general:  {cathedral:0,newbeg:0,newport:0,hampton:0,kecoughtan:0,ingleside:0,norfolk:0,franklin:0},
 };
 
 // ── Per-site volunteer slot requirements (overall totals) ──
@@ -1444,6 +1504,7 @@ var QR_ACTS = [
   {id:'f11',key:'pretzels',    emoji:'\uD83E\uDD68', label:'Pretzels'},
   {id:'f12',key:'coordinator', emoji:'\uD83D\uDCCB', label:'Unity Fest Contacts'},
   {id:'f13',key:'choir',       emoji:'\uD83C\uDFB6', label:'Combined Choir'},
+  {id:'f14',key:'general',    emoji:'\uD83D\uDE4B', label:'General Volunteer'},
 ];
 
 window.addEventListener('load', function() {
@@ -1636,15 +1697,42 @@ var _contactsLoaded = false;
 
 <script>
 // ── SHIRT ORDER ──
+var SHIRT_SIZES = ['S','M','L','XL','XXL','XXXL'];
+var SHIRT_NUM_ROWS = 10;
+
+function _buildShirtRows() {
+  var tbody = document.getElementById('shirt-rows-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  var rowStyle = 'background:#111;border:1px solid #333';
+  var cellStyle = 'padding:4px 6px';
+  var inputStyle = 'width:100%;background:#0d0d0d;border:1px solid #444;border-radius:5px;padding:6px 8px;color:#f0ece4;font-size:.85rem';
+  var selectStyle = inputStyle;
+  for (var i = 0; i < SHIRT_NUM_ROWS; i++) {
+    var tr = document.createElement('tr');
+    tr.style.cssText = rowStyle;
+    tr.innerHTML =
+      '<td style="' + cellStyle + '">' +
+        '<select class="shirt-row-size" style="' + selectStyle + '">' +
+          '<option value="">— Size —</option>' +
+          SHIRT_SIZES.map(function(s){ return '<option>' + s + '</option>'; }).join('') +
+        '</select>' +
+      '</td>' +
+      '<td style="' + cellStyle + '">' +
+        '<input type="number" class="shirt-row-qty" min="1" max="99" placeholder="0" style="' + inputStyle + '">' +
+      '</td>';
+    tbody.appendChild(tr);
+  }
+}
+
 function openShirtOrder() {
   document.getElementById('shirt-name').value = '';
   document.getElementById('shirt-phone').value = '';
-  document.getElementById('shirt-size').value = '';
-  document.getElementById('shirt-qty').value = '';
   document.getElementById('shirt-err').style.display = 'none';
   document.getElementById('shirt-success').style.display = 'none';
   document.getElementById('shirt-submit-btn').disabled = false;
   document.getElementById('shirt-submit-btn').textContent = 'Submit Order';
+  _buildShirtRows();
   document.getElementById('shirt-modal').style.display = 'flex';
 }
 function closeShirtOrder() {
@@ -1653,22 +1741,34 @@ function closeShirtOrder() {
 function submitShirtOrder() {
   var name  = (document.getElementById('shirt-name').value  || '').trim();
   var phone = (document.getElementById('shirt-phone').value || '').trim();
-  var size  = document.getElementById('shirt-size').value;
-  var qty   = (document.getElementById('shirt-qty').value   || '').trim();
   var err   = document.getElementById('shirt-err');
-  if (!name || !phone || !size || !qty) {
-    err.textContent = 'Please fill in all required fields.';
+  if (!name || !phone) {
+    err.textContent = 'Please enter your name and phone number.';
+    err.style.display = 'block'; return;
+  }
+  // Collect rows
+  var sizes = document.querySelectorAll('#shirt-rows-body .shirt-row-size');
+  var qtys  = document.querySelectorAll('#shirt-rows-body .shirt-row-qty');
+  var lines = []; var totalQty = 0;
+  for (var i = 0; i < sizes.length; i++) {
+    var sz = sizes[i].value;
+    var qt = parseInt(qtys[i].value, 10) || 0;
+    if (sz && qt > 0) { lines.push(sz + ' x' + qt); totalQty += qt; }
+  }
+  if (lines.length === 0) {
+    err.textContent = 'Please select at least one size and quantity.';
     err.style.display = 'block'; return;
   }
   err.style.display = 'none';
   var btn = document.getElementById('shirt-submit-btn');
   btn.disabled = true; btn.textContent = 'Submitting…';
+  var sizeStr = lines.join(', ');
   var params = new URLSearchParams({
     activity: 'shirts',
     'Name': name,
     'Phone Number': phone,
-    'Shirt Size': size,
-    'Quantity': qty
+    'Shirt Size': sizeStr,
+    'Quantity': totalQty
   });
   if (WEB_APP_URL && WEB_APP_URL.indexOf('YOUR_WEB_APP') < 0) {
     fetch(WEB_APP_URL, {method:'POST', mode:'no-cors', body: params})
@@ -1676,7 +1776,7 @@ function submitShirtOrder() {
   }
   document.getElementById('shirt-success').style.display = 'block';
   btn.textContent = 'Submitted ✓';
-  setTimeout(function(){ closeShirtOrder(); }, 2500);
+  setTimeout(function(){ closeShirtOrder(); }, 3000);
 }
 
 var _adminHiddenTabs = [];

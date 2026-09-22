@@ -27,6 +27,7 @@ const TAB_MAP = {
   'pretzels':    'Pretzels Signups',
   'coordinator': 'Site Coordinators',
   'choir':       'Combined Choir',
+  'general':     'General Volunteers',
   'tokens':        'Cancel Tokens',      // hidden — editors only
   'cancellations': 'Cancellations',
   'qrlinks':       'QR Form Links',      // hidden — editors only
@@ -48,6 +49,7 @@ const HEADERS = {
   pretzels:    ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Shift Preference','Prior Experience','Status'],
   coordinator: ['Timestamp','Site','Coordinator Name','Phone Number','Email Address','Role','Activity Chaired','T-Shirt Size','Dietary Restrictions','Notes','Status'],
   choir:       ['Timestamp','Site','Singer Name','Phone Number','Email Address','Voice Part','Willing to Lead','Rehearsal Available','Rehearsal Notes','Comments','Status'],
+  general:     ['Timestamp','Site','Name','Phone Number','Email Address','Status'],
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -112,6 +114,7 @@ function doPost(e) {
       case 'contactemail':  return handleContactEmail(p);
       case 'actlead':       return handleActLeadPost(p);
       case 'shirts':        return handleShirtOrder(p);
+      case 'general':       return handleGeneralVolunteer(p);
       default:              return jsonOut({success:false, error:'Unknown activity: ' + activity});
     }
   } catch (err) {
@@ -827,23 +830,72 @@ function handleShirtOrder(p) {
   sheet.appendRow([new Date(), name, phone, size, qty]);
 
   // Email Jordan + CC zccunityfest
+  const qtyNum = parseInt(qty, 10) || 0;
+  const largeOrderNote = qtyNum > 10
+    ? '\n⚠️  LARGE ORDER (' + qty + ' shirts) — approval required to assure availability. Please contact customer.\n'
+    : '';
   const body =
     '🎽 New T-Shirt Order — Zion Unity Fest 2026\n\n' +
     'Name:     ' + name  + '\n' +
     'Phone:    ' + phone + '\n' +
-    'Size:     ' + size  + '\n' +
-    'Quantity: ' + qty   + '\n\n' +
+    'Sizes:    ' + size  + '\n' +
+    'Total Qty:' + qty   + '\n' +
+    largeOrderNote + '\n' +
     'Order logged in the Shirt Orders tab of the master Google Sheet.\n' +
     'Text the customer at: ' + phone;
 
   MailApp.sendEmail({
     to:      'feddermanj@gmail.com',
     cc:      'zccunityfest@gmail.com',
-    subject: '[ZUF 2026] T-Shirt Order — ' + name + ' · ' + qty + 'x ' + size,
+    subject: '[ZUF 2026] T-Shirt Order — ' + name + ' · ' + qty + ' shirts' + (qtyNum > 10 ? ' ⚠️ LARGE ORDER' : ''),
     body:    body
   });
 
   return jsonOut({ok: true});
+}
+
+function handleGeneralVolunteer(p) {
+  const name  = (p['Name']          || '').toString().trim();
+  const phone = (p['Phone Number']  || '').toString().trim();
+  const email = (p['Email Address'] || '').toString().trim();
+  const site  = (p['Site']          || '').toString().trim();
+
+  if (!name || !phone || !site) {
+    return jsonOut({success:false, error:'Missing required fields.'});
+  }
+
+  const headers = HEADERS['general'];
+  const sheet   = getOrCreateSheet(TAB_MAP['general'], headers);
+  sheet.appendRow([new Date(), site, name, phone, email, 'Pending']);
+
+  // Send confirmation email if provided
+  if (email) {
+    sendGeneralVolunteerEmail(email, name, site);
+  }
+
+  // Notify event team
+  MailApp.sendEmail({
+    to:      NOTIFY_EMAIL,
+    subject: '[ZUF 2026] General Volunteer — ' + name + ' · ' + site,
+    body:    'New general volunteer signup:\n\nName:  ' + name + '\nPhone: ' + phone + '\nEmail: ' + (email||'—') + '\nSite:  ' + site
+  });
+
+  return jsonOut({success:true, message:'General volunteer signup recorded!'});
+}
+
+function sendGeneralVolunteerEmail(email, name, site) {
+  const subject = EVENT_NAME + ' – General Volunteer Signup Confirmed';
+  const html = emailWrap(name,
+    '<p>Thank you for signing up as a <strong>General Volunteer</strong> for <strong>' + EVENT_NAME + '</strong>!</p>' +
+    '<table style="border-collapse:collapse;width:100%;background:#f3f0ff;border-radius:8px;overflow:hidden">' +
+    '<tr><td style="padding:6px 12px;font-weight:bold;color:#375623">Site</td><td style="padding:6px 12px">' + escHtml(site) + '</td></tr>' +
+    '</table>' +
+    '<p style="margin-top:14px;color:#555">You will be placed where you are <strong>needed most</strong> on the day of the event. A coordinator will be in touch with your assignment closer to October 4th. Thank you for your willingness to serve!</p>' +
+    btnRow(PORTAL_URL, 'Return to Volunteer Signup Portal', '#375623')
+  );
+  GmailApp.sendEmail(email, subject, 'Your General Volunteer signup for ' + EVENT_NAME + ' is confirmed. You will be used where needed!', {
+    htmlBody: html, replyTo: REPLY_TO, name: EVENT_NAME + ' Volunteer Team', bcc: NOTIFY_EMAIL,
+  });
 }
 
 // ═══════════════════════════════════════════════════════════════
