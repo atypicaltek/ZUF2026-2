@@ -531,7 +531,8 @@ function getLiveSignupCounts() {
   const ss       = getSpreadsheet();
   const result   = {};
   const bySite   = {};
-  const skip     = ['tokens','cancellations','qrlinks','leadership','shirts'];
+  const skip        = ['tokens','cancellations','qrlinks','leadership','shirts'];
+  const skipBySite  = ['choir']; // don't count these toward site volunteer totals
   const SITE_KEYS  = ['cathedral','newbeg','newport','hampton','chesapeake','kecoughtan','ingleside','norfolk','franklin','iglesia'];
   const SITE_NAMES = ['The Cathedral','New Beginnings','Newport News','Downtown Hampton',
                       'Chesapeake Square','Kecoughtan Road','Ingleside Road',
@@ -564,7 +565,7 @@ function getLiveSignupCounts() {
           var siteKeyIdx = SITE_NAMES.indexOf(siteName);
           if (siteKeyIdx >= 0) siteKey = SITE_KEYS[siteKeyIdx];
         }
-        if (siteKey) bySite[siteKey]++;
+        if (siteKey && skipBySite.indexOf(key) < 0) bySite[siteKey]++;
       }
     }
     result[key] = activeCount;

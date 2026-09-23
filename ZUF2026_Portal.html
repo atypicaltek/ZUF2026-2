@@ -747,7 +747,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
   <div class="form-wrap choir-wrap">
     <h2>🎶 Combined Choir Signup <span class="req-badge choir-badge">All Sites Welcome</span></h2>
     <div style="text-align:center;margin:10px 0 16px">
-      <img src="choir_flyer.jpg" alt="Commonwealth District Choir Rehearsal Flyer" style="max-width:100%;max-height:420px;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.25)">
+      <img src="choir_flyer.jpg" alt="Commonwealth District Choir Rehearsal Flyer" loading="lazy" style="max-width:100%;max-height:420px;border-radius:8px;box-shadow:0 2px 12px rgba(0,0,0,.25)">
     </div>
     <p class="form-desc">Join the Zion Unity Fest 2026 Combined Choir! Singers from all 8 sites will come together for a unified worship experience. <strong>Rehearsal: Tuesday, September 29 at 7:00 PM — 2500 E Washington St, Suffolk, VA.</strong></p>
     <form onsubmit="submitForm(event,'choir',this)">
@@ -915,15 +915,41 @@ setInterval(updateCountdown, 1000);
 updateCountdown();
 
 // ── DASHBOARD LOAD ───────────────────────────────────────────
-function loadDash() {
+var _dashLoading = false;
+var _dashLastFetch = 0;
+var _DASH_CACHE_MS = 30000; // don't re-fetch if data is less than 30s old
+
+function loadDash(force) {
+  var now = Date.now();
+  // Debounce: skip if a fetch is already in flight or cache is fresh (unless forced)
+  if (!force && (_dashLoading || (now - _dashLastFetch < _DASH_CACHE_MS))) return;
+  if (_dashLoading) return;
+  _dashLoading = true;
+
   var el = document.getElementById('stat-updated');
   if (el) el.textContent = 'Loading...';
+
+  // Show cached data instantly while fresh fetch is in flight
+  try {
+    var cached = sessionStorage.getItem('zuf_counts');
+    if (cached) renderDash(JSON.parse(cached));
+  } catch(e) {}
+
   if (WEB_APP_URL && WEB_APP_URL.indexOf('YOUR_WEB_APP') < 0 && window.location.protocol !== 'file:') {
     fetch(WEB_APP_URL + '?action=counts')
       .then(function(r){ return r.json(); })
-      .then(function(data){ renderDash(data); })
-      .catch(function(){ renderDash({}); });
+      .then(function(data){
+        _dashLastFetch = Date.now();
+        _dashLoading = false;
+        try { sessionStorage.setItem('zuf_counts', JSON.stringify(data)); } catch(e) {}
+        renderDash(data);
+      })
+      .catch(function(){
+        _dashLoading = false;
+        renderDash({});
+      });
   } else {
+    _dashLoading = false;
     renderDash({});
   }
 }
@@ -1409,7 +1435,6 @@ window.addEventListener('load', function() {
 
   var h = window.location.hash.replace('#','');
   if (h && document.getElementById('tab-'+h)) showTab(h);
-  loadDash();
 });
 
 function toggleActivityField(show) {
@@ -1443,7 +1468,8 @@ function submitForm(e, key, form) {
   form.reset();
   if (btn) { btn.disabled=false; btn.textContent=btn.getAttribute('data-label')||'Submit'; }
   setTimeout(function(){ if(msg) msg.style.display='none'; }, 8000);
-  loadDash();
+  // Refresh counts after a short delay so the sheet has time to update
+  setTimeout(function(){ loadDash(true); }, 3000);
 }
 
 // ── MATRIX ───────────────────────────────────────────────────
@@ -1611,7 +1637,7 @@ window.addEventListener('load', function() {
       new Image().src = fireUrl + '&m=img';
       // Show immediate confirmation — no waiting for server response
       showBanner('Your signup has been cancelled. A confirmation email will be sent to you shortly.', 'cancelled');
-      loadDash();
+      setTimeout(function(){ loadDash(true); }, 2000);
       history.replaceState({}, '', window.location.pathname);
     }
 
@@ -1834,7 +1860,7 @@ function enableAdminMode() {
   document.getElementById('admin-banner').style.display = 'block';
   document.getElementById('admin-fab').style.display = 'none';
   document.getElementById('app') && (document.getElementById('app').style.marginTop = '32px');
-  loadDash(); // refresh counts so admin and public see the same live data
+  loadDash(true); // refresh counts so admin and public see the same live data
 }
 
 function exitAdminMode() {
