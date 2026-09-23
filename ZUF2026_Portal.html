@@ -410,6 +410,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
       <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
       <div class="form-group"><label>Which Game Station? <span class="req">*</span></label><select name="Game Station" required><option value="">— Select —</option><option>Station 1</option><option>Station 2</option><option>Station 3</option><option>Station 4</option><option>No preference</option></select></div>
       <div class="form-group"><label>Available for Setup? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Setup Help" value="Yes" required> Yes</label><label><input type="radio" name="Setup Help" value="No"> No</label></div></div>
+      <div class="form-group"><label>T-Shirt Size <span class="req">*</span></label><select name="T-Shirt Size" required><option value="">— Select size —</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select></div>
       <button type="submit" class="submit-btn">Submit Games Signup</button>
       <div class="success-msg" id="success-games">✅ Signup recorded! Confirmation email sent.</div>
     </form>
@@ -606,6 +607,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
       <div class="form-group"><label>Email Address <span class="req">*</span></label><input type="email" name="Email Address" required placeholder="your@email.com"></div>
       <div class="form-group"><label>Age Group Comfortable Supervising <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Age Group" value="Ages 3–6" required> Ages 3–6</label><label><input type="radio" name="Age Group" value="Ages 7–10"> Ages 7–10</label><label><input type="radio" name="Age Group" value="Ages 11+"> Ages 11+</label><label><input type="radio" name="Age Group" value="Any age group"> Any age group</label></div></div>
       <div class="form-group"><label>First Aid / CPR Certified? <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="CPR Certified" value="Yes" required> Yes</label><label><input type="radio" name="CPR Certified" value="No"> No</label></div></div>
+      <div class="form-group"><label>T-Shirt Size <span class="req">*</span></label><select name="T-Shirt Size" required><option value="">— Select size —</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select></div>
       <button type="submit" class="submit-btn">Submit Kid Games Signup</button>
       <div class="success-msg" id="success-kidgames">✅ Thank you for helping with the kids' area!</div>
     </form>
@@ -645,6 +647,7 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
       <div class="form-group"><label>Equipment Your Site Can Bring <span class="req">*</span></label><div class="check-group"><label><input type="checkbox" name="Equipment" value="Tables"> Tables</label><label><input type="checkbox" name="Equipment" value="Chairs"> Chairs</label><label><input type="checkbox" name="Equipment" value="Tents"> Tent(s)</label><label><input type="checkbox" name="Equipment" value="None - volunteer labor only"> None — volunteer labor only</label></div></div>
       <div class="form-group"><label>Quantity of Equipment</label><input type="text" name="Equipment Quantity" placeholder="e.g., 2 tables, 10 chairs (optional)"></div>
       <div class="form-group"><label>Available For <span class="req">*</span></label><div class="radio-group"><label><input type="radio" name="Available For" value="Setup only" required> Setup only</label><label><input type="radio" name="Available For" value="Teardown only"> Teardown only</label><label><input type="radio" name="Available For" value="Both setup and teardown"> Both setup and teardown</label></div></div>
+      <div class="form-group"><label>T-Shirt Size <span class="req">*</span></label><select name="T-Shirt Size" required><option value="">— Select size —</option><option>S</option><option>M</option><option>L</option><option>XL</option><option>XXL</option><option>XXXL</option></select></div>
       <button type="submit" class="submit-btn">Submit Site Setup Signup</button>
       <div class="success-msg" id="success-setup">✅ Thanks! Your setup crew signup was recorded.</div>
     </form>
@@ -807,6 +810,13 @@ footer{text-align:center;padding:4px 0;color:#666;font-size:.7rem;flex-shrink:0;
       <div class="form-group"><label>Full Name <span class="req">*</span></label><input type="text" name="Name" required placeholder="Your full name"></div>
       <div class="form-group"><label>Phone Number <span class="req">*</span></label><input type="tel" name="Phone Number" required placeholder="(555) 555-5555"></div>
       <div class="form-group"><label>Email Address <span style="color:#888;font-weight:400;font-size:.8rem">(optional)</span></label><input type="email" name="Email Address" placeholder="your@email.com"></div>
+      <div class="form-group"><label>T-Shirt Size <span class="req">*</span></label>
+        <select name="T-Shirt Size" required>
+          <option value="">— Select size —</option>
+          <option>S</option><option>M</option><option>L</option>
+          <option>XL</option><option>XXL</option><option>XXXL</option>
+        </select>
+      </div>
       <button type="submit" class="submit-btn" style="background:#375623">Submit Volunteer Signup 🙋</button>
       <div class="success-msg" id="success-general">✅ You're signed up! You will be placed where needed — thank you! 🙌</div>
     </form>

@@ -39,18 +39,18 @@ const TAB_MAP = {
 const HEADERS = {
   food:        ['Timestamp','Site','Server Name','Phone Number','Email Address','Assigned Food Item','Availability','Allergy Notes','Status'],
   drinks:      ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Role','Time Availability','Status'],
-  games:       ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Game Station','Setup Help','Status'],
+  games:       ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Game Station','Setup Help','T-Shirt Size','Status'],
   dj:          ['Timestamp','Site','Name','Email Address','Song Request','Shoutout Request','MC Volunteer','Status'],
   karaoke:     ['Timestamp','Site','Singer Name','Phone Number','Email Address','Song Choice','Backup Song','Status'],
   basketball:  ['Timestamp','Site','Team Name','Team Captain','Phone Number','Email Address','Player Names','Jersey Color','Status'],
-  kidgames:    ['Timestamp','Site','Helper Name','Phone Number','Email Address','Age Group','CPR Certified','Status'],
+  kidgames:    ['Timestamp','Site','Helper Name','Phone Number','Email Address','Age Group','CPR Certified','T-Shirt Size','Status'],
   parking:     ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Shift Preference','Has Vest/Flashlight','Status'],
-  setup:       ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Equipment','Equipment Quantity','Available For','Status'],
+  setup:       ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Equipment','Equipment Quantity','Available For','T-Shirt Size','Status'],
   popcorn:     ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Shift Preference','Prior Experience','Status'],
   pretzels:    ['Timestamp','Site','Volunteer Name','Phone Number','Email Address','Shift Preference','Prior Experience','Status'],
   coordinator: ['Timestamp','Site','Coordinator Name','Phone Number','Email Address','Role','Activity Chaired','T-Shirt Size','Dietary Restrictions','Notes','Status'],
   choir:       ['Timestamp','Site','Singer Name','Phone Number','Email Address','Voice Part','Willing to Lead','Rehearsal Available','Rehearsal Notes','Comments','Status'],
-  general:     ['Timestamp','Site','Name','Phone Number','Email Address','Status'],
+  general:     ['Timestamp','Site','Name','Phone Number','Email Address','T-Shirt Size','Status'],
 };
 
 // ═══════════════════════════════════════════════════════════════
@@ -1000,36 +1000,38 @@ function handleGeneralVolunteer(p) {
   const phone = (p['Phone Number']  || '').toString().trim();
   const email = (p['Email Address'] || '').toString().trim();
   const site  = (p['Site']          || '').toString().trim();
+  const shirt = (p['T-Shirt Size']  || '').toString().trim();
 
-  if (!name || !phone || !site) {
+  if (!name || !phone || !site || !shirt) {
     return jsonOut({success:false, error:'Missing required fields.'});
   }
 
   const headers = HEADERS['general'];
   const sheet   = getOrCreateSheet(TAB_MAP['general'], headers);
-  sheet.appendRow([new Date(), site, name, phone, email, 'Active']);
+  sheet.appendRow([new Date(), site, name, phone, email, shirt, 'Active']);
 
   // Send confirmation email if provided
   if (email) {
-    sendGeneralVolunteerEmail(email, name, site);
+    sendGeneralVolunteerEmail(email, name, site, shirt);
   }
 
   // Notify event team
   MailApp.sendEmail({
     to:      NOTIFY_EMAIL,
     subject: '[ZUF 2026] General Volunteer — ' + name + ' · ' + site,
-    body:    'New general volunteer signup:\n\nName:  ' + name + '\nPhone: ' + phone + '\nEmail: ' + (email||'—') + '\nSite:  ' + site
+    body:    'New general volunteer signup:\n\nName:   ' + name + '\nPhone:  ' + phone + '\nEmail:  ' + (email||'—') + '\nSite:   ' + site + '\nShirt:  ' + shirt
   });
 
   return jsonOut({success:true, message:'General volunteer signup recorded!'});
 }
 
-function sendGeneralVolunteerEmail(email, name, site) {
+function sendGeneralVolunteerEmail(email, name, site, shirt) {
   const subject = EVENT_NAME + ' – General Volunteer Signup Confirmed';
   const html = emailWrap(name,
     '<p>Thank you for signing up as a <strong>General Volunteer</strong> for <strong>' + EVENT_NAME + '</strong>!</p>' +
     '<table style="border-collapse:collapse;width:100%;background:#f3f0ff;border-radius:8px;overflow:hidden">' +
     '<tr><td style="padding:6px 12px;font-weight:bold;color:#375623">Site</td><td style="padding:6px 12px">' + escHtml(site) + '</td></tr>' +
+    '<tr><td style="padding:6px 12px;font-weight:bold;color:#375623">T-Shirt Size</td><td style="padding:6px 12px">' + escHtml(shirt||'—') + '</td></tr>' +
     '</table>' +
     '<p style="margin-top:14px;color:#555">You will be placed where you are <strong>needed most</strong> on the day of the event. A coordinator will be in touch with your assignment closer to October 4th. Thank you for your willingness to serve!</p>' +
     btnRow(PORTAL_URL, 'Return to Volunteer Signup Portal', '#375623')
