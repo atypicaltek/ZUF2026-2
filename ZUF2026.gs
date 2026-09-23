@@ -478,6 +478,40 @@ function getOrCreateSheet(name, headers) {
   return sheet;
 }
 
+// ─────────────────────────────────────────────────────────────
+//  ONE-TIME MIGRATION: run addMissingColumns() from the Apps
+//  Script editor to add T-Shirt Size (and any other new columns)
+//  to sheets that already exist.
+// ─────────────────────────────────────────────────────────────
+function addMissingColumns() {
+  const ss = getSpreadsheet();
+  var report = [];
+  Object.keys(HEADERS).forEach(function(key) {
+    var tabName = TAB_MAP[key];
+    if (!tabName) return;
+    var sheet = ss.getSheetByName(tabName);
+    if (!sheet) return; // sheet doesn't exist yet — will be created correctly on first signup
+
+    var expectedHeaders = HEADERS[key];
+    var lastCol = sheet.getLastColumn();
+    var existingHeaders = sheet.getRange(1, 1, 1, lastCol).getValues()[0].map(function(h){ return h.toString().trim(); });
+
+    expectedHeaders.forEach(function(col, idx) {
+      if (existingHeaders.indexOf(col) >= 0) return; // already present
+      // Insert before 'Status' column if it exists, otherwise append
+      var statusIdx = existingHeaders.indexOf('Status');
+      var insertAt  = statusIdx >= 0 ? statusIdx + 1 : lastCol + 1; // 1-based
+      sheet.insertColumnBefore(insertAt);
+      sheet.getRange(1, insertAt).setValue(col)
+           .setFontWeight('bold').setBackground('#1F3864').setFontColor('#fff');
+      existingHeaders.splice(statusIdx, 0, col); // keep tracking in sync
+      report.push(tabName + ': added "' + col + '" at column ' + insertAt);
+    });
+  });
+  Logger.log(report.length ? report.join('\n') : 'No missing columns found.');
+  return report;
+}
+
 // ═══════════════════════════════════════════════════════════════
 //  QR FORM LINKS TAB — hidden, editor-only
 // ═══════════════════════════════════════════════════════════════
