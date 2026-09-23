@@ -553,8 +553,8 @@ function getLiveSignupCounts() {
     var activeCount = 0;
 
     for (var i = 1; i < data.length; i++) {
-      var status = statusIdx >= 0 ? (data[i][statusIdx] || '').toString().trim() : 'Active';
-      if (status !== 'Active') continue;
+      var status = statusIdx >= 0 ? (data[i][statusIdx] || '').toString().trim() : '';
+      if (status === 'Cancelled') continue; // count Active, Pending, empty — skip only Cancelled
       activeCount++;
       // Count by site
       if (siteIdx >= 0) {
@@ -671,6 +671,34 @@ function handleAdminDelete(p) {
   }
   Logger.log('Admin delete: sheet=' + sheetName + ' row=' + rowNum);
   return jsonOut({success:true});
+}
+
+// ─────────────────────────────────────────────────────────────
+//  ONE-TIME FIX: run fixPendingToActive() once from Apps Script
+//  editor to correct existing rows that were saved with 'Pending'
+// ─────────────────────────────────────────────────────────────
+function fixPendingToActive() {
+  const ss   = getSpreadsheet();
+  const skip = ['tokens','cancellations','qrlinks','leadership','shirts'];
+  var fixed  = 0;
+  Object.keys(TAB_MAP).forEach(function(key) {
+    if (skip.indexOf(key) >= 0) return;
+    const sheet = ss.getSheetByName(TAB_MAP[key]);
+    if (!sheet || sheet.getLastRow() < 2) return;
+    const hdr       = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+    const statusIdx = hdr.indexOf('Status');
+    if (statusIdx < 0) return;
+    const vals = sheet.getRange(2, statusIdx + 1, sheet.getLastRow() - 1, 1).getValues();
+    vals.forEach(function(row, i) {
+      var s = (row[0] || '').toString().trim();
+      if (s === 'Pending' || s === '') {
+        sheet.getRange(i + 2, statusIdx + 1).setValue('Active');
+        fixed++;
+      }
+    });
+  });
+  Logger.log('fixPendingToActive: updated ' + fixed + ' rows.');
+  return fixed;
 }
 
 // ═══════════════════════════════════════════════════════════════

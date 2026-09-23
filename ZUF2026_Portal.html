@@ -1824,6 +1824,7 @@ function enableAdminMode() {
   document.getElementById('admin-banner').style.display = 'block';
   document.getElementById('admin-fab').style.display = 'none';
   document.getElementById('app') && (document.getElementById('app').style.marginTop = '32px');
+  loadDash(); // refresh counts so admin and public see the same live data
 }
 
 function exitAdminMode() {
@@ -1847,10 +1848,24 @@ function openSiteDetail(siteKey, siteName) {
   var url = WEB_APP_URL + '?action=sitevolunteers&site=' + encodeURIComponent(siteKey);
   if (_isAdminMode) url += '&code=1056';
   fetch(url)
-    .then(function(r){ return r.json(); })
-    .then(function(data){ renderSiteDetail(data); })
-    .catch(function(){ document.getElementById('site-detail-body').innerHTML =
-      '<div style="color:#e55;padding:20px;text-align:center">⚠️ Could not load volunteer data.</div>'; });
+    .then(function(r){ return r.text(); })
+    .then(function(text){
+      var data;
+      try { data = JSON.parse(text); }
+      catch(e) {
+        document.getElementById('site-detail-body').innerHTML =
+          '<div style="color:#e55;padding:20px;text-align:center">' +
+          '⚠️ The Apps Script needs to be redeployed to enable this feature.<br>' +
+          '<span style="font-size:.78rem;color:#aaa;margin-top:6px;display:block">Go to script.google.com → Deploy → Manage deployments → Edit → New version → Deploy</span>' +
+          '</div>';
+        return;
+      }
+      renderSiteDetail(data);
+    })
+    .catch(function(e){
+      document.getElementById('site-detail-body').innerHTML =
+        '<div style="color:#e55;padding:20px;text-align:center">⚠️ Network error — check your connection and try again.</div>';
+    });
 }
 
 function closeSiteDetail() {
